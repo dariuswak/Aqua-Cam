@@ -1,0 +1,607 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8A766A512801380E00677419 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A502801380E00677419 /* AppDelegate.swift */; };
+		8A766A532801380E00677419 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A522801380E00677419 /* SceneDelegate.swift */; };
+		8A766A552801380E00677419 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A542801380E00677419 /* ViewController.swift */; };
+		8A766A582801380E00677419 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A766A562801380E00677419 /* Main.storyboard */; };
+		8A766A5A2801381100677419 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A766A592801381100677419 /* Assets.xcassets */; };
+		8A766A5D2801381100677419 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A766A5B2801381100677419 /* LaunchScreen.storyboard */; };
+		8A766A682801381100677419 /* Aqua_CamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A672801381100677419 /* Aqua_CamTests.swift */; };
+		8A766A722801381100677419 /* Aqua_CamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A712801381100677419 /* Aqua_CamUITests.swift */; };
+		8A766A742801381100677419 /* Aqua_CamUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A732801381100677419 /* Aqua_CamUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8A766A642801381100677419 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A766A452801380E00677419 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8A766A4C2801380E00677419;
+			remoteInfo = "Aqua Cam";
+		};
+		8A766A6E2801381100677419 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A766A452801380E00677419 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8A766A4C2801380E00677419;
+			remoteInfo = "Aqua Cam";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		8A766A4D2801380E00677419 /* Aqua Cam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aqua Cam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A766A502801380E00677419 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8A766A522801380E00677419 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		8A766A542801380E00677419 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8A766A572801380E00677419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8A766A592801381100677419 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8A766A5C2801381100677419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8A766A5E2801381100677419 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A766A632801381100677419 /* Aqua CamTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Aqua CamTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A766A672801381100677419 /* Aqua_CamTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aqua_CamTests.swift; sourceTree = "<group>"; };
+		8A766A6D2801381100677419 /* Aqua CamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Aqua CamUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A766A712801381100677419 /* Aqua_CamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aqua_CamUITests.swift; sourceTree = "<group>"; };
+		8A766A732801381100677419 /* Aqua_CamUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aqua_CamUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8A766A4A2801380E00677419 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A766A602801381100677419 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A766A6A2801381100677419 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8A766A442801380E00677419 = {
+			isa = PBXGroup;
+			children = (
+				8A766A4F2801380E00677419 /* Aqua Cam */,
+				8A766A662801381100677419 /* Aqua CamTests */,
+				8A766A702801381100677419 /* Aqua CamUITests */,
+				8A766A4E2801380E00677419 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8A766A4E2801380E00677419 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A766A4D2801380E00677419 /* Aqua Cam.app */,
+				8A766A632801381100677419 /* Aqua CamTests.xctest */,
+				8A766A6D2801381100677419 /* Aqua CamUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A766A4F2801380E00677419 /* Aqua Cam */ = {
+			isa = PBXGroup;
+			children = (
+				8A766A502801380E00677419 /* AppDelegate.swift */,
+				8A766A522801380E00677419 /* SceneDelegate.swift */,
+				8A766A542801380E00677419 /* ViewController.swift */,
+				8A766A562801380E00677419 /* Main.storyboard */,
+				8A766A592801381100677419 /* Assets.xcassets */,
+				8A766A5B2801381100677419 /* LaunchScreen.storyboard */,
+				8A766A5E2801381100677419 /* Info.plist */,
+			);
+			path = "Aqua Cam";
+			sourceTree = "<group>";
+		};
+		8A766A662801381100677419 /* Aqua CamTests */ = {
+			isa = PBXGroup;
+			children = (
+				8A766A672801381100677419 /* Aqua_CamTests.swift */,
+			);
+			path = "Aqua CamTests";
+			sourceTree = "<group>";
+		};
+		8A766A702801381100677419 /* Aqua CamUITests */ = {
+			isa = PBXGroup;
+			children = (
+				8A766A712801381100677419 /* Aqua_CamUITests.swift */,
+				8A766A732801381100677419 /* Aqua_CamUITestsLaunchTests.swift */,
+			);
+			path = "Aqua CamUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8A766A4C2801380E00677419 /* Aqua Cam */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A766A772801381100677419 /* Build configuration list for PBXNativeTarget "Aqua Cam" */;
+			buildPhases = (
+				8A766A492801380E00677419 /* Sources */,
+				8A766A4A2801380E00677419 /* Frameworks */,
+				8A766A4B2801380E00677419 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Aqua Cam";
+			productName = "Aqua Cam";
+			productReference = 8A766A4D2801380E00677419 /* Aqua Cam.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8A766A622801381100677419 /* Aqua CamTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A766A7A2801381100677419 /* Build configuration list for PBXNativeTarget "Aqua CamTests" */;
+			buildPhases = (
+				8A766A5F2801381100677419 /* Sources */,
+				8A766A602801381100677419 /* Frameworks */,
+				8A766A612801381100677419 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8A766A652801381100677419 /* PBXTargetDependency */,
+			);
+			name = "Aqua CamTests";
+			productName = "Aqua CamTests";
+			productReference = 8A766A632801381100677419 /* Aqua CamTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8A766A6C2801381100677419 /* Aqua CamUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A766A7D2801381100677419 /* Build configuration list for PBXNativeTarget "Aqua CamUITests" */;
+			buildPhases = (
+				8A766A692801381100677419 /* Sources */,
+				8A766A6A2801381100677419 /* Frameworks */,
+				8A766A6B2801381100677419 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8A766A6F2801381100677419 /* PBXTargetDependency */,
+			);
+			name = "Aqua CamUITests";
+			productName = "Aqua CamUITests";
+			productReference = 8A766A6D2801381100677419 /* Aqua CamUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8A766A452801380E00677419 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1330;
+				LastUpgradeCheck = 1330;
+				TargetAttributes = {
+					8A766A4C2801380E00677419 = {
+						CreatedOnToolsVersion = 13.3;
+					};
+					8A766A622801381100677419 = {
+						CreatedOnToolsVersion = 13.3;
+						TestTargetID = 8A766A4C2801380E00677419;
+					};
+					8A766A6C2801381100677419 = {
+						CreatedOnToolsVersion = 13.3;
+						TestTargetID = 8A766A4C2801380E00677419;
+					};
+				};
+			};
+			buildConfigurationList = 8A766A482801380E00677419 /* Build configuration list for PBXProject "Aqua Cam" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8A766A442801380E00677419;
+			productRefGroup = 8A766A4E2801380E00677419 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8A766A4C2801380E00677419 /* Aqua Cam */,
+				8A766A622801381100677419 /* Aqua CamTests */,
+				8A766A6C2801381100677419 /* Aqua CamUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8A766A4B2801380E00677419 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A766A5D2801381100677419 /* LaunchScreen.storyboard in Resources */,
+				8A766A5A2801381100677419 /* Assets.xcassets in Resources */,
+				8A766A582801380E00677419 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A766A612801381100677419 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A766A6B2801381100677419 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8A766A492801380E00677419 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A766A552801380E00677419 /* ViewController.swift in Sources */,
+				8A766A512801380E00677419 /* AppDelegate.swift in Sources */,
+				8A766A532801380E00677419 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A766A5F2801381100677419 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A766A682801381100677419 /* Aqua_CamTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A766A692801381100677419 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A766A742801381100677419 /* Aqua_CamUITestsLaunchTests.swift in Sources */,
+				8A766A722801381100677419 /* Aqua_CamUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8A766A652801381100677419 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8A766A4C2801380E00677419 /* Aqua Cam */;
+			targetProxy = 8A766A642801381100677419 /* PBXContainerItemProxy */;
+		};
+		8A766A6F2801381100677419 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8A766A4C2801380E00677419 /* Aqua Cam */;
+			targetProxy = 8A766A6E2801381100677419 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		8A766A562801380E00677419 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8A766A572801380E00677419 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		8A766A5B2801381100677419 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8A766A5C2801381100677419 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8A766A752801381100677419 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		8A766A762801381100677419 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8A766A782801381100677419 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54LA6F887S;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Aqua Cam/Info.plist";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "local.Aqua-Cam";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8A766A792801381100677419 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54LA6F887S;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Aqua Cam/Info.plist";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "local.Aqua-Cam";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		8A766A7B2801381100677419 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54LA6F887S;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "local.Aqua-CamTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aqua Cam.app/Aqua Cam";
+			};
+			name = Debug;
+		};
+		8A766A7C2801381100677419 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54LA6F887S;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "local.Aqua-CamTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aqua Cam.app/Aqua Cam";
+			};
+			name = Release;
+		};
+		8A766A7E2801381100677419 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54LA6F887S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "local.Aqua-CamUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Aqua Cam";
+			};
+			name = Debug;
+		};
+		8A766A7F2801381100677419 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54LA6F887S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "local.Aqua-CamUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Aqua Cam";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8A766A482801380E00677419 /* Build configuration list for PBXProject "Aqua Cam" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A766A752801381100677419 /* Debug */,
+				8A766A762801381100677419 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A766A772801381100677419 /* Build configuration list for PBXNativeTarget "Aqua Cam" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A766A782801381100677419 /* Debug */,
+				8A766A792801381100677419 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A766A7A2801381100677419 /* Build configuration list for PBXNativeTarget "Aqua CamTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A766A7B2801381100677419 /* Debug */,
+				8A766A7C2801381100677419 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A766A7D2801381100677419 /* Build configuration list for PBXNativeTarget "Aqua CamUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A766A7E2801381100677419 /* Debug */,
+				8A766A7F2801381100677419 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8A766A452801380E00677419 /* Project object */;
+}
