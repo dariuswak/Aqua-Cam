@@ -1,10 +1,3 @@
-//
-//  Aqua_CamTests.swift
-//  Aqua CamTests
-//
-//  Created by Dariusz on 9/4/2022.
-//
-
 import XCTest
 @testable import Aqua_Cam
 

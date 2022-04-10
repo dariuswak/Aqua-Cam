@@ -1,10 +1,3 @@
-//
-//  Aqua_CamUITests.swift
-//  Aqua CamUITests
-//
-//  Created by Dariusz on 9/4/2022.
-//
-
 import XCTest
 
 class Aqua_CamUITests: XCTestCase {
