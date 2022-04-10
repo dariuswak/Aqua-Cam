@@ -15,6 +15,10 @@
 		8A766A682801381100677419 /* Aqua_CamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A672801381100677419 /* Aqua_CamTests.swift */; };
 		8A766A722801381100677419 /* Aqua_CamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A712801381100677419 /* Aqua_CamUITests.swift */; };
 		8A766A742801381100677419 /* Aqua_CamUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A732801381100677419 /* Aqua_CamUITestsLaunchTests.swift */; };
+		8A766A81280272AD00677419 /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A80280272AD00677419 /* PreviewView.swift */; };
+		8A766A832802852500677419 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A822802852500677419 /* CameraManager.swift */; };
+		8A766A85280289D100677419 /* PermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A84280289D100677419 /* PermissionsManager.swift */; };
+		8A766A87280293DD00677419 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A86280293DD00677419 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +51,10 @@
 		8A766A6D2801381100677419 /* Aqua CamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Aqua CamUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A766A712801381100677419 /* Aqua_CamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aqua_CamUITests.swift; sourceTree = "<group>"; };
 		8A766A732801381100677419 /* Aqua_CamUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aqua_CamUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		8A766A80280272AD00677419 /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
+		8A766A822802852500677419 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		8A766A84280289D100677419 /* PermissionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsManager.swift; sourceTree = "<group>"; };
+		8A766A86280293DD00677419 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,9 +107,13 @@
 			children = (
 				8A766A502801380E00677419 /* AppDelegate.swift */,
 				8A766A542801380E00677419 /* ViewController.swift */,
+				8A766A822802852500677419 /* CameraManager.swift */,
+				8A766A80280272AD00677419 /* PreviewView.swift */,
+				8A766A84280289D100677419 /* PermissionsManager.swift */,
+				8A766A86280293DD00677419 /* Extensions.swift */,
 				8A766A562801380E00677419 /* Main.storyboard */,
-				8A766A592801381100677419 /* Assets.xcassets */,
 				8A766A5B2801381100677419 /* LaunchScreen.storyboard */,
+				8A766A592801381100677419 /* Assets.xcassets */,
 				8A766A5E2801381100677419 /* Info.plist */,
 			);
 			path = "Aqua Cam";
@@ -255,8 +267,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A766A85280289D100677419 /* PermissionsManager.swift in Sources */,
 				8A766A552801380E00677419 /* ViewController.swift in Sources */,
 				8A766A512801380E00677419 /* AppDelegate.swift in Sources */,
+				8A766A832802852500677419 /* CameraManager.swift in Sources */,
+				8A766A87280293DD00677419 /* Extensions.swift in Sources */,
+				8A766A81280272AD00677419 /* PreviewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,11 +452,15 @@
 				DEVELOPMENT_TEAM = 54LA6F887S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Aqua Cam/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Required to take photos and videos.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Optional to add location to photos and videos.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Optional to capture sound for photos and videos.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Required to save photos and videos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeLeft;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -466,11 +486,15 @@
 				DEVELOPMENT_TEAM = 54LA6F887S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Aqua Cam/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Required to take photos and videos.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Optional to add location to photos and videos.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Optional to capture sound for photos and videos.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Required to save photos and videos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeLeft;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

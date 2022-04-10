@@ -3,8 +3,6 @@
     <device id="retina6_1" orientation="landscape" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -12,21 +10,30 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Aqua_Cam" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="PwE-ho-rt2">
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemCyanColor"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GYI-aq-X2x" userLabel="Preview" customClass="PreviewView" customModule="Aqua_Cam" customModuleProvider="target">
+                                <rect key="frame" x="60" y="0.0" width="836" height="414"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="GYI-aq-X2x" firstAttribute="top" secondItem="PwE-ho-rt2" secondAttribute="topMargin" id="AqK-jW-gEj"/>
+                            <constraint firstAttribute="trailing" secondItem="GYI-aq-X2x" secondAttribute="trailing" id="J9J-3b-E30"/>
+                            <constraint firstAttribute="bottom" secondItem="GYI-aq-X2x" secondAttribute="bottom" id="bjC-WB-4Ph"/>
+                            <constraint firstItem="GYI-aq-X2x" firstAttribute="leading" secondItem="PwE-ho-rt2" secondAttribute="leadingMargin" id="pCT-fk-j41"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="previewView" destination="GYI-aq-X2x" id="ieX-34-8PY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="139" y="139"/>
         </scene>
     </scenes>
-    <resources>
-        <systemColor name="systemCyanColor">
-            <color red="0.19607843137254902" green="0.67843137254901964" blue="0.90196078431372551" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-    </resources>
 </document>
