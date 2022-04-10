@@ -8,13 +8,29 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var previewView: PreviewView!
 
-    var spinner: UIActivityIndicatorView!
+    @IBAction func openSettings() {
+        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
+                                  options: [:],
+                                  completionHandler: nil)
+    }
+
+    @IBAction func shutterPressed() {
+        cameraManager.capturePhoto(previewView: previewView, viewController: self)
+    }
+
+    @IBOutlet weak var capturingLivePhotoIndicator: UIButton!
+
+    @IBOutlet weak var processingIndicator: UIActivityIndicatorView!
 
     let locationManager = CLLocationManager()
 
     let cameraManager = CameraManager()
 
     let permissionsManager = PermissionsManager()
+
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,15 +41,10 @@ class ViewController: UIViewController {
         // last request stays on
         permissionsManager.askForCameraPermissions(cameraManager: cameraManager)
         permissionsManager.askForMicrophonePermissions()
-        permissionsManager.askForSaveToPhotosPermissions()
+        permissionsManager.askForSaveToPhotosPermissions(cameraManager: cameraManager)
         permissionsManager.askForLocationPermissions(locationManager: locationManager)
 
         cameraManager.launchConfigureSession(previewView: previewView)
-        DispatchQueue.main.async {
-            self.spinner = UIActivityIndicatorView(style: .large)
-            self.spinner.color = UIColor.cyan
-            self.previewView.addSubview(self.spinner)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -46,7 +57,7 @@ class ViewController: UIViewController {
                 self.cameraManager.session.startRunning()
                 self.cameraManager.isSessionRunning = self.cameraManager.session.isRunning
 
-            case .notAuthorized:
+            case .notAuthorizedCamera:
                 DispatchQueue.main.async {
                     let changePrivacySetting = "Permission to use the camera is denied, please review settings"
                     let message = NSLocalizedString(changePrivacySetting, comment: "Alert message when no camera access")
@@ -58,11 +69,24 @@ class ViewController: UIViewController {
 
                     alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
                                                             style: .`default`,
-                                                            handler: { _ in
-                                                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
-                                                                                          options: [:],
-                                                                                          completionHandler: nil)
-                    }))
+                                                            handler: { _ in self.openSettings() }))
+
+                    self.present(alertController, animated: true, completion: nil)
+                }
+
+            case .notAuthorizedAlbum:
+                DispatchQueue.main.async {
+                    let changePrivacySetting = "Permission to save to album is denied, please review settings"
+                    let message = NSLocalizedString(changePrivacySetting, comment: "Alert message when no album access")
+                    let alertController = UIAlertController(title: Bundle.main.appName, message: message, preferredStyle: .alert)
+
+                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
+                                                            style: .cancel,
+                                                            handler: nil))
+
+                    alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
+                                                            style: .`default`,
+                                                            handler: { _ in self.openSettings() }))
 
                     self.present(alertController, animated: true, completion: nil)
                 }

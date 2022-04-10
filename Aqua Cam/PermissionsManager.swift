@@ -1,4 +1,5 @@
 import AVFoundation
+import Photos
 import CoreLocation
 
 class PermissionsManager {
@@ -12,13 +13,13 @@ class PermissionsManager {
             cameraManager.sessionQueue.suspend()
             AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
                 if !granted {
-                    cameraManager.setupResult = .notAuthorized
+                    cameraManager.setupResult = .notAuthorizedCamera
                 }
                 cameraManager.sessionQueue.resume()
             })
 
         default:
-            cameraManager.setupResult = .notAuthorized
+            cameraManager.setupResult = .notAuthorizedCamera
         }
     }
 
@@ -28,8 +29,25 @@ class PermissionsManager {
         }
     }
 
-    func askForSaveToPhotosPermissions() {
-        // TODO
+    func askForSaveToPhotosPermissions(cameraManager: CameraManager) {
+        switch PHPhotoLibrary.authorizationStatus(for: .addOnly) {
+        case .authorized:
+            break
+        case .limited:
+            break
+
+        case .notDetermined:
+            cameraManager.sessionQueue.suspend()
+            PHPhotoLibrary.requestAuthorization(for: .addOnly) { outcome in
+                if ![.authorized, .limited].contains(outcome) {
+                    cameraManager.setupResult = .notAuthorizedAlbum
+                }
+                cameraManager.sessionQueue.resume()
+            }
+
+        default:
+            cameraManager.setupResult = .notAuthorizedAlbum
+        }
     }
 
     func askForLocationPermissions(locationManager: CLLocationManager) {
