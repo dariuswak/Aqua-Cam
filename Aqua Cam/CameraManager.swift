@@ -11,44 +11,27 @@ class CameraManager {
         case configurationFailed
     }
 
-    enum LivePhotoMode {
-        case on
-        case off
-    }
-
-    enum DepthDataDeliveryMode {
-        case on
-        case off
-    }
-
-    enum PortraitEffectsMatteDeliveryMode {
-        case on
-        case off
-    }
-
     let session = AVCaptureSession()
+//    let session = AVCaptureMultiCamSession()
 
     let sessionQueue = DispatchQueue(label: "session queue")
 
     let photoOutput = AVCapturePhotoOutput()
 
+    let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(
+        deviceTypes: [
+            .builtInWideAngleCamera,
+            .builtInUltraWideCamera,
+            .builtInTelephotoCamera],
+        mediaType: .video, position: .back)
+
     var inProgressPhotoCaptureDelegates = [Int64: PhotoCaptureProcessor]()
 
     var inProgressLivePhotoCapturesCount = 0
 
-    var isSessionRunning = false
-
-    var selectedSemanticSegmentationMatteTypes = [AVSemanticSegmentationMatte.MatteType]()
-
     var setupResult: SessionSetupResult = .success
 
-    var livePhotoMode: LivePhotoMode = .off
-
-    var portraitEffectsMatteDeliveryMode: PortraitEffectsMatteDeliveryMode = .off
-
-    var depthDataDeliveryMode: DepthDataDeliveryMode = .off
-
-    var photoQualityPrioritizationMode: AVCapturePhotoOutput.QualityPrioritization = .quality
+    var keyValueObservations = [NSKeyValueObservation]()
 
     @objc dynamic var videoDeviceInput: AVCaptureDeviceInput!
 
@@ -70,21 +53,8 @@ class CameraManager {
 
         // Add video input.
         do {
-            var defaultVideoDevice: AVCaptureDevice?
-
-            // Choose the back dual camera, if available, otherwise default to a wide angle camera.
-
-            if let tripleCameraDevice = AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back) {
-                defaultVideoDevice = tripleCameraDevice
-            } else if let dualCameraDevice = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back) {
-                defaultVideoDevice = dualCameraDevice
-            } else if let dualWideCameraDevice = AVCaptureDevice.default(.builtInDualWideCamera, for: .video, position: .back) {
-                defaultVideoDevice = dualWideCameraDevice
-            } else if let backCameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
-                defaultVideoDevice = backCameraDevice
-            }
-            guard let videoDevice = defaultVideoDevice else {
-                os_log("Default video device is unavailable.")
+            guard let videoDevice = videoDeviceDiscoverySession.devices.first else {
+                os_log("No back-located video devices unavailable.")
                 setupResult = .configurationFailed
                 session.commitConfiguration()
                 return
@@ -138,17 +108,122 @@ class CameraManager {
         photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
         photoOutput.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
         photoOutput.isPortraitEffectsMatteDeliveryEnabled = photoOutput.isPortraitEffectsMatteDeliverySupported
-        photoOutput.enabledSemanticSegmentationMatteTypes = photoOutput.availableSemanticSegmentationMatteTypes
-        selectedSemanticSegmentationMatteTypes = photoOutput.availableSemanticSegmentationMatteTypes
         photoOutput.maxPhotoQualityPrioritization = .quality
-        livePhotoMode = photoOutput.isLivePhotoCaptureSupported ? .on : .off
-        depthDataDeliveryMode = photoOutput.isDepthDataDeliverySupported ? .on : .off
-        portraitEffectsMatteDeliveryMode = photoOutput.isPortraitEffectsMatteDeliverySupported ? .on : .off
-        photoQualityPrioritizationMode = .quality
 
         session.commitConfiguration()
     }
 
+    /// - Tag: ChangeCamera
+    func changeCamera() {
+        let oldVideoDeviceInput = videoDeviceInput!
+
+        var index = videoDeviceDiscoverySession.devices.firstIndex(of: oldVideoDeviceInput.device)!
+        index = (index + 1) % videoDeviceDiscoverySession.devices.count
+        let newVideoDeviceInput: AVCaptureDeviceInput
+        do {
+            newVideoDeviceInput = try AVCaptureDeviceInput(device: videoDeviceDiscoverySession.devices[index])
+        } catch {
+            os_log("Error occurred while creating video device input: \(String(describing: error))")
+            return
+        }
+
+        session.beginConfiguration()
+
+        session.removeInput(oldVideoDeviceInput)
+        if session.canAddInput(newVideoDeviceInput) {
+            NotificationCenter.default.removeObserver(self, name: .AVCaptureDeviceSubjectAreaDidChange, object: oldVideoDeviceInput.device)
+            NotificationCenter.default.addObserver(self, selector: #selector(subjectAreaDidChange), name: .AVCaptureDeviceSubjectAreaDidChange, object: newVideoDeviceInput.device)
+            session.addInput(newVideoDeviceInput)
+            videoDeviceInput = newVideoDeviceInput
+            os_log("Changed camera to: \(newVideoDeviceInput)")
+        } else {
+            os_log("Unable to add camera input: \(newVideoDeviceInput)")
+            session.addInput(oldVideoDeviceInput)
+        }
+
+//            if let connection = movieFileOutput?.connection(with: .video) {
+//                session.sessionPreset = .high
+//
+//                selectedMovieMode10BitDeviceFormat = tenBitVariantOfFormat(activeFormat: videoDeviceInput.device.activeFormat)
+//
+//                if selectedMovieMode10BitDeviceFormat != nil {
+//                    DispatchQueue.main.async {
+//                        self.HDRVideoModeButton.isEnabled = true
+//                    }
+//
+//                    if HDRVideoMode == .on {
+//                        do {
+//                            try videoDeviceInput.device.lockForConfiguration()
+//                            videoDeviceInput.device.activeFormat = selectedMovieMode10BitDeviceFormat!
+//                            print("Setting 'x420' format \(String(describing: selectedMovieMode10BitDeviceFormat)) for video recording")
+//                            videoDeviceInput.device.unlockForConfiguration()
+//                        } catch {
+//                            print("Could not lock device for configuration: \(error)")
+//                        }
+//                    }
+//                }
+//
+//                if connection.isVideoStabilizationSupported {
+//                    connection.preferredVideoStabilizationMode = .auto
+//                }
+//            }
+
+        /*
+         Set Live Photo capture and depth data delivery if it's supported. When changing cameras, the
+         `livePhotoCaptureEnabled` and `depthDataDeliveryEnabled` properties of the AVCapturePhotoOutput
+         get set to false when a video device is disconnected from the session. After the new video device is
+         added to the session, re-enable them on the AVCapturePhotoOutput, if supported.
+         */
+        photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
+        photoOutput.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
+        photoOutput.isPortraitEffectsMatteDeliveryEnabled = photoOutput.isPortraitEffectsMatteDeliverySupported
+        photoOutput.maxPhotoQualityPrioritization = .quality
+
+        session.commitConfiguration()
+    }
+
+    func cycleLockFocusAndExposureInCentre(viewController: ViewController) {
+        if (self.videoDeviceInput.device.focusMode == .continuousAutoFocus) {
+            UIView.animate(withDuration: 1,
+                           animations: { viewController.focusIndicator.alpha = 1 },
+                           completion: { _ in
+                               UIView.animate(withDuration: 1,
+                                              animations: { viewController.focusIndicator.alpha = 0 })
+                           })
+            focusAndExposure(with: .locked, exposureMode: .autoExpose)
+        } else {
+            focusAndExposure(with: .continuousAutoFocus, exposureMode: .continuousAutoExposure)
+        }
+    }
+
+    func focusAndExposure(with focusMode: AVCaptureDevice.FocusMode,
+                          exposureMode: AVCaptureDevice.ExposureMode) {
+        let centre = CGPoint(x: 0.5, y: 0.5)
+
+        os_log("Focus: \(String(describing: focusMode)), exposure: \(String(describing: exposureMode))")
+        sessionQueue.async {
+            let device = self.videoDeviceInput.device
+            do {
+                try device.lockForConfiguration()
+                if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(focusMode) {
+                    device.focusPointOfInterest = centre
+                    device.focusMode = focusMode
+                }
+                if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode) {
+                    device.exposurePointOfInterest = centre
+                    device.exposureMode = exposureMode
+                }
+                device.isSubjectAreaChangeMonitoringEnabled = true
+                device.unlockForConfiguration()
+            } catch {
+                os_log("Could not lock device for configuration: \(String(describing: error))")
+            }
+        }
+    }
+
+    func cyclePhotoAndVideo() {
+        os_log("TODO: cycle Photo and Video") // TODO
+    }
 
     // MARK: Photos
 
@@ -168,31 +243,27 @@ class CameraManager {
                 photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPhotoPixelFormatType]
             }
             // Live Photo capture is not supported in movie mode.
-            if self.livePhotoMode == .on && self.photoOutput.isLivePhotoCaptureSupported {
+            if self.photoOutput.isLivePhotoCaptureSupported {
                 let livePhotoMovieFileName = NSUUID().uuidString
                 let livePhotoMovieFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((livePhotoMovieFileName as NSString).appendingPathExtension("mov")!)
                 photoSettings.livePhotoMovieFileURL = URL(fileURLWithPath: livePhotoMovieFilePath)
             }
-            photoSettings.enabledSemanticSegmentationMatteTypes = self.selectedSemanticSegmentationMatteTypes
-            photoSettings.isDepthDataDeliveryEnabled = (self.depthDataDeliveryMode == .on
-                && self.photoOutput.isDepthDataDeliveryEnabled)
-            photoSettings.isPortraitEffectsMatteDeliveryEnabled = (self.portraitEffectsMatteDeliveryMode == .on
-                && self.photoOutput.isPortraitEffectsMatteDeliveryEnabled)
-            photoSettings.photoQualityPrioritization = self.photoQualityPrioritizationMode
+            photoSettings.isDepthDataDeliveryEnabled = self.photoOutput.isDepthDataDeliveryEnabled
+            photoSettings.isPortraitEffectsMatteDeliveryEnabled = self.photoOutput.isPortraitEffectsMatteDeliveryEnabled
+            photoSettings.photoQualityPrioritization = .quality
 
             let photoCaptureProcessor = PhotoCaptureProcessor(with: photoSettings, willCapturePhotoAnimation: {
-                // Flash the screen to signal that AVCam took a photo.
                 DispatchQueue.main.async {
-                    previewView.videoPreviewLayer.opacity = 0
-                    UIView.animate(withDuration: 0.25) {
-                        previewView.videoPreviewLayer.opacity = 1
+                    previewView.videoPreviewLayer.backgroundColor = UIColor.white.cgColor
+                    UIView.animate(withDuration: 0.35) {
+                        previewView.videoPreviewLayer.backgroundColor = UIColor.black.cgColor
                     }
                 }
             }, livePhotoCaptureHandler: { capturing in
                 self.sessionQueue.async {
                     if capturing {
                         self.inProgressLivePhotoCapturesCount += 1
-                    } else {
+                    } else if self.inProgressLivePhotoCapturesCount > 0 {
                         self.inProgressLivePhotoCapturesCount -= 1
                     }
 
@@ -200,10 +271,8 @@ class CameraManager {
                     DispatchQueue.main.async {
                         if inProgressLivePhotoCapturesCount > 0 {
                             viewController.capturingLivePhotoIndicator.isHidden = false
-                        } else if inProgressLivePhotoCapturesCount == 0 {
-                            viewController.capturingLivePhotoIndicator.isHidden = true
                         } else {
-                            os_log("Error: In progress Live Photo capture count is less than 0.")
+                            viewController.capturingLivePhotoIndicator.isHidden = true
                         }
                     }
                 }
@@ -213,7 +282,6 @@ class CameraManager {
                     self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = nil
                 }
             }, photoProcessingHandler: { animate in
-                // Animates a spinner while photo is processing
                 DispatchQueue.main.async {
                     if animate {
                         viewController.processingIndicator.startAnimating()
@@ -223,7 +291,6 @@ class CameraManager {
                 }
             })
 
-            // Specify the location the photo was taken
             photoCaptureProcessor.location = viewController.locationManager.location
 
             // The photo output holds a weak reference to the photo capture delegate and stores it in an array to maintain a strong reference.
@@ -232,100 +299,28 @@ class CameraManager {
         }
     }
 
-
-    // MARK: Varia
-
-    func focus(with focusMode: AVCaptureDevice.FocusMode,
-                       exposureMode: AVCaptureDevice.ExposureMode,
-                       at devicePoint: CGPoint,
-                       monitorSubjectAreaChange: Bool) {
-
-        sessionQueue.async {
-            let device = self.videoDeviceInput.device
-            do {
-                try device.lockForConfiguration()
-
-                /*
-                 Setting (focus/exposure)PointOfInterest alone does not initiate a (focus/exposure) operation.
-                 Call set(Focus/Exposure)Mode() to apply the new point of interest.
-                 */
-                if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(focusMode) {
-                    device.focusPointOfInterest = devicePoint
-                    device.focusMode = focusMode
-                }
-
-                if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode) {
-                    device.exposurePointOfInterest = devicePoint
-                    device.exposureMode = exposureMode
-                }
-
-                device.isSubjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange
-                device.unlockForConfiguration()
-            } catch {
-                os_log("Could not lock device for configuration: \(String(describing: error))")
-            }
-        }
-    }
-
     // MARK: Session lifecycle
 
     @objc
     func sessionRuntimeError(notification: NSNotification) {
         guard let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError else { return }
-
-        os_log("Capture session runtime error: \(String(describing: error))")
-        // If media services were reset, and the last start succeeded, restart the session.
-        if error.code == .mediaServicesWereReset {
-            sessionQueue.async {
-                if self.isSessionRunning {
-                    self.session.startRunning()
-                    self.isSessionRunning = self.session.isRunning
-                } else {
-                    DispatchQueue.main.async {
-//                        self.resumeButton.isHidden = false
-                    }
-                }
-            }
-        } else {
-//            resumeButton.isHidden = false
+        if error.code == AVError.Code.unknown
+                && error.userInfo[NSLocalizedFailureReasonErrorKey] as! String == "An unknown error occurred (-16401)"
+                && error.userInfo[NSLocalizedDescriptionKey] as! String == "The operation could not be completed"
+                && (error.userInfo[NSUnderlyingErrorKey] as! NSError).domain == NSOSStatusErrorDomain {
+            return
         }
+        os_log("Capture session runtime error: \(String(describing: error))")
     }
 
     @objc
     func sessionWasInterrupted(notification: NSNotification) {
-        /*
-         In some scenarios you want to enable the user to resume the session.
-         For example, if music playback is initiated from Control Center while
-         using AVCam, then the user can let AVCam resume
-         the session running, which will stop music playback. Note that stopping
-         music playback in Control Center will not automatically resume the session.
-         Also note that it's not always possible to resume, see `resumeInterruptedSession(_:)`.
-         */
         if let userInfoValue = notification.userInfo?[AVCaptureSessionInterruptionReasonKey] as AnyObject?,
             let reasonIntegerValue = userInfoValue.integerValue,
             let reason = AVCaptureSession.InterruptionReason(rawValue: reasonIntegerValue) {
             os_log("Capture session was interrupted with reason \(String(describing: reason).lowercased())")
-
-            var showResumeButton = false
-            if reason == .audioDeviceInUseByAnotherClient || reason == .videoDeviceInUseByAnotherClient {
-                showResumeButton = true
-            } else if reason == .videoDeviceNotAvailableWithMultipleForegroundApps {
-                // Fade-in a label to inform the user that the camera is unavailable.
-//                cameraUnavailableLabel.alpha = 0
-//                cameraUnavailableLabel.isHidden = false
-//                UIView.animate(withDuration: 0.25) {
-//                    self.cameraUnavailableLabel.alpha = 1
-//                }
-            } else if reason == .videoDeviceNotAvailableDueToSystemPressure {
+            if reason == .videoDeviceNotAvailableDueToSystemPressure {
                 os_log("Session stopped running due to shutdown system pressure level.")
-            }
-            if showResumeButton {
-                // Fade-in a button to enable the user to try to resume the session running.
-//                resumeButton.alpha = 0
-//                resumeButton.isHidden = false
-//                UIView.animate(withDuration: 0.25) {
-//                    self.resumeButton.alpha = 1
-//                }
             }
         }
     }
@@ -333,53 +328,11 @@ class CameraManager {
     @objc
     func sessionInterruptionEnded(notification: NSNotification) {
         os_log("Capture session interruption ended")
-
-//        if !resumeButton.isHidden {
-//            UIView.animate(withDuration: 0.25,
-//                           animations: {
-//                               self.resumeButton.alpha = 0
-//                           }, completion: { _ in
-//                               self.resumeButton.isHidden = true
-//                           })
-//        }
-//        if !cameraUnavailableLabel.isHidden {
-//            UIView.animate(withDuration: 0.25,
-//                           animations: {
-//                               self.cameraUnavailableLabel.alpha = 0
-//                           }, completion: { _ in
-//                               self.cameraUnavailableLabel.isHidden = true
-//                           }
-//            )
-//        }
     }
 
     // MARK: Notifications
 
-    var keyValueObservations = [NSKeyValueObservation]()
-
     func addObservers() {
-        let keyValueObservation = session.observe(\.isRunning, options: .new) { _, change in
-            guard let isSessionRunning = change.newValue else { return }
-            let isLivePhotoCaptureEnabled = self.photoOutput.isLivePhotoCaptureEnabled
-            let isDepthDeliveryDataEnabled = self.photoOutput.isDepthDataDeliveryEnabled
-            let isPortraitEffectsMatteEnabled = self.photoOutput.isPortraitEffectsMatteDeliveryEnabled
-            let isSemanticSegmentationMatteEnabled = !self.photoOutput.enabledSemanticSegmentationMatteTypes.isEmpty
-
-            DispatchQueue.main.async {
-                // Only enable the ability to change camera if the device has more than one camera.
-//                self.cameraButton.isEnabled = isSessionRunning && self.videoDeviceDiscoverySession.uniqueDevicePositionsCount > 1
-//                self.recordButton.isEnabled = isSessionRunning && self.movieFileOutput != nil
-//                self.photoButton.isEnabled = isSessionRunning
-//                self.captureModeControl.isEnabled = isSessionRunning
-//                self.livePhotoModeButton.isEnabled = isSessionRunning && isLivePhotoCaptureEnabled
-//                self.depthDataDeliveryButton.isEnabled = isSessionRunning && isDepthDeliveryDataEnabled
-//                self.portraitEffectsMatteDeliveryButton.isEnabled = isSessionRunning && isPortraitEffectsMatteEnabled
-//                self.semanticSegmentationMatteDeliveryButton.isEnabled = isSessionRunning && isSemanticSegmentationMatteEnabled
-//                self.photoQualityPrioritizationSegControl.isEnabled = isSessionRunning
-            }
-        }
-        keyValueObservations.append(keyValueObservation)
-
 //        let systemPressureStateObservation = observe(\.videoDeviceInput.device.systemPressureState, options: .new) { _, change in
 //            guard let systemPressureState = change.newValue else { return }
 //            self.setRecommendedFrameRateRangeForPressureState(systemPressureState: systemPressureState)
@@ -396,13 +349,6 @@ class CameraManager {
                                                name: .AVCaptureSessionRuntimeError,
                                                object: session)
 
-        /*
-         A session can only run when the app is full screen. It will be interrupted
-         in a multi-app layout, introduced in iOS 9, see also the documentation of
-         AVCaptureSessionInterruptionReason. Add observers to handle these session
-         interruptions and show a preview is paused message. See the documentation
-         of AVCaptureSessionWasInterruptedNotification for other interruption reasons.
-         */
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(sessionWasInterrupted),
                                                name: .AVCaptureSessionWasInterrupted,
@@ -424,9 +370,7 @@ class CameraManager {
 
     @objc
     func subjectAreaDidChange(notification: NSNotification) {
-        let devicePoint = CGPoint(x: 0.5, y: 0.5)
-        focus(with: .continuousAutoFocus, exposureMode: .continuousAutoExposure, at: devicePoint, monitorSubjectAreaChange: false)
+        focusAndExposure(with: .continuousAutoFocus, exposureMode: .continuousAutoExposure)
     }
-
 
 }
