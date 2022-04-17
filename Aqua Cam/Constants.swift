@@ -3,8 +3,8 @@ import AVFoundation
 
 class Constants {
 
-    static let UI_ORIENTATION: UIInterfaceOrientation = .landscapeRight
+    static let LANDSCAPE_RIGHT: AVCaptureVideoOrientation = .landscapeRight
 
-    static let AV_ORIENTATION: AVCaptureVideoOrientation = .landscapeRight
+    static let HD_4K: AVCaptureSession.Preset = .hd4K3840x2160
 
 }

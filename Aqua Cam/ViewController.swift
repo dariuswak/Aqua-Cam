@@ -1,6 +1,5 @@
 import UIKit
 import AVFoundation
-import CoreLocation
 import Photos
 import os
 
@@ -41,8 +40,13 @@ class ViewController: UIViewController {
             }
             return
         }
-        os_log("Capturing photo")
-        cameraManager.capturePhoto(previewView: previewView, viewController: self)
+        if (cameraManager.movieFileOutput != nil) {
+            os_log("Toggling video recording")
+            cameraManager.toggleMovieRecording()
+        } else {
+            os_log("Capturing photo")
+            cameraManager.capturePhoto(previewView: previewView, viewController: self)
+        }
     }
 
     // 1st button - focus
@@ -66,17 +70,24 @@ class ViewController: UIViewController {
     }
 
     // 2nd button - mode
+    // click - change camera
     // double click - photo/video
+    // click during video recording - take photo
     @IBAction func modePressed() {
-        multiClick.on(count: 2) {
-            os_log("Changing mode: photo/video")
-            cameraManager.sessionQueue.async {
-                self.cameraManager.cyclePhotoAndVideo()
-            }
-        } else: {
-            os_log("Changing camera (cycle)")
-            cameraManager.sessionQueue.async {
-                self.cameraManager.changeCamera()
+        if cameraManager.movieFileOutput?.isRecording == true {
+            os_log("Capturing photo during movie recording")
+            cameraManager.capturePhoto(previewView: previewView, viewController: self)
+        } else {
+            multiClick.on(count: 2) {
+                os_log("Changing mode: photo/video")
+                cameraManager.sessionQueue.async {
+                    self.cameraManager.cyclePhotoAndVideo()
+                }
+            } else: {
+                os_log("Changing camera (cycle)")
+                cameraManager.sessionQueue.async {
+                    self.cameraManager.changeCamera()
+                }
             }
         }
     }
@@ -86,8 +97,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var processingIndicator: UIActivityIndicatorView!
 
     @IBOutlet weak var focusIndicator: UIImageView!
-
-    let locationManager = CLLocationManager()
 
     let cameraManager = CameraManager()
 
@@ -108,7 +117,7 @@ class ViewController: UIViewController {
         permissionsManager.askForCameraPermissions(cameraManager: cameraManager)
         permissionsManager.askForMicrophonePermissions()
         permissionsManager.askForSaveToPhotosPermissions(cameraManager: cameraManager)
-        permissionsManager.askForLocationPermissions(locationManager: locationManager)
+        permissionsManager.askForLocationPermissions(locationManager: cameraManager.locationManager)
 
         cameraManager.launchConfigureSession(previewView: previewView)
     }

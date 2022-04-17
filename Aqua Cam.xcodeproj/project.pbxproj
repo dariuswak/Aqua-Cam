@@ -21,6 +21,7 @@
 		8A766A87280293DD00677419 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A86280293DD00677419 /* Extensions.swift */; };
 		8AFE65922802E5E400F73301 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE65912802E5E400F73301 /* Constants.swift */; };
 		8AFE65942802F18100F73301 /* PhotoCaptureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE65932802F18100F73301 /* PhotoCaptureDelegate.swift */; };
+		8AFF1256280C037D00460FD4 /* MovieRecordingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFF1255280C037C00460FD4 /* MovieRecordingDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		8A766A86280293DD00677419 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8AFE65912802E5E400F73301 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8AFE65932802F18100F73301 /* PhotoCaptureDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCaptureDelegate.swift; sourceTree = "<group>"; };
+		8AFF1255280C037C00460FD4 /* MovieRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRecordingDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				8A766A542801380E00677419 /* ViewController.swift */,
 				8A766A822802852500677419 /* CameraManager.swift */,
 				8AFE65932802F18100F73301 /* PhotoCaptureDelegate.swift */,
+				8AFF1255280C037C00460FD4 /* MovieRecordingDelegate.swift */,
 				8A766A80280272AD00677419 /* PreviewView.swift */,
 				8A766A84280289D100677419 /* PermissionsManager.swift */,
 				8A766A86280293DD00677419 /* Extensions.swift */,
@@ -277,6 +280,7 @@
 				8A766A552801380E00677419 /* ViewController.swift in Sources */,
 				8A766A512801380E00677419 /* AppDelegate.swift in Sources */,
 				8A766A832802852500677419 /* CameraManager.swift in Sources */,
+				8AFF1256280C037D00460FD4 /* MovieRecordingDelegate.swift in Sources */,
 				8AFE65922802E5E400F73301 /* Constants.swift in Sources */,
 				8A766A87280293DD00677419 /* Extensions.swift in Sources */,
 				8AFE65942802F18100F73301 /* PhotoCaptureDelegate.swift in Sources */,

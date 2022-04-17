@@ -1,6 +1,7 @@
 import AVFoundation
-import os
+import CoreLocation
 import UIKit
+import os
 
 class CameraManager {
 
@@ -11,8 +12,9 @@ class CameraManager {
         case configurationFailed
     }
 
+    let locationManager = CLLocationManager()
+
     let session = AVCaptureSession()
-//    let session = AVCaptureMultiCamSession()
 
     let sessionQueue = DispatchQueue(label: "session queue")
 
@@ -27,6 +29,8 @@ class CameraManager {
 
     var inProgressPhotoCaptureDelegates = [Int64: PhotoCaptureProcessor]()
 
+    var inProgressMovieRecordingDelegates = [NSUUID: MovieRecordingProcessor]()
+
     var inProgressLivePhotoCapturesCount = 0
 
     var setupResult: SessionSetupResult = .success
@@ -34,6 +38,8 @@ class CameraManager {
     var keyValueObservations = [NSKeyValueObservation]()
 
     @objc dynamic var videoDeviceInput: AVCaptureDeviceInput!
+
+    var movieFileOutput: AVCaptureMovieFileOutput?
 
     func launchConfigureSession(previewView: PreviewView) {
         sessionQueue.async {
@@ -50,7 +56,6 @@ class CameraManager {
 
         session.sessionPreset = .photo
 
-
         // Add video input.
         do {
             guard let videoDevice = videoDeviceDiscoverySession.devices.first else {
@@ -59,6 +64,7 @@ class CameraManager {
                 session.commitConfiguration()
                 return
             }
+//            let videoDevice = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back)!
             let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
 
             guard session.canAddInput(videoDeviceInput) else {
@@ -71,7 +77,7 @@ class CameraManager {
             self.videoDeviceInput = videoDeviceInput
 
             DispatchQueue.main.async {
-                previewView.videoPreviewLayer.connection?.videoOrientation = Constants.AV_ORIENTATION
+                previewView.videoPreviewLayer.connection?.videoOrientation = Constants.LANDSCAPE_RIGHT
             }
         } catch {
             os_log("Couldn't create video device input: \(String(describing: error))")
@@ -141,32 +147,36 @@ class CameraManager {
             session.addInput(oldVideoDeviceInput)
         }
 
-//            if let connection = movieFileOutput?.connection(with: .video) {
-//                session.sessionPreset = .high
-//
-//                selectedMovieMode10BitDeviceFormat = tenBitVariantOfFormat(activeFormat: videoDeviceInput.device.activeFormat)
-//
-//                if selectedMovieMode10BitDeviceFormat != nil {
-//                    DispatchQueue.main.async {
-//                        self.HDRVideoModeButton.isEnabled = true
-//                    }
-//
-//                    if HDRVideoMode == .on {
-//                        do {
-//                            try videoDeviceInput.device.lockForConfiguration()
-//                            videoDeviceInput.device.activeFormat = selectedMovieMode10BitDeviceFormat!
-//                            print("Setting 'x420' format \(String(describing: selectedMovieMode10BitDeviceFormat)) for video recording")
-//                            videoDeviceInput.device.unlockForConfiguration()
-//                        } catch {
-//                            print("Could not lock device for configuration: \(error)")
-//                        }
-//                    }
-//                }
-//
-//                if connection.isVideoStabilizationSupported {
-//                    connection.preferredVideoStabilizationMode = .auto
-//                }
-//            }
+        if (movieFileOutput != nil) {
+            session.sessionPreset = Constants.HD_4K
+
+            let tenBitsHdrFormat = videoDeviceInput.device.formats.last { format in CMFormatDescriptionGetMediaSubType(format.formatDescription) == kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange }
+            if tenBitsHdrFormat != nil {
+                print("Setting 'x420' format \(String(describing: tenBitsHdrFormat))")
+                do {
+                    try videoDeviceInput.device.lockForConfiguration()
+                    videoDeviceInput.device.activeFormat = tenBitsHdrFormat!
+                    videoDeviceInput.device.unlockForConfiguration()
+                } catch {
+                    os_log("changeCamera_1: Could not lock device for configuration: \(String(describing: error))")
+                }
+            } else {
+                let highestQualityFormat = videoDeviceInput.device.formats.last
+                do {
+                    try videoDeviceInput.device.lockForConfiguration()
+                    videoDeviceInput.device.activeFormat = highestQualityFormat!
+                    videoDeviceInput.device.unlockForConfiguration()
+                } catch {
+                    os_log("changeCamera_2: Could not lock device for configuration: \(String(describing: error))")
+                }
+            }
+            os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
+            if let connection = movieFileOutput?.connection(with: .video) {
+                if connection.isVideoStabilizationSupported {
+                    connection.preferredVideoStabilizationMode = .auto
+                }
+            }
+        }
 
         /*
          Set Live Photo capture and depth data delivery if it's supported. When changing cameras, the
@@ -216,20 +226,103 @@ class CameraManager {
                 device.isSubjectAreaChangeMonitoringEnabled = true
                 device.unlockForConfiguration()
             } catch {
-                os_log("Could not lock device for configuration: \(String(describing: error))")
+                os_log("focusAndExposure: Could not lock device for configuration: \(String(describing: error))")
             }
         }
     }
 
     func cyclePhotoAndVideo() {
-        os_log("TODO: cycle Photo and Video") // TODO
+        if session.sessionPreset == .photo {
+            os_log("Switching to Movie recording")
+            sessionQueue.async {
+                self.switchToMovie()
+            }
+        } else {
+            os_log("Switching to Photo taking")
+            sessionQueue.async {
+                self.switchToPhoto()
+            }
+        }
+    }
+
+    func switchToPhoto() {
+        session.beginConfiguration()
+        session.removeOutput(movieFileOutput!) // otherwise Live Photos are unavailable
+        movieFileOutput = nil
+        session.sessionPreset = .photo
+        photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
+        photoOutput.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
+        photoOutput.isPortraitEffectsMatteDeliveryEnabled = photoOutput.isPortraitEffectsMatteDeliverySupported
+        photoOutput.maxPhotoQualityPrioritization = .quality
+        session.commitConfiguration()
+    }
+
+    func switchToMovie() {
+        let movieFileOutput = AVCaptureMovieFileOutput()
+        if !session.canAddOutput(movieFileOutput) { return }
+        session.beginConfiguration()
+        session.addOutput(movieFileOutput)
+        session.sessionPreset = Constants.HD_4K
+
+        let tenBitsHdrFormat = videoDeviceInput.device.formats.last { format in CMFormatDescriptionGetMediaSubType(format.formatDescription) == kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange }
+        if tenBitsHdrFormat != nil {
+            print("Setting 'x420' format \(String(describing: tenBitsHdrFormat))")
+            do {
+                try videoDeviceInput.device.lockForConfiguration()
+                videoDeviceInput.device.activeFormat = tenBitsHdrFormat!
+                videoDeviceInput.device.unlockForConfiguration()
+            } catch {
+                os_log("switchToMovie_1: Could not lock device for configuration: \(String(describing: error))")
+            }
+        } else {
+            let highestQualityFormat = videoDeviceInput.device.formats.last
+            do {
+                try videoDeviceInput.device.lockForConfiguration()
+                videoDeviceInput.device.activeFormat = highestQualityFormat!
+                videoDeviceInput.device.unlockForConfiguration()
+            } catch {
+                os_log("switchToMovie_2: Could not lock device for configuration: \(String(describing: error))")
+            }
+        }
+        os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
+        if let connection = movieFileOutput.connection(with: .video) {
+            if connection.isVideoStabilizationSupported {
+                connection.preferredVideoStabilizationMode = .auto
+            }
+        }
+        session.commitConfiguration()
+        self.movieFileOutput = movieFileOutput
+    }
+
+    // MARK: Recording Movies
+
+    func toggleMovieRecording() {
+        guard let movieFileOutput = self.movieFileOutput else {
+            return
+        }
+        sessionQueue.async {
+            if movieFileOutput.isRecording {
+                os_log("Stopping recording")
+                movieFileOutput.stopRecording()
+            } else {
+                os_log("Starting recording")
+                let movieRecordingProcessor = MovieRecordingProcessor { movieRecordingProcessor in
+                    self.sessionQueue.async {
+                        self.inProgressMovieRecordingDelegates[movieRecordingProcessor.uniqueID] = nil
+                    }
+                }
+                self.inProgressMovieRecordingDelegates[movieRecordingProcessor.uniqueID] = movieRecordingProcessor
+                movieRecordingProcessor.location = self.locationManager.location
+                movieRecordingProcessor.startRecording(with: movieFileOutput)
+            }
+        }
     }
 
     // MARK: Photos
 
     func capturePhoto(previewView: PreviewView, viewController: ViewController) {
         sessionQueue.async {
-            self.photoOutput.connection(with: .video)!.videoOrientation = Constants.AV_ORIENTATION
+            self.photoOutput.connection(with: .video)!.videoOrientation = Constants.LANDSCAPE_RIGHT
             var photoSettings = AVCapturePhotoSettings()
             if self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {
                 photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
@@ -279,7 +372,7 @@ class CameraManager {
             }, completionHandler: { photoCaptureProcessor in
                 // When the capture is complete, remove a reference to the photo capture delegate so it can be deallocated.
                 self.sessionQueue.async {
-                    self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = nil
+                    self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.uniqueID] = nil
                 }
             }, photoProcessingHandler: { animate in
                 DispatchQueue.main.async {
@@ -291,10 +384,10 @@ class CameraManager {
                 }
             })
 
-            photoCaptureProcessor.location = viewController.locationManager.location
+            photoCaptureProcessor.location = self.locationManager.location
 
             // The photo output holds a weak reference to the photo capture delegate and stores it in an array to maintain a strong reference.
-            self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = photoCaptureProcessor
+            self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.uniqueID] = photoCaptureProcessor
             self.photoOutput.capturePhoto(with: photoSettings, delegate: photoCaptureProcessor)
         }
     }

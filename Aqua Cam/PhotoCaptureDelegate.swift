@@ -4,17 +4,21 @@ import os
 
 class PhotoCaptureProcessor: NSObject {
 
-    private (set) var requestedPhotoSettings: AVCapturePhotoSettings
+    let requestedPhotoSettings: AVCapturePhotoSettings
 
     let willCapturePhotoAnimation: () -> Void
 
     let livePhotoCaptureHandler: (Bool) -> Void
 
-    lazy var context = CIContext()
-
     let completionHandler: (PhotoCaptureProcessor) -> Void
 
     let photoProcessingHandler: (Bool) -> Void
+
+    lazy var context = CIContext()
+
+    var uniqueID: Int64 { get {
+        return requestedPhotoSettings.uniqueID
+    }}
 
     var photoData: Data?
 
