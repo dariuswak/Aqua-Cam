@@ -65,6 +65,7 @@ class CameraManager {
                 return
             }
 //            let videoDevice = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back)!
+//            let videoDevice = AVCaptureDevice.default(.builtInLiDARDepthCamera, for: .video, position: .back)!
             let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
 
             guard session.canAddInput(videoDeviceInput) else {

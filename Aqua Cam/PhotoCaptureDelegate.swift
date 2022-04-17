@@ -24,8 +24,6 @@ class PhotoCaptureProcessor: NSObject {
 
     var livePhotoCompanionMovieURL: URL?
 
-    var portraitEffectsMatteData: Data?
-
     var maxPhotoProcessingTime: CMTime?
 
     var location: CLLocation?
@@ -86,25 +84,6 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
         } else {
             photoData = photo.fileDataRepresentation()
         }
-        // A portrait effects matte gets generated only if AVFoundation detects a face.
-        if var portraitEffectsMatte = photo.portraitEffectsMatte {
-            if let orientation = photo.metadata[ String(kCGImagePropertyOrientation) ] as? UInt32 {
-                portraitEffectsMatte = portraitEffectsMatte.applyingExifOrientation(CGImagePropertyOrientation(rawValue: orientation)!)
-            }
-            let portraitEffectsMattePixelBuffer = portraitEffectsMatte.mattingImage
-            let portraitEffectsMatteImage = CIImage( cvImageBuffer: portraitEffectsMattePixelBuffer, options: [ .auxiliaryPortraitEffectsMatte: true ] )
-
-            guard let perceptualColorSpace = CGColorSpace(name: CGColorSpace.sRGB) else {
-                portraitEffectsMatteData = nil
-                return
-            }
-            portraitEffectsMatteData = context.heifRepresentation(of: portraitEffectsMatteImage,
-                                                                  format: .RGBA8,
-                                                                  colorSpace: perceptualColorSpace,
-                                                                  options: [.portraitEffectsMatteImage: portraitEffectsMatteImage])
-        } else {
-            portraitEffectsMatteData = nil
-        }
     }
 
     /// - Tag: DidFinishRecordingLive
@@ -147,12 +126,6 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
                 creationRequest.addResource(with: .pairedVideo,
                                             fileURL: livePhotoCompanionMovieURL,
                                             options: livePhotoCompanionMovieFileOptions)
-            }
-            if let portraitEffectsMatteData = self.portraitEffectsMatteData {
-                let creationRequest = PHAssetCreationRequest.forAsset()
-                creationRequest.addResource(with: .photo,
-                                            data: portraitEffectsMatteData,
-                                            options: nil)
             }
         }, completionHandler: { _, error in
             if let error = error {
