@@ -13,6 +13,7 @@ class ViewController: UIViewController {
                                   completionHandler: nil)
     }
 
+    // shutter button
     @IBAction func shutterPressed() {
         if !cameraManager.session.isRunning {
             os_log("Attempting to restart the session")
@@ -97,6 +98,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var processingIndicator: UIActivityIndicatorView!
 
     @IBOutlet weak var focusIndicator: UIImageView!
+
+    @IBOutlet weak var recordingTime: UILabel!
 
     let cameraManager = CameraManager()
 
