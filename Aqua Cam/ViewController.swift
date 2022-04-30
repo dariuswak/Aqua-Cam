@@ -7,14 +7,30 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var previewView: PreviewView!
 
+    @IBOutlet weak var disconnectedControls: UIView!
+
+    @IBOutlet weak var capturingLivePhotoIndicator: UIButton!
+
+    @IBOutlet weak var processingIndicator: UIActivityIndicatorView!
+
+    @IBOutlet weak var focusIndicator: UIImageView!
+
+    @IBOutlet weak var recordingTime: UILabel!
+
+    @IBOutlet weak var bluetoothIndicator: UIButton!
+
+    @IBOutlet weak var housingProximity: UIProgressView!
+    
     @IBAction func openSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
                                   options: [:],
                                   completionHandler: nil)
     }
 
-    // shutter button
-    @IBAction func shutterPressed() {
+    // take photo
+    // start/stop recording video
+    // wake up
+    @IBAction func shutterButtonPressed() {
         if !cameraManager.session.isRunning {
             os_log("Attempting to restart the session")
             cameraManager.sessionQueue.async {
@@ -49,41 +65,43 @@ class ViewController: UIViewController {
             cameraManager.capturePhoto(previewView: previewView, viewController: self)
         }
     }
-
+    
     // 1st button - focus
-    // triple click - sleep (shutter to wake)
-    @IBAction func focusButton() {
+    // hold / triple click - sleep (shutter to wake)
+    @IBAction func focusButtonPressed() {
         multiClick.on(count: 3) {
-            os_log("Entering sleep")
-            self.previewView.isHidden = true
-            cameraManager.sessionQueue.async {
-                self.cameraManager.videoDeviceInput.ports
-                    .filter { port in port.mediaType == AVMediaType.video }
-                    .forEach { port in
-                        os_log("Disabling video port: \(port)")
-                        port.isEnabled = false
-                    }
-            }
+            sleep()
         } else: {
             os_log("Locking focus and exposure (cycle)")
             cameraManager.cycleLockFocusAndExposureInCentre(viewController: self)
         }
     }
 
+    func sleep() {
+        os_log("Entering sleep")
+        self.previewView.isHidden = true
+        cameraManager.sessionQueue.async {
+            self.cameraManager.videoDeviceInput.ports
+                .filter { port in port.mediaType == AVMediaType.video }
+                .forEach { port in
+                    os_log("Disabling video port: \(port)")
+                    port.isEnabled = false
+                }
+        }
+    }
+
     // 2nd button - mode
-    // click - change camera
-    // double click - photo/video
+    // click - change camera (cycle)
+    // double click - photo/video (cycle)
     // click during video recording - take photo
-    @IBAction func modePressed() {
+    @IBAction func modeButtonPressed() {
         if cameraManager.movieFileOutput?.isRecording == true {
             os_log("Capturing photo during movie recording")
             cameraManager.capturePhoto(previewView: previewView, viewController: self)
         } else {
             multiClick.on(count: 2) {
                 os_log("Changing mode: photo/video")
-                cameraManager.sessionQueue.async {
-                    self.cameraManager.cyclePhotoAndVideo()
-                }
+                self.recordingTime.isHidden = self.cameraManager.cyclePhotoAndVideo() == .photo
             } else: {
                 os_log("Changing camera (cycle)")
                 cameraManager.sessionQueue.async {
@@ -92,16 +110,6 @@ class ViewController: UIViewController {
             }
         }
     }
-
-    @IBOutlet weak var capturingLivePhotoIndicator: UIButton!
-
-    @IBOutlet weak var processingIndicator: UIActivityIndicatorView!
-
-    @IBOutlet weak var focusIndicator: UIImageView!
-
-    @IBOutlet weak var recordingTime: UILabel!
-
-    @IBOutlet weak var bluetoothIndicator: UIButton!
 
     let cameraManager = CameraManager()
 
@@ -217,6 +225,44 @@ class ViewController: UIViewController {
             os_log("centralManager.state changed")
             self.bluetoothIndicator.isEnabled = (self.bleCentralManager.centralManager.state == .poweredOn)
         })
+        keyValueObservations.append(observe(\.bleCentralManager.discoveredPeripheral?.state) { _,_ in
+            let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
+            UIView.animate(withDuration: 1, animations: {
+                self.disconnectedControls.alpha = connected ? 0 : 1
+            }, completion: { _ in
+                self.disconnectedControls.isHidden = connected
+            })
+        })
+        keyValueObservations.append(observe(\.bleCentralManager.centralManager.isScanning) { _,_ in
+            self.housingProximity.isHidden = !self.bleCentralManager.centralManager.isScanning
+        })
+        keyValueObservations.append(observe(\.bleCentralManager.signalStrengthDb) { _,_ in
+            let current = self.bleCentralManager.signalStrengthDb
+            self.housingProximity.setProgress(self.calculateProgress(current), animated: true)
+            self.housingProximity.trackTintColor = (current > SignalStrength.closingUp.rawValue ? UIColor.systemRed : .none)
+        })
+        keyValueObservations.append(observe(\.bleCentralManager.buttonPressed) { _,_ in
+            switch self.bleCentralManager.buttonPressed {
+            case BleConstants.shutterButtonCode: self.shutterButtonPressed()
+            case BleConstants.focusButtonCode: self.focusButtonPressed()
+            case BleConstants.focusPressHoldButtonCode: self.sleep()
+            case BleConstants.modeButtonCode: self.modeButtonPressed()
+            case BleConstants.upButtonCode: break
+            case BleConstants.menuButtonCode: break
+            case BleConstants.downButtonCode: break
+            default: os_log("Unsupported button code: \(self.bleCentralManager.buttonPressed)")
+            }
+        })
+    }
+
+    // convert strength in (minimal..connectable) into (0..1)
+    // range     = -80 .. -40 = 40 = -(minimal - connectable)
+    // proximity = -55 .. -40 = 15 = -(strength - connectable)
+    // progress  = 1 - 15/40  = 1 - (proximity / range)
+    func calculateProgress(_ current: Int) -> Float {
+        let range = -(SignalStrength.minimal.rawValue - SignalStrength.connectable.rawValue)
+        let proximity = -(current - SignalStrength.connectable.rawValue)
+        return 1 - (Float(proximity) / Float(range))
     }
 
     func removeObservers() {

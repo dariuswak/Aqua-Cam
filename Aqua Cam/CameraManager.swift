@@ -232,17 +232,19 @@ class CameraManager {
         }
     }
 
-    func cyclePhotoAndVideo() {
+    func cyclePhotoAndVideo() -> AVCaptureSession.Preset {
         if session.sessionPreset == .photo {
             os_log("Switching to Movie recording")
             sessionQueue.async {
                 self.switchToMovie()
             }
+            return .hd1920x1080
         } else {
             os_log("Switching to Photo taking")
             sessionQueue.async {
                 self.switchToPhoto()
             }
+            return .photo
         }
     }
 
