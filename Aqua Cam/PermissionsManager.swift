@@ -1,11 +1,12 @@
 import AVFoundation
 import Photos
 import CoreLocation
+import CoreBluetooth
 import os
 
 class PermissionsManager {
 
-    func askForCameraPermissions(cameraManager: CameraManager) {
+    func askForCameraPermissions(_ cameraManager: CameraManager) {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
             break
@@ -34,7 +35,7 @@ class PermissionsManager {
         }
     }
 
-    func askForSaveToPhotosPermissions(cameraManager: CameraManager) {
+    func askForSaveToPhotosPermissions(_ cameraManager: CameraManager) {
         switch PHPhotoLibrary.authorizationStatus(for: .addOnly) {
         case .authorized:
             break
@@ -58,11 +59,15 @@ class PermissionsManager {
         }
     }
 
-    func askForLocationPermissions(locationManager: CLLocationManager) {
+    func askForLocationPermissions(_ locationManager: CLLocationManager) {
         if locationManager.authorizationStatus == .notDetermined {
             os_log("Asking for location permissions")
             locationManager.requestWhenInUseAuthorization()
         }
+    }
+
+    func askForBluetoothPermissions(_ bleCentralManager: BleCentralManager) {
+        bleCentralManager.initiate()
     }
 
 }

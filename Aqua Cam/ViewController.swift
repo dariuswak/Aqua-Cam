@@ -101,11 +101,17 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var recordingTime: UILabel!
 
+    @IBOutlet weak var bluetoothIndicator: UIButton!
+
     let cameraManager = CameraManager()
+
+    @objc let bleCentralManager = BleCentralManager()
 
     let permissionsManager = PermissionsManager()
 
     let multiClick = TimedMultiClick()
+
+    var keyValueObservations = [NSKeyValueObservation]()
 
     override var prefersHomeIndicatorAutoHidden: Bool {
         return true
@@ -117,10 +123,11 @@ class ViewController: UIViewController {
         previewView.session = cameraManager.session
 
         os_log("Checking permissions")
-        permissionsManager.askForCameraPermissions(cameraManager: cameraManager)
+        permissionsManager.askForCameraPermissions(cameraManager)
         permissionsManager.askForMicrophonePermissions()
-        permissionsManager.askForSaveToPhotosPermissions(cameraManager: cameraManager)
-        permissionsManager.askForLocationPermissions(locationManager: cameraManager.locationManager)
+        permissionsManager.askForSaveToPhotosPermissions(cameraManager)
+        permissionsManager.askForLocationPermissions(cameraManager.locationManager)
+        permissionsManager.askForBluetoothPermissions(bleCentralManager)
 
         cameraManager.launchConfigureSession(previewView: previewView)
     }
@@ -186,6 +193,7 @@ class ViewController: UIViewController {
                 }
             }
         }
+        addObservers()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -196,8 +204,24 @@ class ViewController: UIViewController {
                 self.cameraManager.removeObservers()
             }
         }
-
+        os_log("Stopping BLE scanning")
+        bleCentralManager.centralManager.stopScan()
+        removeObservers()
         super.viewWillDisappear(animated)
+    }
+
+    // MARK: Notifications
+
+    func addObservers() {
+        keyValueObservations.append(observe(\.bleCentralManager.centralManager.state) { _,_ in
+            os_log("centralManager.state changed")
+            self.bluetoothIndicator.isEnabled = (self.bleCentralManager.centralManager.state == .poweredOn)
+        })
+    }
+
+    func removeObservers() {
+        keyValueObservations.forEach { $0.invalidate() }
+        keyValueObservations.removeAll()
     }
 
 }

@@ -455,10 +455,7 @@ class CameraManager {
 
     func removeObservers() {
         NotificationCenter.default.removeObserver(self)
-
-        for keyValueObservation in keyValueObservations {
-            keyValueObservation.invalidate()
-        }
+        keyValueObservations.forEach { $0.invalidate() }
         keyValueObservations.removeAll()
     }
 
