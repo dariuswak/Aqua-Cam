@@ -36,13 +36,7 @@ struct BleConstants {
     static let menuButtonCode = Data([48])
 
     static let downButtonCode = Data([80])
-    
-}
 
-enum SignalStrength: Int {
-    case outOfRange = -100
-    case minimal = -80
-    case closingUp = -50
-    case connectable = -40
-    case connected = 0
+    static let connectableSignalStrengthThreshold = -70 // TODO -40 (tap)
+
 }

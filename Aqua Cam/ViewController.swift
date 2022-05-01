@@ -21,7 +21,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var recordingTime: UIRecordingTime!
 
-    @IBOutlet weak var frameRate: UILabel!
+    @IBOutlet weak var frameRate: UIFormatFrameRate!
 
     // MARK: Bottom info pane
 
@@ -29,17 +29,19 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var modeIndicator: UILabel!
 
+    @IBOutlet weak var cameraName: UICameraType!
+
     @IBOutlet weak var focusLockIndicator: UILabel!
     
-    @IBOutlet weak var stabilisationIndicator: UILabel!
+    @IBOutlet weak var stabilisationIndicator: UIStabilisationType!
 
-    @IBOutlet weak var resolutionIndicator: UILabel!
+    @IBOutlet weak var resolutionIndicator: UIFormatResolution!
 
+    @IBOutlet weak var exposureIndicator: UIExposure!
+    
     @IBOutlet weak var isoIndicator: UILabel!
 
     // MARK: Disconnected controls
-
-    @IBOutlet weak var housingProximity: UIProgressView!
 
     @IBAction func openSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
@@ -132,13 +134,31 @@ class ViewController: UIViewController {
                 self.recordingTime.show(if: !isPhoto) {
                     self.frameRate.isHidden = isPhoto
                 }
-                self.modeIndicator.text = isPhoto ? " 📷 " : " 🎥 "
+                self.modeIndicator.text = isPhoto ? " 📷" : " 🎥"
             } else: {
                 os_log("Changing camera (cycle)")
                 cameraManager.sessionQueue.async {
                     self.cameraManager.changeCamera()
                 }
             }
+        }
+    }
+
+    // 3rd button - up
+    @IBAction func upButtonPressed() {
+        cameraManager.sessionQueue.async {
+            self.cameraManager.changeFormat(direction: .previous)
+        }
+    }
+
+    // 4th button - menu/ok
+    @IBAction func menuButtonPressed() {
+    }
+
+    // 5th button - down
+    @IBAction func downButtonPressed() {
+        cameraManager.sessionQueue.async {
+            self.cameraManager.changeFormat(direction: .next)
         }
     }
 
@@ -259,34 +279,44 @@ class ViewController: UIViewController {
         // format info
         keyValueObservations.append(observe(\.cameraManager.videoDeviceInput?.device.activeFormat) { _,_ in
             DispatchQueue.main.async {
-                let format = self.cameraManager.videoDeviceInput.device.activeFormat
-                self.frameRate.text = " 🎞 \(Int(format.videoSupportedFrameRateRanges.last!.maxFrameRate)) "
-                self.resolutionIndicator.text = " \(format.formatDescription.dimensions.width)x\(format.formatDescription.dimensions.height) "
+                self.frameRate.fromFormat = self.cameraManager.videoDeviceInput.device.activeFormat
+                self.resolutionIndicator.fromFormat = self.cameraManager.videoDeviceInput.device.activeFormat
             }
         })
+        self.resolutionIndicator.fromFormat = self.cameraManager.videoDeviceInput.device.activeFormat
         // bluetooth on/off
         keyValueObservations.append(observe(\.bleCentralManager.centralManager.state) { _,_ in
-            os_log("centralManager.state changed")
-            self.bluetoothIndicator.isEnabled = (self.bleCentralManager.centralManager.state == .poweredOn)
+            DispatchQueue.main.async {
+                os_log("centralManager.state changed")
+                self.bluetoothIndicator.isEnabled = (self.bleCentralManager.centralManager.state == .poweredOn)
+            }
         })
+        self.bluetoothIndicator.isEnabled = (self.bleCentralManager.centralManager.state == .poweredOn)
+        // camera name
+        keyValueObservations.append(observe(\.cameraManager.videoDeviceInput.device.deviceType) { _,_ in
+            DispatchQueue.main.async {
+                self.cameraName.cameraType = self.cameraManager.videoDeviceInput.device.deviceType
+            }
+        })
+        self.cameraName.cameraType = self.cameraManager.videoDeviceInput.device.deviceType
         // focus lock
         keyValueObservations.append(observe(\.cameraManager.videoDeviceInput.device.focusMode) { _,_ in
             DispatchQueue.main.async {
                 self.focusLockIndicator.isEnabled = self.cameraManager.videoDeviceInput.device.focusMode == .locked
             }
         })
+        self.focusLockIndicator.isEnabled = self.cameraManager.videoDeviceInput.device.focusMode == .locked
         // stabilisation mode
         keyValueObservations.append(observe(\.cameraManager.videoConnection?.activeVideoStabilizationMode) { _,_ in
             DispatchQueue.main.async {
-                os_log("Stabilisation mode: \(self.cameraManager.videoConnection?.isVideoStabilizationSupported ?? false) / \(self.cameraManager.videoConnection?.activeVideoStabilizationMode.rawValue ?? -100)")
-                let stabilisationMode = self.cameraManager.videoConnection?.activeVideoStabilizationMode
-                self.stabilisationIndicator.isEnabled = stabilisationMode != .off
-                let indicatorText: String = { switch self.cameraManager.videoConnection?.activeVideoStabilizationMode {
-                    case .off, .standard: return " (o) "
-                    case .cinematic, .cinematicExtended: return " ((o)) "
-                    default: return " (?) "
-                }}()
-                self.stabilisationIndicator.text = indicatorText
+                self.stabilisationIndicator.setStabilisationType(connection: self.cameraManager.videoConnection)
+            }
+        })
+        self.stabilisationIndicator.setStabilisationType(connection: self.cameraManager.videoConnection)
+        // exposure
+        keyValueObservations.append(observe(\.cameraManager.videoDeviceInput.device.exposureDuration) { _,_ in
+            DispatchQueue.main.async {
+                self.exposureIndicator.exposureDuration = self.cameraManager.videoDeviceInput.device.exposureDuration
             }
         })
         // iso
@@ -300,15 +330,6 @@ class ViewController: UIViewController {
             let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
             self.disconnectedControls.show(if: !connected, duration: 1, options: .transitionCrossDissolve)
         })
-        // proximity indicator
-        keyValueObservations.append(observe(\.bleCentralManager.centralManager.isScanning) { _,_ in
-            self.housingProximity.isHidden = !self.bleCentralManager.centralManager.isScanning
-        })
-        keyValueObservations.append(observe(\.bleCentralManager.signalStrengthDb) { _,_ in
-            let current = self.bleCentralManager.signalStrengthDb
-            self.housingProximity.setProgress(self.calculateProgress(current), animated: true)
-            self.housingProximity.trackTintColor = (current > SignalStrength.closingUp.rawValue ? UIColor.systemRed : .none)
-        })
         // housing buttons
         keyValueObservations.append(observe(\.bleCentralManager.buttonPressed) { _,_ in
             switch self.bleCentralManager.buttonPressed {
@@ -316,22 +337,12 @@ class ViewController: UIViewController {
             case BleConstants.focusButtonCode: self.focusButtonPressed()
             case BleConstants.focusPressHoldButtonCode: self.sleep()
             case BleConstants.modeButtonCode: self.modeButtonPressed()
-            case BleConstants.upButtonCode: break
-            case BleConstants.menuButtonCode: break
-            case BleConstants.downButtonCode: break
+            case BleConstants.upButtonCode: self.upButtonPressed()
+            case BleConstants.menuButtonCode: self.menuButtonPressed()
+            case BleConstants.downButtonCode: self.downButtonPressed()
             default: os_log("Unsupported button code: \(self.bleCentralManager.buttonPressed)")
             }
         })
-    }
-
-    // convert strength in (minimal..connectable) into (0..1)
-    // range     = -80 .. -40 = 40 = -(minimal - connectable)
-    // proximity = -55 .. -40 = 15 = -(strength - connectable)
-    // progress  = 1 - 15/40  = 1 - (proximity / range)
-    func calculateProgress(_ current: Int) -> Float {
-        let range = -(SignalStrength.minimal.rawValue - SignalStrength.connectable.rawValue)
-        let proximity = -(current - SignalStrength.connectable.rawValue)
-        return 1 - (Float(proximity) / Float(range))
     }
 
     func removeObservers() {

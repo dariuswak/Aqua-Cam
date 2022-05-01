@@ -1,4 +1,6 @@
 import UIKit
+import AVFoundation
+import os
 
 class TimedMultiClick {
 
@@ -56,6 +58,70 @@ class UIRecordingTime: UILabel {
         willSet {
             text = UIRecordingTime.ZERO
             timer?.invalidate()
+        }
+    }
+
+}
+
+class UIFormatFrameRate: UILabel {
+
+    var fromFormat: AVCaptureDevice.Format? {
+        didSet {
+            text = " 🎞 \(Int(fromFormat!.videoSupportedFrameRateRanges.last!.maxFrameRate)) "
+        }
+    }
+
+}
+
+class UICameraType: UILabel {
+
+    var cameraType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera {
+        didSet {
+            let longName = cameraType.rawValue
+            os_log("Camera name: \(longName)")
+            let codeName = (longName.contains("Ultra") ? "U" : "") +
+                           (longName.contains("Wide") ? "W" : "") +
+                           (longName.contains("Tele") ? "T" : "") +
+                           (longName.contains("Depth") ? "D" : "")
+            self.text = " \(codeName) "
+        }
+    }
+
+}
+
+class UIStabilisationType: UILabel {
+
+    func setStabilisationType(connection: AVCaptureConnection?) {
+        os_log("Stabilisation mode: \(connection?.isVideoStabilizationSupported ?? false) / \(connection?.activeVideoStabilizationMode.rawValue ?? -100)")
+        guard let stabilisationMode = connection?.activeVideoStabilizationMode else { return }
+        isEnabled = stabilisationMode != .off
+        let indicatorText: String = { switch stabilisationMode {
+            case .off, .standard: return " (o) "
+            case .cinematic, .cinematicExtended: return " ((o)) "
+            default: return " (?) "
+        }}()
+        text = indicatorText
+    }
+
+}
+
+class UIFormatResolution: UILabel {
+
+    var fromFormat: AVCaptureDevice.Format? {
+        didSet {
+            let dimensions = fromFormat!.formatDescription.dimensions
+            text = " \(dimensions.width)x\(dimensions.height) "
+        }
+    }
+
+}
+
+class UIExposure: UILabel {
+
+    var exposureDuration: CMTime? {
+        didSet {
+            os_log("Exposure: \(String(describing: self.exposureDuration!))")
+            text = " 1/\(Int(Int64(exposureDuration!.timescale) / exposureDuration!.value)) "
         }
     }
 

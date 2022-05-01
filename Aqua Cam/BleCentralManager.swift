@@ -8,8 +8,6 @@ class BleCentralManager: NSObject {
 
     @objc dynamic var discoveredPeripheral: CBPeripheral?
 
-    @objc dynamic var signalStrengthDb: Int = SignalStrength.outOfRange.rawValue
-
     @objc dynamic var buttonPressed = Data()
 
     func initiate() {
@@ -17,7 +15,6 @@ class BleCentralManager: NSObject {
     }
 
     func connectToPeripheral() {
-        signalStrengthDb = SignalStrength.outOfRange.rawValue
         let foundPeripherals: [CBPeripheral] = (centralManager.retrieveConnectedPeripherals(withServices: [BleConstants.buttonsServiceUuid]))
         if let foundPeripheral = foundPeripherals.last {
             os_log("Found previously connected peripherals with Buttons Service: \(foundPeripherals)")
@@ -69,14 +66,10 @@ extension BleCentralManager: CBCentralManagerDelegate {
         guard let advertisedServiceName = advertisementData[CBAdvertisementDataLocalNameKey] as? String,
               advertisedServiceName == BleConstants.peripherialName
                 else { return }
-        // Only update proximity if not connected yet
-        if (signalStrengthDb != SignalStrength.connected.rawValue) {
-            signalStrengthDb = RSSI.intValue
-        }
         if discoveredPeripheral == peripheral {
             return
         }
-        guard RSSI.intValue > SignalStrength.connectable.rawValue else {
+        guard RSSI.intValue > BleConstants.connectableSignalStrengthThreshold else {
             //os_log("Discovered perhiperal not in expected range, at \(RSSI.intValue)")
             return
         }
@@ -97,7 +90,6 @@ extension BleCentralManager: CBCentralManagerDelegate {
         os_log("Peripheral Connected")
         centralManager.stopScan()
         os_log("Scanning stopped")
-        signalStrengthDb = SignalStrength.connected.rawValue
         peripheral.delegate = self
         peripheral.discoverServices([BleConstants.deviceInformationServiceUuid,
                                      BleConstants.batteryServiceUuid, BleConstants.emulatedBatteryServiceUuid,

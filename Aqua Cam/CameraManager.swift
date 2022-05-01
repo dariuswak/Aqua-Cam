@@ -45,49 +45,40 @@ class CameraManager: NSObject {
     @objc dynamic var videoConnection: AVCaptureConnection?
 
     func launchConfigureSession(previewView: PreviewView) {
+        if setupResult != .success {
+            return
+        }
+        guard let videoDevice = videoDeviceDiscoverySession.devices.first else {
+            os_log("No back-located video devices unavailable.")
+            setupResult = .configurationFailed
+            return
+        }
+        do {
+            videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
+        } catch {
+            os_log("Couldn't create video device input: \(String(describing: error))")
+            setupResult = .configurationFailed
+            return
+        }
         sessionQueue.async {
             self.configureSession(previewView: previewView)
         }
     }
 
     func configureSession(previewView: PreviewView) {
-        if setupResult != .success {
-            return
-        }
-
         session.beginConfiguration()
-
         session.sessionPreset = .photo
 
         // Add video input.
-        do {
-            guard let videoDevice = videoDeviceDiscoverySession.devices.first else {
-                os_log("No back-located video devices unavailable.")
-                setupResult = .configurationFailed
-                session.commitConfiguration()
-                return
-            }
-//            let videoDevice = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back)!
-//            let videoDevice = AVCaptureDevice.default(.builtInLiDARDepthCamera, for: .video, position: .back)!
-            let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
-
-            guard session.canAddInput(videoDeviceInput) else {
-                os_log("Couldn't add video device input to the session.")
-                setupResult = .configurationFailed
-                session.commitConfiguration()
-                return
-            }
-            session.addInput(videoDeviceInput)
-            self.videoDeviceInput = videoDeviceInput
-
-            DispatchQueue.main.async {
-                previewView.videoPreviewLayer.connection?.videoOrientation = Constants.LANDSCAPE_RIGHT
-            }
-        } catch {
-            os_log("Couldn't create video device input: \(String(describing: error))")
+        guard session.canAddInput(videoDeviceInput) else {
+            os_log("Couldn't add video device input to the session.")
             setupResult = .configurationFailed
             session.commitConfiguration()
             return
+        }
+        session.addInput(videoDeviceInput)
+        DispatchQueue.main.async {
+            previewView.videoPreviewLayer.connection?.videoOrientation = Constants.LANDSCAPE_RIGHT
         }
 
         // Add an audio input device.
@@ -171,10 +162,10 @@ class CameraManager: NSObject {
                     os_log("changeCamera_1: Could not lock device for configuration: \(String(describing: error))")
                 }
             } else {
-                let highestQualityFormat = videoDeviceInput.device.formats.last
+                let highestQualityFormat = selectFormat(direction: Constants.Direction.last)
                 do {
                     try videoDeviceInput.device.lockForConfiguration()
-//                    videoDeviceInput.device.activeFormat = highestQualityFormat!
+                    videoDeviceInput.device.activeFormat = highestQualityFormat
                     videoDeviceInput.device.unlockForConfiguration()
                 } catch {
                     os_log("changeCamera_2: Could not lock device for configuration: \(String(describing: error))")
@@ -203,6 +194,44 @@ class CameraManager: NSObject {
         }
 
         session.commitConfiguration()
+    }
+
+    func changeFormat(direction: Constants.Direction) {
+        guard movieFileOutput != nil else { return }
+        session.beginConfiguration()
+        let newFormat = selectFormat(direction: direction)
+        do {
+            try videoDeviceInput.device.lockForConfiguration()
+            videoDeviceInput.device.activeFormat = newFormat
+            videoDeviceInput.device.unlockForConfiguration()
+        } catch {
+            os_log("changeFormat: Could not lock device for configuration: \(String(describing: error))")
+        }
+        os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
+        videoConnection = movieFileOutput?.connection(with: .video)
+        if let connection = videoConnection {
+            if connection.isVideoStabilizationSupported {
+                connection.preferredVideoStabilizationMode = .auto
+            }
+        }
+        session.commitConfiguration()
+    }
+
+    func selectFormat(direction: Constants.Direction) -> AVCaptureDevice.Format {
+        let selectedFormats = videoDeviceInput.device.formats.filter {!(
+            $0.isVideoBinned ||
+            $0.formatDescription.dimensions.width < 1280 ||
+            ($0.videoSupportedFrameRateRanges.last!.maxFrameRate < 60
+                && $0 != videoDeviceInput.device.formats.last)
+        )}
+        selectedFormats.forEach { os_log("FORMAT: \($0)") }
+        if direction == .last {
+            return selectedFormats.last!
+        }
+        var index = selectedFormats.firstIndex(of: videoDeviceInput.device.activeFormat)!
+        index = (index + direction.rawValue) % selectedFormats.count
+        if index < 0 { index += selectedFormats.count }
+        return selectedFormats[index]
     }
 
     func cycleLockFocusAndExposureInCentre() -> AVCaptureDevice.FocusMode {
@@ -292,10 +321,10 @@ class CameraManager: NSObject {
                 os_log("switchToMovie_1: Could not lock device for configuration: \(String(describing: error))")
             }
         } else {
-            let highestQualityFormat = videoDeviceInput.device.formats.last
+            let highestQualityFormat = selectFormat(direction: Constants.Direction.last)
             do {
                 try videoDeviceInput.device.lockForConfiguration()
-//                videoDeviceInput.device.activeFormat = highestQualityFormat!
+                videoDeviceInput.device.activeFormat = highestQualityFormat
                 videoDeviceInput.device.unlockForConfiguration()
             } catch {
                 os_log("switchToMovie_2: Could not lock device for configuration: \(String(describing: error))")

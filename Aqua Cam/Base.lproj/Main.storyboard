@@ -42,7 +42,7 @@
                                                 <color key="textColor" systemColor="systemRedColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 🎞 0 " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23o-pM-uqv" userLabel="Frame Rate">
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 🎞 ? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23o-pM-uqv" userLabel="Frame Rate" customClass="UIFormatFrameRate" customModule="Aqua_Cam" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="25.5" width="72.5" height="0.0"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
@@ -67,36 +67,55 @@
                                                 <color key="textColor" systemColor="systemBlueColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 📷 " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtz-dc-irH" userLabel="Mode">
-                                                <rect key="frame" x="110.5" y="0.0" width="41.5" height="25.5"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
-                                                <color key="textColor" systemColor="systemRedColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ntc-vi-na0" userLabel="Camera Info">
+                                                <rect key="frame" x="82" y="0.0" width="60.5" height="25.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 📷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtz-dc-irH" userLabel="Mode">
+                                                        <rect key="frame" x="0.0" y="0.0" width="34" height="25.5"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" systemColor="systemRedColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qBG-l3-T0N" userLabel="Camera Name" customClass="UICameraType" customModule="Aqua_Cam" customModuleProvider="target">
+                                                        <rect key="frame" x="34" y="0.0" width="26.5" height="25.5"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" systemColor="systemRedColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ⧈ " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qMm-6N-bH1" userLabel="Focus">
-                                                <rect key="frame" x="229" y="0.0" width="34" height="25.5"/>
+                                                <rect key="frame" x="191" y="0.0" width="34" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
                                                 <color key="textColor" systemColor="systemRedColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" (o) " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZW-hY-GIO" userLabel="Stabilisation">
-                                                <rect key="frame" x="339.5" y="0.0" width="50" height="25.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" (o) " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZW-hY-GIO" userLabel="Stabilisation" customClass="UIStabilisationType" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="274" y="0.0" width="50" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
                                                 <color key="textColor" systemColor="systemRedColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 0x0 " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3e-nx-hLc" userLabel="Resolution">
-                                                <rect key="frame" x="466.5" y="0.0" width="43" height="25.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ????x???? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3e-nx-hLc" userLabel="Resolution" customClass="UIFormatResolution" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="372.5" y="0.0" width="85" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
                                                 <color key="textColor" systemColor="systemRedColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ISO 0 " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23h-yX-gKX" userLabel="ISO">
-                                                <rect key="frame" x="586.5" y="0.0" width="59.5" height="25.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 1/? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bjo-ad-CEI" userLabel="Exposure" customClass="UIExposure" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="506" y="0.0" width="35" height="25.5"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
+                                                <color key="textColor" systemColor="systemRedColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ISO ? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23h-yX-gKX" userLabel="ISO">
+                                                <rect key="frame" x="589.5" y="0.0" width="56.5" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
                                                 <color key="textColor" systemColor="systemRedColor"/>
@@ -137,9 +156,6 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Gv-n6-Rt1" userLabel="Disconnected Controls">
                                 <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                                 <subviews>
-                                    <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="RaJ-sP-etR" userLabel="Proximity">
-                                        <rect key="frame" x="50" y="18" width="796" height="4"/>
-                                    </progressView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="tQF-tL-Dly" userLabel="Buttons">
                                         <rect key="frame" x="758.5" y="30" width="77.5" height="324"/>
                                         <subviews>
@@ -178,16 +194,25 @@
                                                 <rect key="frame" x="0.0" y="146.5" width="77.5" height="31"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" title="Up"/>
+                                                <connections>
+                                                    <action selector="upButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Wq-Wn-WyO"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gll-Rf-lBf" userLabel="Menu">
                                                 <rect key="frame" x="0.0" y="186" width="77.5" height="31"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" title="Menu"/>
+                                                <connections>
+                                                    <action selector="menuButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="G11-D2-znY"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T46-qr-MWF">
                                                 <rect key="frame" x="0.0" y="225" width="77.5" height="31"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" title="Down"/>
+                                                <connections>
+                                                    <action selector="downButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="f8I-Dl-Mjm"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wD4-kc-Wst" userLabel="Spacer, lower">
                                                 <rect key="frame" x="0.0" y="264.5" width="77.5" height="20.5"/>
@@ -209,12 +234,9 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="RaJ-sP-etR" firstAttribute="top" secondItem="7Gv-n6-Rt1" secondAttribute="topMargin" constant="10" id="aKC-2F-dCx"/>
                                     <constraint firstAttribute="trailing" secondItem="tQF-tL-Dly" secondAttribute="trailing" constant="60" id="ghY-fY-91D"/>
                                     <constraint firstItem="tQF-tL-Dly" firstAttribute="top" secondItem="7Gv-n6-Rt1" secondAttribute="top" constant="30" id="qo9-9M-udH"/>
-                                    <constraint firstItem="RaJ-sP-etR" firstAttribute="leading" secondItem="7Gv-n6-Rt1" secondAttribute="leading" constant="50" id="qvu-sd-dx8"/>
                                     <constraint firstAttribute="bottom" secondItem="tQF-tL-Dly" secondAttribute="bottom" constant="60" id="sB4-GG-Pgi"/>
-                                    <constraint firstAttribute="trailing" secondItem="RaJ-sP-etR" secondAttribute="trailing" constant="50" id="uf4-bi-EwP"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -233,12 +255,13 @@
                     </view>
                     <connections>
                         <outlet property="bluetoothIndicator" destination="E7R-Vu-ppp" id="umT-0G-Tgn"/>
+                        <outlet property="cameraName" destination="qBG-l3-T0N" id="3ht-XC-3qs"/>
                         <outlet property="capturingLivePhotoIndicator" destination="mbe-HS-tO6" id="0gy-jK-lTT"/>
                         <outlet property="disconnectedControls" destination="7Gv-n6-Rt1" id="cAt-Qm-ahN"/>
+                        <outlet property="exposureIndicator" destination="Bjo-ad-CEI" id="cyJ-eq-GcI"/>
                         <outlet property="focusIndicator" destination="nox-87-Tkw" id="u2C-nj-88d"/>
                         <outlet property="focusLockIndicator" destination="qMm-6N-bH1" id="Yid-Vc-CVA"/>
                         <outlet property="frameRate" destination="23o-pM-uqv" id="XPC-Yb-oRw"/>
-                        <outlet property="housingProximity" destination="RaJ-sP-etR" id="xrh-90-cfP"/>
                         <outlet property="isoIndicator" destination="23h-yX-gKX" id="r2U-vQ-AYA"/>
                         <outlet property="modeIndicator" destination="qtz-dc-irH" id="rEE-hw-2Dj"/>
                         <outlet property="previewView" destination="GYI-aq-X2x" id="ieX-34-8PY"/>
