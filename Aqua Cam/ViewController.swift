@@ -9,18 +9,28 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var disconnectedControls: UIView!
 
-    @IBOutlet weak var capturingLivePhotoIndicator: UIButton!
-
-    @IBOutlet weak var processingIndicator: UIActivityIndicatorView!
+    // MARK: Center widgets
 
     @IBOutlet weak var focusIndicator: UIImageView!
 
+    @IBOutlet weak var processingIndicator: UIActivityIndicatorView!
+
+    // MARK: Left info pane
+
+    @IBOutlet weak var capturingLivePhotoIndicator: UILabel!
+
     @IBOutlet weak var recordingTime: UILabel!
 
-    @IBOutlet weak var bluetoothIndicator: UIButton!
+    @IBOutlet weak var frameRate: UILabel!
+
+    // MARK: Bottom info pane
+
+    @IBOutlet weak var bluetoothIndicator: UILabel!
+
+    // MARK: Disconnected controls
 
     @IBOutlet weak var housingProximity: UIProgressView!
-    
+
     @IBAction func openSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
                                   options: [:],
@@ -101,7 +111,10 @@ class ViewController: UIViewController {
         } else {
             multiClick.on(count: 2) {
                 os_log("Changing mode: photo/video")
-                self.recordingTime.isHidden = self.cameraManager.cyclePhotoAndVideo() == .photo
+                let isPhoto = self.cameraManager.cyclePhotoAndVideo() == .photo
+                self.recordingTime.show(if: !isPhoto) {
+                    self.frameRate.isHidden = isPhoto
+                }
             } else: {
                 os_log("Changing camera (cycle)")
                 cameraManager.sessionQueue.async {
@@ -227,11 +240,7 @@ class ViewController: UIViewController {
         })
         keyValueObservations.append(observe(\.bleCentralManager.discoveredPeripheral?.state) { _,_ in
             let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
-            UIView.animate(withDuration: 1, animations: {
-                self.disconnectedControls.alpha = connected ? 0 : 1
-            }, completion: { _ in
-                self.disconnectedControls.isHidden = connected
-            })
+            self.disconnectedControls.show(if: !connected, duration: 1, options: .transitionCrossDissolve)
         })
         keyValueObservations.append(observe(\.bleCentralManager.centralManager.isScanning) { _,_ in
             self.housingProximity.isHidden = !self.bleCentralManager.centralManager.isScanning

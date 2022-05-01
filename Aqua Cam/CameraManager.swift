@@ -362,15 +362,7 @@ class CameraManager {
                     } else if self.inProgressLivePhotoCapturesCount > 0 {
                         self.inProgressLivePhotoCapturesCount -= 1
                     }
-
-                    let inProgressLivePhotoCapturesCount = self.inProgressLivePhotoCapturesCount
-                    DispatchQueue.main.async {
-                        if inProgressLivePhotoCapturesCount > 0 {
-                            viewController.capturingLivePhotoIndicator.isHidden = false
-                        } else {
-                            viewController.capturingLivePhotoIndicator.isHidden = true
-                        }
-                    }
+                    viewController.capturingLivePhotoIndicator.show(if: self.inProgressLivePhotoCapturesCount > 0)
                 }
             }, completionHandler: { photoCaptureProcessor in
                 // When the capture is complete, remove a reference to the photo capture delegate so it can be deallocated.
