@@ -3,7 +3,7 @@ import CoreLocation
 import UIKit
 import os
 
-class CameraManager {
+class CameraManager: NSObject {
 
     enum SessionSetupResult {
         case success
@@ -24,7 +24,8 @@ class CameraManager {
         deviceTypes: [
             .builtInWideAngleCamera,
             .builtInUltraWideCamera,
-            .builtInTelephotoCamera],
+            .builtInTelephotoCamera,
+            .builtInLiDARDepthCamera],
         mediaType: .video, position: .back)
 
     var inProgressPhotoCaptureDelegates = [Int64: PhotoCaptureProcessor]()
@@ -39,7 +40,9 @@ class CameraManager {
 
     @objc dynamic var videoDeviceInput: AVCaptureDeviceInput!
 
-    var movieFileOutput: AVCaptureMovieFileOutput?
+    @objc dynamic var movieFileOutput: AVCaptureMovieFileOutput?
+
+    @objc dynamic var videoConnection: AVCaptureConnection?
 
     func launchConfigureSession(previewView: PreviewView) {
         sessionQueue.async {
@@ -116,6 +119,12 @@ class CameraManager {
         photoOutput.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
         photoOutput.isPortraitEffectsMatteDeliveryEnabled = photoOutput.isPortraitEffectsMatteDeliverySupported
         photoOutput.maxPhotoQualityPrioritization = .quality
+        videoConnection = photoOutput.connection(with: .video)
+        if let connection = videoConnection {
+            if connection.isVideoStabilizationSupported {
+                connection.preferredVideoStabilizationMode = .auto
+            }
+        }
 
         session.commitConfiguration()
     }
@@ -165,18 +174,16 @@ class CameraManager {
                 let highestQualityFormat = videoDeviceInput.device.formats.last
                 do {
                     try videoDeviceInput.device.lockForConfiguration()
-                    videoDeviceInput.device.activeFormat = highestQualityFormat!
+//                    videoDeviceInput.device.activeFormat = highestQualityFormat!
                     videoDeviceInput.device.unlockForConfiguration()
                 } catch {
                     os_log("changeCamera_2: Could not lock device for configuration: \(String(describing: error))")
                 }
             }
             os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
-            if let connection = movieFileOutput?.connection(with: .video) {
-                if connection.isVideoStabilizationSupported {
-                    connection.preferredVideoStabilizationMode = .auto
-                }
-            }
+            videoConnection = movieFileOutput?.connection(with: .video)
+        } else {
+            videoConnection = photoOutput.connection(with: .video)
         }
 
         /*
@@ -189,21 +196,22 @@ class CameraManager {
         photoOutput.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
         photoOutput.isPortraitEffectsMatteDeliveryEnabled = photoOutput.isPortraitEffectsMatteDeliverySupported
         photoOutput.maxPhotoQualityPrioritization = .quality
+        if let connection = videoConnection {
+            if connection.isVideoStabilizationSupported {
+                connection.preferredVideoStabilizationMode = .auto
+            }
+        }
 
         session.commitConfiguration()
     }
 
-    func cycleLockFocusAndExposureInCentre(viewController: ViewController) {
+    func cycleLockFocusAndExposureInCentre() -> AVCaptureDevice.FocusMode {
         if (self.videoDeviceInput.device.focusMode == .continuousAutoFocus) {
-            UIView.animate(withDuration: 1,
-                           animations: { viewController.focusIndicator.alpha = 1 },
-                           completion: { _ in
-                               UIView.animate(withDuration: 1,
-                                              animations: { viewController.focusIndicator.alpha = 0 })
-                           })
             focusAndExposure(with: .locked, exposureMode: .autoExpose)
+            return .locked
         } else {
             focusAndExposure(with: .continuousAutoFocus, exposureMode: .continuousAutoExposure)
+            return .continuousAutoFocus
         }
     }
 
@@ -238,7 +246,7 @@ class CameraManager {
             sessionQueue.async {
                 self.switchToMovie()
             }
-            return .hd1920x1080
+            return Constants.HD_4K
         } else {
             os_log("Switching to Photo taking")
             sessionQueue.async {
@@ -257,6 +265,12 @@ class CameraManager {
         photoOutput.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
         photoOutput.isPortraitEffectsMatteDeliveryEnabled = photoOutput.isPortraitEffectsMatteDeliverySupported
         photoOutput.maxPhotoQualityPrioritization = .quality
+        videoConnection = photoOutput.connection(with: .video)
+        if let connection = videoConnection {
+            if connection.isVideoStabilizationSupported {
+                connection.preferredVideoStabilizationMode = .auto
+            }
+        }
         session.commitConfiguration()
     }
 
@@ -281,14 +295,15 @@ class CameraManager {
             let highestQualityFormat = videoDeviceInput.device.formats.last
             do {
                 try videoDeviceInput.device.lockForConfiguration()
-                videoDeviceInput.device.activeFormat = highestQualityFormat!
+//                videoDeviceInput.device.activeFormat = highestQualityFormat!
                 videoDeviceInput.device.unlockForConfiguration()
             } catch {
                 os_log("switchToMovie_2: Could not lock device for configuration: \(String(describing: error))")
             }
         }
         os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
-        if let connection = movieFileOutput.connection(with: .video) {
+        videoConnection = movieFileOutput.connection(with: .video)
+        if let connection = videoConnection {
             if connection.isVideoStabilizationSupported {
                 connection.preferredVideoStabilizationMode = .auto
             }
@@ -421,6 +436,7 @@ class CameraManager {
     // MARK: Notifications
 
     func addObservers() {
+// TODO
 //        let systemPressureStateObservation = observe(\.videoDeviceInput.device.systemPressureState, options: .new) { _, change in
 //            guard let systemPressureState = change.newValue else { return }
 //            self.setRecommendedFrameRateRangeForPressureState(systemPressureState: systemPressureState)

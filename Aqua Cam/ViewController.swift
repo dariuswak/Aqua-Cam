@@ -19,13 +19,23 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var capturingLivePhotoIndicator: UILabel!
 
-    @IBOutlet weak var recordingTime: UILabel!
+    @IBOutlet weak var recordingTime: UIRecordingTime!
 
     @IBOutlet weak var frameRate: UILabel!
 
     // MARK: Bottom info pane
 
     @IBOutlet weak var bluetoothIndicator: UILabel!
+
+    @IBOutlet weak var modeIndicator: UILabel!
+
+    @IBOutlet weak var focusLockIndicator: UILabel!
+    
+    @IBOutlet weak var stabilisationIndicator: UILabel!
+
+    @IBOutlet weak var resolutionIndicator: UILabel!
+
+    @IBOutlet weak var isoIndicator: UILabel!
 
     // MARK: Disconnected controls
 
@@ -83,7 +93,14 @@ class ViewController: UIViewController {
             sleep()
         } else: {
             os_log("Locking focus and exposure (cycle)")
-            cameraManager.cycleLockFocusAndExposureInCentre(viewController: self)
+            if cameraManager.cycleLockFocusAndExposureInCentre() == .locked {
+                UIView.animate(withDuration: 1,
+                               animations: { self.focusIndicator.alpha = 1 },
+                               completion: { _ in
+                                   UIView.animate(withDuration: 1,
+                                                  animations: { self.focusIndicator.alpha = 0 })
+                               })
+            }
         }
     }
 
@@ -115,6 +132,7 @@ class ViewController: UIViewController {
                 self.recordingTime.show(if: !isPhoto) {
                     self.frameRate.isHidden = isPhoto
                 }
+                self.modeIndicator.text = isPhoto ? " 📷 " : " 🎥 "
             } else: {
                 os_log("Changing camera (cycle)")
                 cameraManager.sessionQueue.async {
@@ -124,7 +142,7 @@ class ViewController: UIViewController {
         }
     }
 
-    let cameraManager = CameraManager()
+    @objc let cameraManager = CameraManager()
 
     @objc let bleCentralManager = BleCentralManager()
 
@@ -234,14 +252,55 @@ class ViewController: UIViewController {
     // MARK: Notifications
 
     func addObservers() {
+        // recording timer
+        keyValueObservations.append(observe(\.cameraManager.movieFileOutput?.isRecording) { _,_ in
+            self.recordingTime.isRecording = self.cameraManager.movieFileOutput?.isRecording ?? false
+        })
+        // format info
+        keyValueObservations.append(observe(\.cameraManager.videoDeviceInput?.device.activeFormat) { _,_ in
+            DispatchQueue.main.async {
+                let format = self.cameraManager.videoDeviceInput.device.activeFormat
+                self.frameRate.text = " 🎞 \(Int(format.videoSupportedFrameRateRanges.last!.maxFrameRate)) "
+                self.resolutionIndicator.text = " \(format.formatDescription.dimensions.width)x\(format.formatDescription.dimensions.height) "
+            }
+        })
+        // bluetooth on/off
         keyValueObservations.append(observe(\.bleCentralManager.centralManager.state) { _,_ in
             os_log("centralManager.state changed")
             self.bluetoothIndicator.isEnabled = (self.bleCentralManager.centralManager.state == .poweredOn)
         })
+        // focus lock
+        keyValueObservations.append(observe(\.cameraManager.videoDeviceInput.device.focusMode) { _,_ in
+            DispatchQueue.main.async {
+                self.focusLockIndicator.isEnabled = self.cameraManager.videoDeviceInput.device.focusMode == .locked
+            }
+        })
+        // stabilisation mode
+        keyValueObservations.append(observe(\.cameraManager.videoConnection?.activeVideoStabilizationMode) { _,_ in
+            DispatchQueue.main.async {
+                os_log("Stabilisation mode: \(self.cameraManager.videoConnection?.isVideoStabilizationSupported ?? false) / \(self.cameraManager.videoConnection?.activeVideoStabilizationMode.rawValue ?? -100)")
+                let stabilisationMode = self.cameraManager.videoConnection?.activeVideoStabilizationMode
+                self.stabilisationIndicator.isEnabled = stabilisationMode != .off
+                let indicatorText: String = { switch self.cameraManager.videoConnection?.activeVideoStabilizationMode {
+                    case .off, .standard: return " (o) "
+                    case .cinematic, .cinematicExtended: return " ((o)) "
+                    default: return " (?) "
+                }}()
+                self.stabilisationIndicator.text = indicatorText
+            }
+        })
+        // iso
+        keyValueObservations.append(observe(\.cameraManager.videoDeviceInput.device.iso) { _,_ in
+            DispatchQueue.main.async {
+                self.isoIndicator.text = " ISO \(Int(self.cameraManager.videoDeviceInput.device.iso)) "
+            }
+        })
+        // disconnected view
         keyValueObservations.append(observe(\.bleCentralManager.discoveredPeripheral?.state) { _,_ in
             let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
             self.disconnectedControls.show(if: !connected, duration: 1, options: .transitionCrossDissolve)
         })
+        // proximity indicator
         keyValueObservations.append(observe(\.bleCentralManager.centralManager.isScanning) { _,_ in
             self.housingProximity.isHidden = !self.bleCentralManager.centralManager.isScanning
         })
@@ -250,6 +309,7 @@ class ViewController: UIViewController {
             self.housingProximity.setProgress(self.calculateProgress(current), animated: true)
             self.housingProximity.trackTintColor = (current > SignalStrength.closingUp.rawValue ? UIColor.systemRed : .none)
         })
+        // housing buttons
         keyValueObservations.append(observe(\.bleCentralManager.buttonPressed) { _,_ in
             switch self.bleCentralManager.buttonPressed {
             case BleConstants.shutterButtonCode: self.shutterButtonPressed()
@@ -277,30 +337,6 @@ class ViewController: UIViewController {
     func removeObservers() {
         keyValueObservations.forEach { $0.invalidate() }
         keyValueObservations.removeAll()
-    }
-
-}
-
-class TimedMultiClick {
-
-    private var counter = 0
-
-    private var countResetTimer: Timer?
-
-    func on(count: Int, action: () -> Void, else: () -> Void) {
-        countResetTimer?.invalidate()
-        countResetTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
-            self.countResetTimer?.invalidate()
-            self.counter = 0
-        }
-        counter += 1
-        if counter == count {
-            countResetTimer?.invalidate()
-            counter = 0
-            action()
-        } else {
-            `else`()
-        }
     }
 
 }

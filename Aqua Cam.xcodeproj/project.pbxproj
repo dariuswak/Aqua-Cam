@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A09202D281E543100E33C6A /* UIWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A09202C281E543100E33C6A /* UIWidgets.swift */; };
 		8A766A512801380E00677419 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A502801380E00677419 /* AppDelegate.swift */; };
 		8A766A552801380E00677419 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A542801380E00677419 /* ViewController.swift */; };
 		8A766A582801380E00677419 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A766A562801380E00677419 /* Main.storyboard */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8A09202C281E543100E33C6A /* UIWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWidgets.swift; sourceTree = "<group>"; };
 		8A766A4D2801380E00677419 /* Aqua Cam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aqua Cam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A766A502801380E00677419 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8A766A542801380E00677419 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			children = (
 				8A766A502801380E00677419 /* AppDelegate.swift */,
 				8A766A542801380E00677419 /* ViewController.swift */,
+				8A09202C281E543100E33C6A /* UIWidgets.swift */,
 				8A766A822802852500677419 /* CameraManager.swift */,
 				8AFE65932802F18100F73301 /* PhotoCaptureDelegate.swift */,
 				8AFF1255280C037C00460FD4 /* MovieRecordingDelegate.swift */,
@@ -287,6 +290,7 @@
 				8A766A832802852500677419 /* CameraManager.swift in Sources */,
 				8AD4B679281652B200B04CF4 /* BleCentralManager.swift in Sources */,
 				8AFF1256280C037D00460FD4 /* MovieRecordingDelegate.swift in Sources */,
+				8A09202D281E543100E33C6A /* UIWidgets.swift in Sources */,
 				8AFE65922802E5E400F73301 /* Constants.swift in Sources */,
 				8A766A87280293DD00677419 /* Extensions.swift in Sources */,
 				8AFE65942802F18100F73301 /* PhotoCaptureDelegate.swift in Sources */,
