@@ -27,7 +27,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var bluetoothIndicator: UILabel!
 
-    @IBOutlet weak var modeIndicator: UILabel!
+    @IBOutlet weak var modeIndicator: UIMode!
 
     @IBOutlet weak var cameraName: UICameraType!
 
@@ -134,7 +134,7 @@ class ViewController: UIViewController {
                 self.recordingTime.show(if: !isPhoto) {
                     self.frameRate.isHidden = isPhoto
                 }
-                self.modeIndicator.text = isPhoto ? " 📷" : " 🎥"
+                self.modeIndicator.isPhoto = isPhoto
             } else: {
                 os_log("Changing camera (cycle)")
                 cameraManager.sessionQueue.async {
@@ -278,16 +278,16 @@ class ViewController: UIViewController {
         })
         // format info
         keyValueObservations.append(observe(\.cameraManager.videoDeviceInput?.device.activeFormat) { _,_ in
+            let format = self.cameraManager.videoDeviceInput.device.activeFormat
             DispatchQueue.main.async {
-                self.frameRate.fromFormat = self.cameraManager.videoDeviceInput.device.activeFormat
-                self.resolutionIndicator.fromFormat = self.cameraManager.videoDeviceInput.device.activeFormat
+                self.frameRate.fromFormat = format
+                self.resolutionIndicator.fromFormat = format
             }
         })
         self.resolutionIndicator.fromFormat = self.cameraManager.videoDeviceInput.device.activeFormat
         // bluetooth on/off
         keyValueObservations.append(observe(\.bleCentralManager.centralManager.state) { _,_ in
             DispatchQueue.main.async {
-                os_log("centralManager.state changed")
                 self.bluetoothIndicator.isEnabled = (self.bleCentralManager.centralManager.state == .poweredOn)
             }
         })

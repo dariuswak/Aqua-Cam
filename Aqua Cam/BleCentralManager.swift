@@ -157,7 +157,7 @@ extension BleCentralManager: CBPeripheralDelegate {
 
         var bytes: [UInt8] = []
         characteristic.value?.withUnsafeBytes{$0.forEach{bytes.append($0)}}
-        let stringForm = String(bytes: characteristic.value ?? Data([]), encoding: .utf8)!
+        let stringForm = String(bytes: characteristic.value ?? Data([]), encoding: .ascii)!
         os_log("Peripheral \(peripheral.identifier.uuidString) - Characteristic \(characteristic.uuid.uuidString): \(bytes) \(stringForm)")
 
         if (characteristic.uuid == BleConstants.buttonsCharacteristicUuid) {

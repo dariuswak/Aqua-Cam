@@ -67,7 +67,23 @@ class UIFormatFrameRate: UILabel {
 
     var fromFormat: AVCaptureDevice.Format? {
         didSet {
-            text = " 🎞 \(Int(fromFormat!.videoSupportedFrameRateRanges.last!.maxFrameRate)) "
+            text = " \(Int(fromFormat!.videoSupportedFrameRateRanges.last!.maxFrameRate))"
+        }
+    }
+
+    override var isHidden: Bool {
+        didSet {
+            self.superview?.isHidden = isHidden
+        }
+    }
+
+}
+
+class UIMode: UILabel {
+
+    var isPhoto: Bool = true {
+        didSet {
+            text = isPhoto ? " PHOTO|" : " VIDEO|"
         }
     }
 
