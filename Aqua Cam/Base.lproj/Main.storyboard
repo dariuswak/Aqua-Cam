@@ -133,8 +133,9 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" image="target" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="nox-87-Tkw" userLabel="Target">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" image="target" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="nox-87-Tkw" userLabel="Focus Indicator">
                                         <rect key="frame" x="383" y="187.5" width="40" height="39"/>
+                                        <color key="tintColor" systemColor="systemRedColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="Jp0-Yy-qbK"/>
                                             <constraint firstAttribute="width" constant="40" id="TMs-g2-ad0"/>

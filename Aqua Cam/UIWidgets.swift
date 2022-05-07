@@ -131,9 +131,20 @@ class UICameraType: UILabel {
 
 class UIFocus: UIImageView {
 
+    var focusIndicator: UIImageView?
+
     var focusMode: AVCaptureDevice.FocusMode = .continuousAutoFocus {
         didSet {
             tintColor = focusMode == .locked ? UIColor.systemRed : UIColor.systemGray
+            if focusMode == .autoFocus {
+                UIView.animate(withDuration: 0.2) {
+                    self.focusIndicator?.alpha = 1
+                }
+            } else {
+                UIView.animate(withDuration: 1.5) {
+                    self.focusIndicator?.alpha = 0
+                }
+            }
         }
     }
 

@@ -236,14 +236,8 @@ class CameraManager: NSObject {
         return selectedFormats[index]
     }
 
-    func cycleLockFocusAndExposureInCentre() -> AVCaptureDevice.FocusMode {
-        if (self.videoDeviceInput.device.focusMode == .continuousAutoFocus) {
-            focusAndExposure(with: .locked, exposureMode: .autoExpose)
-            return .locked
-        } else {
-            focusAndExposure(with: .continuousAutoFocus, exposureMode: .continuousAutoExposure)
-            return .continuousAutoFocus
-        }
+    func lockFocusAndExposureInCentre() {
+        focusAndExposure(with: .autoFocus, exposureMode: .autoExpose)
     }
 
     func focusAndExposure(with focusMode: AVCaptureDevice.FocusMode,

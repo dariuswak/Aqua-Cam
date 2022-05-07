@@ -95,15 +95,8 @@ class ViewController: UIViewController {
         multiClick.on(count: 3) {
             sleep()
         } else: {
-            os_log("Locking focus and exposure (cycle)")
-            if cameraManager.cycleLockFocusAndExposureInCentre() == .locked {
-                UIView.animate(withDuration: 1,
-                               animations: { self.focusIndicator.alpha = 1 },
-                               completion: { _ in
-                                   UIView.animate(withDuration: 1,
-                                                  animations: { self.focusIndicator.alpha = 0 })
-                               })
-            }
+            os_log("Locking focus and exposure")
+            cameraManager.lockFocusAndExposureInCentre()
         }
     }
 
@@ -179,7 +172,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        focusLockIndicator.focusIndicator = focusIndicator
         previewView.session = cameraManager.session
 
         os_log("Checking permissions")
