@@ -25,13 +25,13 @@ class ViewController: UIViewController {
 
     // MARK: Bottom info pane
 
-    @IBOutlet weak var bluetoothIndicator: UILabel!
+    @IBOutlet weak var bluetoothIndicator: UIBluetooth!
 
     @IBOutlet weak var modeIndicator: UIMode!
 
     @IBOutlet weak var cameraName: UICameraType!
 
-    @IBOutlet weak var focusLockIndicator: UILabel!
+    @IBOutlet weak var focusLockIndicator: UIFocus!
     
     @IBOutlet weak var stabilisationIndicator: UIStabilisationType!
 
@@ -289,10 +289,10 @@ class ViewController: UIViewController {
         // bluetooth on/off
         keyValueObservations.append(observe(\.bleCentralManager.centralManager.state) { _,_ in
             DispatchQueue.main.async {
-                self.bluetoothIndicator.isEnabled = (self.bleCentralManager.centralManager.state == .poweredOn)
+                self.bluetoothIndicator.state = self.bleCentralManager.centralManager.state
             }
         })
-        self.bluetoothIndicator.isEnabled = (self.bleCentralManager.centralManager.state == .poweredOn)
+        self.bluetoothIndicator.state = self.bleCentralManager.centralManager.state
         // camera name
         keyValueObservations.append(observe(\.cameraManager.videoDeviceInput.device.deviceType) { _,_ in
             DispatchQueue.main.async {
@@ -303,10 +303,10 @@ class ViewController: UIViewController {
         // focus lock
         keyValueObservations.append(observe(\.cameraManager.videoDeviceInput.device.focusMode) { _,_ in
             DispatchQueue.main.async {
-                self.focusLockIndicator.isEnabled = self.cameraManager.videoDeviceInput.device.focusMode == .locked
+                self.focusLockIndicator.focusMode = self.cameraManager.videoDeviceInput.device.focusMode
             }
         })
-        self.focusLockIndicator.isEnabled = self.cameraManager.videoDeviceInput.device.focusMode == .locked
+        self.focusLockIndicator.focusMode = self.cameraManager.videoDeviceInput.device.focusMode
         // stabilisation mode
         keyValueObservations.append(observe(\.cameraManager.videoConnection?.activeVideoStabilizationMode) { _,_ in
             DispatchQueue.main.async {
@@ -331,6 +331,7 @@ class ViewController: UIViewController {
             let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
             let shouldHide = connected || self.previewView.isHidden
             self.disconnectedControls.show(if: !shouldHide, duration: 1, options: .transitionCrossDissolve)
+            self.bluetoothIndicator.connected = connected
         })
         // housing buttons
         keyValueObservations.append(observe(\.bleCentralManager.buttonPressed) { _,_ in

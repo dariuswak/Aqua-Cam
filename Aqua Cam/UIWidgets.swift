@@ -1,5 +1,6 @@
 import UIKit
 import AVFoundation
+import CoreBluetooth
 import os
 
 class TimedMultiClick {
@@ -79,6 +80,29 @@ class UIFormatFrameRate: UILabel {
 
 }
 
+class UIBluetooth: UIImageView {
+
+    var state: CBManagerState = .unknown {
+        didSet {
+            let poweredOn = state == .poweredOn
+            image = poweredOn ? UIImage(named: "bluetooth") : UIImage(named: "bluetooth_disabled")
+            tintColor = poweredOn ? UIColor.tintColor : UIColor.systemGray
+        }
+    }
+
+    var connected: Bool = false {
+        didSet {
+            if connected {
+                image = UIImage(named: "bluetooth_connected")
+            } else {
+                (state = state)
+            }
+        }
+    }
+
+
+}
+
 class UIMode: UILabel {
 
     var isPhoto: Bool = true {
@@ -100,6 +124,16 @@ class UICameraType: UILabel {
                            (longName.contains("Tele") ? "T" : "") +
                            (longName.contains("Depth") ? "D" : "")
             self.text = " \(codeName) "
+        }
+    }
+
+}
+
+class UIFocus: UIImageView {
+
+    var focusMode: AVCaptureDevice.FocusMode = .continuousAutoFocus {
+        didSet {
+            tintColor = focusMode == .locked ? UIColor.systemRed : UIColor.systemGray
         }
     }
 
