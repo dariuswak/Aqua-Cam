@@ -126,7 +126,18 @@ class UIFormatResolution: UILabel {
     var fromFormat: AVCaptureDevice.Format? {
         didSet {
             let dimensions = fromFormat!.formatDescription.dimensions
-            text = " \(dimensions.width)x\(dimensions.height) "
+            switch dimensions.height {
+            case 720:
+                text = " 2/3 HD "
+            case 1080:
+                text = " HD "
+            case 2160:
+                text = " UHD "
+            case 3024: // should be 3072, but is slightly smaller
+                text = " 4K "
+            default:
+                text = " \(dimensions.width)x\(dimensions.height) "
+            }
         }
     }
 
@@ -136,7 +147,6 @@ class UIExposure: UILabel {
 
     var exposureDuration: CMTime? {
         didSet {
-            os_log("Exposure: \(String(describing: self.exposureDuration!))")
             text = " 1/\(Int(Int64(exposureDuration!.timescale) / exposureDuration!.value)) "
         }
     }

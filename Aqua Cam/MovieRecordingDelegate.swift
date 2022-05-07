@@ -23,12 +23,28 @@ class MovieRecordingProcessor: NSObject, AVCaptureFileOutputRecordingDelegate {
         }
         let movieFileOutputConnection = movieFileOutput.connection(with: .video)
         movieFileOutputConnection?.videoOrientation = Constants.LANDSCAPE_RIGHT
-        if movieFileOutput.availableVideoCodecTypes.contains(.hevc) {
-            movieFileOutput.setOutputSettings([AVVideoCodecKey: AVVideoCodecType.hevc], for: movieFileOutputConnection!)
-        }
+
+        let settings = movieFileOutput.outputSettings(for: movieFileOutputConnection!)
+        let newSettings: [String : Any] = [
+            AVVideoCodecKey: AVVideoCodecType.hevc,
+            AVVideoCompressionPropertiesKey: [
+                AVVideoAverageBitRateKey: calculateNominalBitRate(settings),
+            ],
+        ]
+        movieFileOutput.setOutputSettings(newSettings, for: movieFileOutputConnection!)
+        os_log("Recording settings: \(movieFileOutput.outputSettings(for: movieFileOutputConnection!))")
+
         let outputFileName = uniqueID.uuidString
         let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
         movieFileOutput.startRecording(to: URL(fileURLWithPath: outputFilePath), recordingDelegate: self)
+    }
+
+    func calculateNominalBitRate(_ settings: [String: Any]) -> Int {
+        let frameWidthFactor = settings[AVVideoWidthKey] as! Double / 1920.0
+        let frameHeightFactor = settings[AVVideoHeightKey] as! Double / 1080.0
+        let frameRateFactor = (settings[AVVideoCompressionPropertiesKey] as! NSDictionary)[AVVideoExpectedSourceFrameRateKey] as! Double / 60.0
+        os_log("Factors: width=\(frameWidthFactor) height=\(frameHeightFactor) rate=\(frameRateFactor)")
+        return Int(Constants.NOMINAL_AVG_VIDEO_BITRATE * frameWidthFactor * frameHeightFactor * frameRateFactor)
     }
 
     /// - Tag: DidStartRecording

@@ -1,15 +1,10 @@
+'vide'/'420f' 1920x1080, { 1- 60 fps}, HRSI:4224x2376, fov:38.784, supports vis, max zoom:16.00 (upscales @2.00), AF System:2, ISO:15.0-1440.0, SS:0.000042-1.000000, supports wide color, supports high photo quality>
+'vide'/'420f' 1920x1080, { 2-120 fps}, fov:19.964, supports vis, max zoom:135.00 (upscales @2.00), AF System:2, ISO:15.0-480.0, SS:0.000050-0.500000, supports wide color>
+'vide'/'420f' 3840x2160, { 1- 60 fps}, fov:38.784, supports vis, max zoom:135.00 (upscales @1.00), AF System:2, ISO:15.0-1440.0, SS:0.000042-1.000000, supports wide color>
+'vide'/'420f' 4032x3024, { 1- 30 fps}, HRSI:4032x3024, fov:37.021, max zoom:189.00 (upscales @1.00), AF System:2, ISO:15.0-960.0, SS:0.000042-1.000000, supports HDR, supports wide color, supports highest photo quality>
 
- 'vide'/'420v' 1920x1080, { 2-120 fps}, fov:19.964, supports vis, max zoom:135.00 (upscales @2.00), AF System:2, ISO:15.0-480.0, SS:0.000050-0.500000>
- 'vide'/'420f' 1920x1080, { 2-120 fps}, fov:19.964, supports vis, max zoom:135.00 (upscales @2.00), AF System:2, ISO:15.0-480.0, SS:0.000050-0.500000, supports wide color>
- 'vide'/'420v' 1920x1080, { 2-240 fps}, fov:38.784, binned, supports vis, max zoom:67.50 (upscales @1.00), AF System:1, ISO:15.0-480.0, SS:0.000022-0.500000>
- 'vide'/'420f' 1920x1080, { 2-240 fps}, fov:38.784, binned, supports vis, max zoom:67.50 (upscales @1.00), AF System:1, ISO:15.0-480.0, SS:0.000022-0.500000, supports wide color>
 
- 'vide'/'420v' 3840x2160, { 1- 30 fps}, HRSI:4224x2376, fov:38.784, supports vis, max zoom:9.00 (upscales @1.00), AF System:2, ISO:15.0-1440.0, SS:0.000042-1.000000, supports HDR, supports high photo quality>
- 'vide'/'420f' 3840x2160, { 1- 30 fps}, HRSI:4224x2376, fov:38.784, supports vis, max zoom:9.00 (upscales @1.00), AF System:2, ISO:15.0-1440.0, SS:0.000042-1.000000, supports HDR, supports wide color, supports high photo quality>
-
- 'vide'/'420v' 3840x2160, { 1- 60 fps}, fov:38.784, supports vis, max zoom:135.00 (upscales @1.00), AF System:2, ISO:15.0-1440.0, SS:0.000042-1.000000>
- 'vide'/'420f' 3840x2160, { 1- 60 fps}, fov:38.784, supports vis, max zoom:135.00 (upscales @1.00), AF System:2, ISO:15.0-1440.0, SS:0.000042-1.000000, supports wide color>
-
- 'vide'/'420v' 4032x3024, { 1- 30 fps}, HRSI:4032x3024, fov:37.021, max zoom:189.00 (upscales @1.00), AF System:2, ISO:15.0-960.0, SS:0.000042-1.000000, supports HDR, supports highest photo quality>
- 'vide'/'420f' 4032x3024, { 1- 30 fps}, HRSI:4032x3024, fov:37.021, max zoom:189.00 (upscales @1.00), AF System:2, ISO:15.0-960.0, SS:0.000042-1.000000, supports HDR, supports wide color, supports highest photo quality>
-
+1920x1080, { 1- 60     11653631   25000000
+1920x1080, { 2-120     22498560   50000000
+3840x2160, { 1- 60     50366912   100000000
+4032x3024, { 1- 30     25595440   73500000

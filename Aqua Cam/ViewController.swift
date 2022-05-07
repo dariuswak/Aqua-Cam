@@ -74,6 +74,7 @@ class ViewController: UIViewController {
                     }
                 DispatchQueue.main.async {
                     self.previewView.isHidden = false
+                    self.disconnectedControls.isHidden = self.bleCentralManager.discoveredPeripheral?.state == .connected
                     os_log("Wakeup from sleep finished")
                 }
             }
@@ -328,7 +329,8 @@ class ViewController: UIViewController {
         // disconnected view
         keyValueObservations.append(observe(\.bleCentralManager.discoveredPeripheral?.state) { _,_ in
             let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
-            self.disconnectedControls.show(if: !connected, duration: 1, options: .transitionCrossDissolve)
+            let shouldHide = connected || self.previewView.isHidden
+            self.disconnectedControls.show(if: !shouldHide, duration: 1, options: .transitionCrossDissolve)
         })
         // housing buttons
         keyValueObservations.append(observe(\.bleCentralManager.buttonPressed) { _,_ in

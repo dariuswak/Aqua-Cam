@@ -208,6 +208,7 @@ class CameraManager: NSObject {
             os_log("changeFormat: Could not lock device for configuration: \(String(describing: error))")
         }
         os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
+        os_log("Color space: \(String(describing: self.videoDeviceInput.device.activeColorSpace))")
         videoConnection = movieFileOutput?.connection(with: .video)
         if let connection = videoConnection {
             if connection.isVideoStabilizationSupported {
@@ -220,7 +221,8 @@ class CameraManager: NSObject {
     func selectFormat(direction: Constants.Direction) -> AVCaptureDevice.Format {
         let selectedFormats = videoDeviceInput.device.formats.filter {!(
             $0.isVideoBinned ||
-            $0.formatDescription.dimensions.width < 1280 ||
+            $0.formatDescription.dimensions.height < 1080 ||
+            !$0.supportedColorSpaces.contains(.P3_D65) ||
             ($0.videoSupportedFrameRateRanges.last!.maxFrameRate < 60
                 && $0 != videoDeviceInput.device.formats.last)
         )}
@@ -353,11 +355,9 @@ class CameraManager: NSObject {
                 movieFileOutput.stopRecording()
             } else {
                 os_log("Starting recording")
-                let movieRecordingProcessor = MovieRecordingProcessor { movieRecordingProcessor in
-                    self.sessionQueue.async {
-                        self.inProgressMovieRecordingDelegates[movieRecordingProcessor.uniqueID] = nil
-                    }
-                }
+                let movieRecordingProcessor = MovieRecordingProcessor(completionHandler: { movieRecordingProcessor in
+                    self.inProgressMovieRecordingDelegates[movieRecordingProcessor.uniqueID] = nil
+                })
                 self.inProgressMovieRecordingDelegates[movieRecordingProcessor.uniqueID] = movieRecordingProcessor
                 movieRecordingProcessor.location = self.locationManager.location
                 movieRecordingProcessor.startRecording(with: movieFileOutput)
