@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>4K - 4/3 - Reduced frame rate</string>
+			<key>FooterText</key>
+			<string>This is a 4/3 aspect ratio format.
+This format supports taking highest quality 12MP 4032x3024 photos in wide colour.
+This format has reduced frames per second rate and doesn&apos;t support stabilisation.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>4K 4032x3024 30 fps
+Full colour range</string>
+			<key>Key</key>
+			<string>na</string>
+			<key>DefaultValue</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Include this format</string>
+			<key>Key</key>
+			<string>fmt_hd</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Ultra High Definition</string>
+			<key>FooterText</key>
+			<string>This format supports taking WYSIWYG photos only.
+This format supports Video Image Stabilisation.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>UHD 3840x2160 60 fps
+Full colour range</string>
+			<key>Key</key>
+			<string>na</string>
+			<key>DefaultValue</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Include this format</string>
+			<key>Key</key>
+			<string>fmt_hd</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>High Definition - High frame rate</string>
+			<key>FooterText</key>
+			<string>This format supports taking WYSIWYG photos only.
+This format has high frames per second rate suitable for capturing slow motion footage.
+This format supports Video Image Stabilisation.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>HD 1920x1080 120 fps
+High frame rate - slow motion
+Full colour range</string>
+			<key>Key</key>
+			<string>na</string>
+			<key>DefaultValue</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Include this format</string>
+			<key>Key</key>
+			<string>fmt_hd</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>High Definition</string>
+			<key>FooterText</key>
+			<string>This format supports taking high quality 12MP 4224x2376 photos in wide colour.
+This format supports Video Image Stabilisation.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>HD 1920x1080 60 fps
+Full colour range</string>
+			<key>Key</key>
+			<string>na</string>
+			<key>DefaultValue</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Include this format</string>
+			<key>Key</key>
+			<string>fmt_hd</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Explanation of terms</string>
+			<key>FooterText</key>
+			<string>Wide colour - P3-D65 wide colour gamut https://en.wikipedia.org/wiki/DCI-P3
+Video Image Stabilisation - depending on camera capabilities it can include sensor-shift (cinematic) stabilisation. Some iPhone models' Ultra-wide angle and Telephoto cameras doesn't support optical image stabilisation.
+</string>
+		</dict>
+	</array>
+</dict>
+</plist>

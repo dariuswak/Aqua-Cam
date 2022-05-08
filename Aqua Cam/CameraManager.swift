@@ -224,7 +224,7 @@ class CameraManager: NSObject {
             $0.formatDescription.dimensions.height < 1080 ||
             $0.supportedColorSpaces == [.sRGB] ||
             // x422 only supports ProRes
-            CMFormatDescriptionGetMediaSubType($0.formatDescription) == kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange ||
+            $0.formatDescription.mediaSubType.rawValue == kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange ||
             ($0.videoSupportedFrameRateRanges.last!.maxFrameRate < 60
                 && $0 != videoDeviceInput.device.formats.last)
         )}

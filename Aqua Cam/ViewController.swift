@@ -44,9 +44,7 @@ class ViewController: UIViewController {
     // MARK: Disconnected controls
 
     @IBAction func openSettings() {
-        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
-                                  options: [:],
-                                  completionHandler: nil)
+        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
     }
 
     // take photo
