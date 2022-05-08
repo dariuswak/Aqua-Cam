@@ -176,6 +176,8 @@ class UIFormatResolution: UILabel {
                 text = " 2/3 HD "
             case 1080:
                 text = " HD "
+            case 1440:
+                text = " HD 4/3 "
             case 2160:
                 text = " UHD "
             case 3024: // should be 3072, but is slightly smaller
