@@ -40,3 +40,17 @@ x422' 1920x1080             AVVideoCodecKey": apch
 x420' 1920x1080 12818995
 420f' 1920x1080 11653631
 
+
+
+
+Camera Manager Refactoring
+
+launchConfigureSession - selects 1st camera, creates input, calls configureSession in async
+
+configureSession - adds video input, adds audio input, adds photo output, (inlined) configures photos output
+
+changeCamera - selects new camera, creates input, adds video input, removes previous video input & notifications
+    configures video format, if applicable
+    configures photos output
+
+

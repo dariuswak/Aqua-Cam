@@ -174,6 +174,18 @@ class CameraManager: NSObject {
             os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
             videoConnection = movieFileOutput?.connection(with: .video)
         } else {
+            if photoOutput.isDepthDataDeliverySupported {
+                do {
+                    try videoDeviceInput.device.lockForConfiguration()
+                    videoDeviceInput.device.activeFormat = videoDeviceInput.device.formats.last { $0.isHighestPhotoQualitySupported == false
+                    }!
+                    videoDeviceInput.device.unlockForConfiguration()
+                } catch {
+                    os_log("changeCamera_3: Could not lock device for configuration: \(String(describing: error))")
+                }
+            } else {
+                session.sessionPreset = .photo
+            }
             videoConnection = photoOutput.connection(with: .video)
         }
 
