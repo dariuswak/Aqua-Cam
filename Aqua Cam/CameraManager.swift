@@ -193,6 +193,7 @@ class CameraManager: NSObject {
             }
         }
 
+        photoOutput.isHighResolutionCaptureEnabled = !photoOutput.isDepthDataDeliveryEnabled
         session.commitConfiguration()
     }
 
@@ -215,6 +216,7 @@ class CameraManager: NSObject {
                 connection.preferredVideoStabilizationMode = .auto
             }
         }
+        photoOutput.isHighResolutionCaptureEnabled = !photoOutput.isDepthDataDeliveryEnabled
         session.commitConfiguration()
     }
 
@@ -268,7 +270,7 @@ class CameraManager: NSObject {
     }
 
     func cyclePhotoAndVideo() -> AVCaptureSession.Preset {
-        if session.sessionPreset == .photo {
+        if movieFileOutput == nil {
             os_log("Switching to Movie recording")
             sessionQueue.async {
                 self.switchToMovie()
@@ -285,7 +287,9 @@ class CameraManager: NSObject {
 
     func switchToPhoto() {
         session.beginConfiguration()
-        session.removeOutput(movieFileOutput!) // otherwise Live Photos are unavailable
+        if let movieFileOutput = movieFileOutput {
+            session.removeOutput(movieFileOutput) // otherwise Live Photos are unavailable
+        }
         movieFileOutput = nil
         session.sessionPreset = .photo
         photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
@@ -298,6 +302,7 @@ class CameraManager: NSObject {
                 connection.preferredVideoStabilizationMode = .auto
             }
         }
+        photoOutput.isHighResolutionCaptureEnabled = !photoOutput.isDepthDataDeliveryEnabled
         session.commitConfiguration()
     }
 
@@ -335,22 +340,25 @@ class CameraManager: NSObject {
                 connection.preferredVideoStabilizationMode = .auto
             }
         }
+        photoOutput.isHighResolutionCaptureEnabled = !photoOutput.isDepthDataDeliveryEnabled
         session.commitConfiguration()
         self.movieFileOutput = movieFileOutput
     }
 
     // MARK: Recording Movies
 
-    func toggleMovieRecording() {
+    func toggleMovieRecording(_ flashView: UIFlashView) {
         guard let movieFileOutput = self.movieFileOutput else {
             return
         }
         sessionQueue.async {
             if movieFileOutput.isRecording {
                 os_log("Stopping recording")
+                flashView.flash(color: UIColor.black)
                 movieFileOutput.stopRecording()
             } else {
                 os_log("Starting recording")
+                flashView.flash(color: UIColor.systemRed)
                 let movieRecordingProcessor = MovieRecordingProcessor(completionHandler: { movieRecordingProcessor in
                     self.inProgressMovieRecordingDelegates[movieRecordingProcessor.uniqueID] = nil
                 })
@@ -363,7 +371,7 @@ class CameraManager: NSObject {
 
     // MARK: Photos
 
-    func capturePhoto(previewView: PreviewView, viewController: ViewController) {
+    func capturePhoto(viewController: ViewController) {
         sessionQueue.async {
             self.photoOutput.connection(with: .video)!.videoOrientation = Constants.LANDSCAPE_RIGHT
             var photoSettings = AVCapturePhotoSettings()
@@ -374,7 +382,7 @@ class CameraManager: NSObject {
             if self.videoDeviceInput.device.isFlashAvailable {
                 photoSettings.flashMode = .off
             }
-            photoSettings.isHighResolutionPhotoEnabled = true
+            photoSettings.isHighResolutionPhotoEnabled = self.photoOutput.isHighResolutionCaptureEnabled
             if let previewPhotoPixelFormatType = photoSettings.availablePreviewPhotoPixelFormatTypes.first {
                 photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPhotoPixelFormatType]
             }
@@ -389,12 +397,7 @@ class CameraManager: NSObject {
             photoSettings.photoQualityPrioritization = .quality
 
             let photoCaptureProcessor = PhotoCaptureProcessor(with: photoSettings, willCapturePhotoAnimation: {
-                DispatchQueue.main.async {
-                    previewView.videoPreviewLayer.backgroundColor = UIColor.white.cgColor
-                    UIView.animate(withDuration: 0.35) {
-                        previewView.videoPreviewLayer.backgroundColor = UIColor.black.cgColor
-                    }
-                }
+                viewController.flashView.flash(color: UIColor.systemGray)
             }, livePhotoCaptureHandler: { capturing in
                 self.sessionQueue.async {
                     if capturing {

@@ -27,6 +27,19 @@ class TimedMultiClick {
 
 }
 
+class UIFlashView: UIView {
+
+    func flash(color: UIColor) {
+        DispatchQueue.main.async {
+            self.backgroundColor = color
+            UIView.animate(withDuration: 0.35) {
+                self.backgroundColor = UIColor.clear
+            }
+        }
+    }
+
+}
+
 class UIRecordingTime: UILabel {
 
     private static let ZERO = " 0s "

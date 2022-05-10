@@ -11,8 +11,9 @@
 			<string>4K - 4/3 - Reduced frame rate</string>
 			<key>FooterText</key>
 			<string>This is a 4/3 aspect ratio format.
+This format has reduced frames per second rate and doesn't support stabilisation.
 This format supports taking highest quality 12MP 4032x3024 photos in wide colour.
-This format has reduced frames per second rate and doesn&apos;t support stabilisation.</string>
+This format doesn't support taking photos together with depth data.</string>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -31,7 +32,7 @@ Full colour range</string>
 			<key>Title</key>
 			<string>Include this format</string>
 			<key>Key</key>
-			<string>fmt_hd</string>
+			<string>include_fmt_4k</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>
@@ -61,7 +62,7 @@ Full colour range</string>
 			<key>Title</key>
 			<string>Include this format</string>
 			<key>Key</key>
-			<string>fmt_hd</string>
+			<string>include_fmt_uhd</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>
@@ -93,7 +94,7 @@ Full colour range</string>
 			<key>Title</key>
 			<string>Include this format</string>
 			<key>Key</key>
-			<string>fmt_hd</string>
+			<string>include_fmt_slomo</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>
@@ -123,7 +124,7 @@ Full colour range</string>
 			<key>Title</key>
 			<string>Include this format</string>
 			<key>Key</key>
-			<string>fmt_hd</string>
+			<string>include_fmt_hd</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>
@@ -134,7 +135,7 @@ Full colour range</string>
 			<string>Explanation of terms</string>
 			<key>FooterText</key>
 			<string>Wide colour - P3-D65 wide colour gamut https://en.wikipedia.org/wiki/DCI-P3
-Video Image Stabilisation - depending on camera capabilities it can include sensor-shift (cinematic) stabilisation. Some iPhone models' Ultra-wide angle and Telephoto cameras doesn't support optical image stabilisation.
+Video Image Stabilisation - depending on camera capabilities it can include sensor-shift (cinematic) stabilisation.
 </string>
 		</dict>
 	</array>

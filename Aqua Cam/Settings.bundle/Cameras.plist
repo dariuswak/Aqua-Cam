@@ -15,7 +15,7 @@
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
 			<string>Wide Angle Camera
-26 mm - ⨍1.8
+26 mm - ⨍1.5
 12MP - 4032x3024</string>
 			<key>Key</key>
 			<string>na</string>
@@ -36,6 +36,34 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
+			<string>Ultra Wide Angle</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>Ultra Wide Angle Camera
+13 mm - ⨍1.8
+12MP - 4032x3024</string>
+			<key>Key</key>
+			<string>na</string>
+			<key>DefaultValue</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Include this camera</string>
+			<key>Key</key>
+			<string>include_ultra_wide_camera</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
 			<string>Telephoto</string>
 		</dict>
 		<dict>
@@ -43,7 +71,7 @@
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
 			<string>Telephoto Camera
-52 mm - ⨍2.4
+77 mm - ⨍2.8
 12MP - 4032x3024</string>
 			<key>Key</key>
 			<string>na</string>
@@ -57,6 +85,39 @@
 			<string>Include this camera</string>
 			<key>Key</key>
 			<string>include_tele_camera</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>LiDAR Depth Camera</string>
+			<key>FooterText</key>
+			<string>This camera is a dual camera with constituent cameras:
+- LiDAR depth camera
+- Wide Angle video camera</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>LiDAR + Wide Angle Camera
+26 mm - ⨍1.5
+12MP - 4032x3024
+Capturing high-precision depth data together with photo</string>
+			<key>Key</key>
+			<string>na</string>
+			<key>DefaultValue</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Include this camera</string>
+			<key>Key</key>
+			<string>include_lidar_camera</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>

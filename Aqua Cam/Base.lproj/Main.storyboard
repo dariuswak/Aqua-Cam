@@ -20,6 +20,10 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GYI-aq-X2x" userLabel="Preview" customClass="PreviewView" customModule="Aqua_Cam" customModuleProvider="target">
                                 <rect key="frame" x="90" y="0.0" width="806" height="414"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q8d-gv-jpw" userLabel="Flash" customClass="UIFlashView" customModule="Aqua_Cam" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="806" height="414"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="ds6-11-XO4" userLabel="Vertical Status">
                                         <rect key="frame" x="50" y="100" width="72.5" height="214"/>
                                         <subviews>
@@ -154,10 +158,14 @@
                                 <constraints>
                                     <constraint firstItem="nox-87-Tkw" firstAttribute="centerX" secondItem="GYI-aq-X2x" secondAttribute="centerX" id="1On-1c-0je"/>
                                     <constraint firstAttribute="bottom" secondItem="kpQ-Cq-shQ" secondAttribute="bottom" constant="20" id="3yx-Pp-eaF"/>
+                                    <constraint firstItem="Q8d-gv-jpw" firstAttribute="top" secondItem="GYI-aq-X2x" secondAttribute="top" id="92k-bY-tTv"/>
                                     <constraint firstAttribute="bottom" secondItem="ds6-11-XO4" secondAttribute="bottom" constant="100" id="BX4-s9-dqu"/>
+                                    <constraint firstItem="Q8d-gv-jpw" firstAttribute="trailing" secondItem="GYI-aq-X2x" secondAttribute="trailing" id="N6F-kf-XQn"/>
                                     <constraint firstAttribute="trailing" secondItem="kpQ-Cq-shQ" secondAttribute="trailing" constant="50" id="SPk-vg-k8I"/>
+                                    <constraint firstItem="Q8d-gv-jpw" firstAttribute="bottom" secondItem="GYI-aq-X2x" secondAttribute="bottom" id="YCy-Xw-P42"/>
                                     <constraint firstItem="l96-3y-9vP" firstAttribute="centerY" secondItem="GYI-aq-X2x" secondAttribute="centerY" id="Yf8-iH-eHd"/>
                                     <constraint firstItem="l96-3y-9vP" firstAttribute="centerX" secondItem="GYI-aq-X2x" secondAttribute="centerX" id="cdL-XT-8XF"/>
+                                    <constraint firstItem="Q8d-gv-jpw" firstAttribute="leading" secondItem="GYI-aq-X2x" secondAttribute="leading" id="mUg-Ou-EUK"/>
                                     <constraint firstItem="kpQ-Cq-shQ" firstAttribute="leading" secondItem="GYI-aq-X2x" secondAttribute="leading" constant="50" id="qZR-fz-WeN"/>
                                     <constraint firstItem="ds6-11-XO4" firstAttribute="leading" secondItem="GYI-aq-X2x" secondAttribute="leading" constant="50" id="r9l-ca-C7z"/>
                                     <constraint firstItem="ds6-11-XO4" firstAttribute="top" secondItem="GYI-aq-X2x" secondAttribute="top" constant="100" id="tIj-ea-J1O"/>
@@ -270,6 +278,7 @@
                         <outlet property="capturingLivePhotoIndicator" destination="mbe-HS-tO6" id="0gy-jK-lTT"/>
                         <outlet property="disconnectedControls" destination="7Gv-n6-Rt1" id="cAt-Qm-ahN"/>
                         <outlet property="exposureIndicator" destination="Bjo-ad-CEI" id="cyJ-eq-GcI"/>
+                        <outlet property="flashView" destination="Q8d-gv-jpw" id="Hn3-Mi-7NK"/>
                         <outlet property="focusIndicator" destination="nox-87-Tkw" id="u2C-nj-88d"/>
                         <outlet property="focusLockIndicator" destination="P0G-GA-KJj" id="Nks-Ch-vlT"/>
                         <outlet property="frameRate" destination="23o-pM-uqv" id="XPC-Yb-oRw"/>

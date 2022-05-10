@@ -11,6 +11,8 @@ class ViewController: UIViewController {
 
     // MARK: Center widgets
 
+    @IBOutlet weak var flashView: UIFlashView!
+
     @IBOutlet weak var focusIndicator: UIImageView!
 
     @IBOutlet weak var processingIndicator: UIActivityIndicatorView!
@@ -80,10 +82,10 @@ class ViewController: UIViewController {
         }
         if (cameraManager.movieFileOutput != nil) {
             os_log("Toggling video recording")
-            cameraManager.toggleMovieRecording()
+            cameraManager.toggleMovieRecording(self.flashView)
         } else {
             os_log("Capturing photo")
-            cameraManager.capturePhoto(previewView: previewView, viewController: self)
+            cameraManager.capturePhoto(viewController: self)
         }
     }
     
@@ -112,31 +114,24 @@ class ViewController: UIViewController {
     }
 
     // 2nd button - mode
-    // click - change camera (cycle)
-    // double click - photo/video (cycle)
+    // photo/video (cycle)
     // click during video recording - take photo
     @IBAction func modeButtonPressed() {
         if cameraManager.movieFileOutput?.isRecording == true {
             os_log("Capturing photo during movie recording")
-            cameraManager.capturePhoto(previewView: previewView, viewController: self)
+            cameraManager.capturePhoto(viewController: self)
         } else {
-            multiClick.on(count: 2) {
-                os_log("Changing mode: photo/video")
-                let isPhoto = self.cameraManager.cyclePhotoAndVideo() == .photo
-                self.recordingTime.show(if: !isPhoto) {
-                    self.frameRate.isHidden = isPhoto
-                }
-                self.modeIndicator.isPhoto = isPhoto
-            } else: {
-                os_log("Changing camera (cycle)")
-                cameraManager.sessionQueue.async {
-                    self.cameraManager.changeCamera()
-                }
+            os_log("Changing mode: photo/video")
+            let isPhoto = self.cameraManager.cyclePhotoAndVideo() == .photo
+            self.recordingTime.show(if: !isPhoto) {
+                self.frameRate.isHidden = isPhoto
             }
+            self.modeIndicator.isPhoto = isPhoto
         }
     }
 
     // 3rd button - up
+    // change camera/format
     @IBAction func upButtonPressed() {
         cameraManager.sessionQueue.async {
             self.cameraManager.changeFormat(direction: .previous)
@@ -144,10 +139,16 @@ class ViewController: UIViewController {
     }
 
     // 4th button - menu/ok
+    // change camera (cycle)
     @IBAction func menuButtonPressed() {
+        os_log("Changing camera (cycle)")
+        cameraManager.sessionQueue.async {
+            self.cameraManager.changeCamera()
+        }
     }
 
     // 5th button - down
+    // change camera/format
     @IBAction func downButtonPressed() {
         cameraManager.sessionQueue.async {
             self.cameraManager.changeFormat(direction: .next)
@@ -284,7 +285,7 @@ class ViewController: UIViewController {
             }
         })
         self.bluetoothIndicator.state = self.bleCentralManager.centralManager.state
-        // camera name
+        // camera type
         keyValueObservations.append(observe(\.cameraManager.videoDeviceInput.device.deviceType) { _,_ in
             DispatchQueue.main.async {
                 self.cameraName.cameraType = self.cameraManager.videoDeviceInput.device.deviceType

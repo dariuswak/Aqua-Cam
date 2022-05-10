@@ -24,7 +24,7 @@
 'x420' 3840x2160, { 1- 60 fps}, fov:106.748, gdc fov:106.569, supports vis, max zoom:129.12 (upscales @1.00), AF System:2, ISO:24.0-2304.0, SS:0.000015-1.000000,               supports wide color>
 
 '420f' 4032x3024, { 1- 30 fps}, HRSI:4032x3024, fov:101.896, max zoom:189.00 (upscales @1.00), AF System:2, ISO:24.0-2304.0, SS:0.000015-1.000000, supports HDR, supports wide color, supports highest photo quality>
-
+    XXX NO DEPTH DATA on photos while recording video
 
 420f' 4032x3024 25595440
 
