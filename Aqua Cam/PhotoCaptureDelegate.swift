@@ -4,6 +4,8 @@ import os
 
 class PhotoCaptureProcessor: NSObject {
 
+    let perceptualColorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
+
     let requestedPhotoSettings: AVCapturePhotoSettings
 
     let willCapturePhotoAnimation: () -> Void
@@ -21,6 +23,8 @@ class PhotoCaptureProcessor: NSObject {
     }}
 
     var photoData: Data?
+
+    var depthData: Data?
 
     var livePhotoCompanionMovieURL: URL?
 
@@ -84,6 +88,18 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
         } else {
             photoData = photo.fileDataRepresentation()
         }
+        guard var depthData = photo.depthData else {
+            self.depthData = nil
+            return
+        }
+        if let orientation = photo.metadata[ String(kCGImagePropertyOrientation) ] as? UInt32 {
+            depthData = depthData.applyingExifOrientation(CGImagePropertyOrientation(rawValue: orientation)!)
+        }
+        let depthDataImage = CIImage(cvPixelBuffer: depthData.depthDataMap, options: [.auxiliaryDepth: true])
+        self.depthData = context.heifRepresentation(of: depthDataImage,
+                                                    format: .RGBA8,
+                                                    colorSpace: perceptualColorSpace,
+                                                    options: [.portraitEffectsMatteImage: depthDataImage])
     }
 
     /// - Tag: DidFinishRecordingLive
@@ -126,6 +142,12 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
                 creationRequest.addResource(with: .pairedVideo,
                                             fileURL: livePhotoCompanionMovieURL,
                                             options: livePhotoCompanionMovieFileOptions)
+            }
+            if let depthData = self.depthData {
+                let creationRequest = PHAssetCreationRequest.forAsset()
+                creationRequest.addResource(with: .photo,
+                                            data: depthData,
+                                            options: nil)
             }
         }, completionHandler: { _, error in
             if let error = error {
