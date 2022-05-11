@@ -126,7 +126,7 @@ class UIMode: UILabel {
 
 }
 
-class UICameraType: UILabel {
+class UICameraType: SelectableUILabel {
 
     var cameraType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera {
         didSet {
@@ -179,7 +179,7 @@ class UIStabilisationType: UILabel {
 
 }
 
-class UIFormatResolution: UILabel {
+class UIFormatResolution: SelectableUILabel {
 
     var fromFormat: AVCaptureDevice.Format? {
         didSet {
@@ -208,6 +208,18 @@ class UIExposure: UILabel {
     var exposureDuration: CMTime? {
         didSet {
             text = " 1/\(Int(Int64(exposureDuration!.timescale) / exposureDuration!.value)) "
+        }
+    }
+
+}
+
+class SelectableUILabel: UILabel {
+
+    var selected: Bool = false {
+        didSet {
+            layer.borderWidth = selected ? 2 : 0
+            layer.borderColor = UIColor.systemRed.cgColor
+            layer.cornerRadius = 8
         }
     }
 

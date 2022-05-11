@@ -49,8 +49,7 @@ This format supports Video Image Stabilisation.</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>UHD 3840x2160 60 fps
-Full colour range</string>
+			<string>UHD 3840x2160 60 fps</string>
 			<key>Key</key>
 			<string>na</string>
 			<key>DefaultValue</key>
@@ -70,6 +69,35 @@ Full colour range</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
+			<string>High Definition - 4/3</string>
+			<key>FooterText</key>
+			<string>This format supports taking high quality 12MP 4032x3024 photos in wide colour.
+This format supports Video Image Stabilisation.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>HD 1920x1440 60 fps</string>
+			<key>Key</key>
+			<string>na</string>
+			<key>DefaultValue</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Include this format</string>
+			<key>Key</key>
+			<string>include_fmt_hd_4_3</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
 			<string>High Definition - High frame rate</string>
 			<key>FooterText</key>
 			<string>This format supports taking WYSIWYG photos only.
@@ -81,8 +109,7 @@ This format supports Video Image Stabilisation.</string>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
 			<string>HD 1920x1080 120 fps
-High frame rate - slow motion
-Full colour range</string>
+High frame rate - slow motion</string>
 			<key>Key</key>
 			<string>na</string>
 			<key>DefaultValue</key>
@@ -104,15 +131,14 @@ Full colour range</string>
 			<key>Title</key>
 			<string>High Definition</string>
 			<key>FooterText</key>
-			<string>This format supports taking high quality 12MP 4224x2376 photos in wide colour.
+			<string>This format supports taking high quality 10MP 4224x2376 photos in wide colour.
 This format supports Video Image Stabilisation.</string>
 		</dict>
 		<dict>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>HD 1920x1080 60 fps
-Full colour range</string>
+			<string>HD 1920x1080 60 fps</string>
 			<key>Key</key>
 			<string>na</string>
 			<key>DefaultValue</key>
@@ -135,8 +161,7 @@ Full colour range</string>
 			<string>Explanation of terms</string>
 			<key>FooterText</key>
 			<string>Wide colour - P3-D65 wide colour gamut https://en.wikipedia.org/wiki/DCI-P3
-Video Image Stabilisation - depending on camera capabilities it can include sensor-shift (cinematic) stabilisation.
-</string>
+Video Image Stabilisation - depending on camera capabilities it can include sensor-shift (cinematic) stabilisation.</string>
 		</dict>
 	</array>
 </dict>

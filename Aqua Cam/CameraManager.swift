@@ -20,13 +20,11 @@ class CameraManager: NSObject {
 
     let photoOutput = AVCapturePhotoOutput()
 
-    let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(
-        deviceTypes: [
-            .builtInWideAngleCamera,
-            .builtInUltraWideCamera,
-            .builtInTelephotoCamera,
-            .builtInLiDARDepthCamera],
-        mediaType: .video, position: .back)
+    let videoDevices = AVCaptureDevice.DiscoverySession(
+        deviceTypes: Constants.CAMERAS, mediaType: .video, position: .back
+    ).devices
+
+    var currentVideoFormat: FormatType = .UHD
 
     var inProgressPhotoCaptureDelegates = [Int64: PhotoCaptureProcessor]()
 
@@ -48,7 +46,7 @@ class CameraManager: NSObject {
         if setupResult != .success {
             return
         }
-        guard let videoDevice = videoDeviceDiscoverySession.devices.first else {
+        guard let videoDevice = videoDevices.first else {
             os_log("No back-located video devices unavailable.")
             setupResult = .configurationFailed
             return
@@ -121,14 +119,16 @@ class CameraManager: NSObject {
     }
 
     /// - Tag: ChangeCamera
-    func changeCamera() {
+    func changeCamera(direction: Constants.Direction) {
         let oldVideoDeviceInput = videoDeviceInput!
 
-        var index = videoDeviceDiscoverySession.devices.firstIndex(of: oldVideoDeviceInput.device)!
-        index = (index + 1) % videoDeviceDiscoverySession.devices.count
+        var index = videoDevices.firstIndex(of: oldVideoDeviceInput.device)!
+        index = (index + direction.rawValue) % videoDevices.count
+        if index < 0 { index += videoDevices.count }
+
         let newVideoDeviceInput: AVCaptureDeviceInput
         do {
-            newVideoDeviceInput = try AVCaptureDeviceInput(device: videoDeviceDiscoverySession.devices[index])
+            newVideoDeviceInput = try AVCaptureDeviceInput(device: videoDevices[index])
         } catch {
             os_log("Error occurred while creating video device input: \(String(describing: error))")
             return
@@ -149,27 +149,13 @@ class CameraManager: NSObject {
         }
 
         if (movieFileOutput != nil) {
-            session.sessionPreset = Constants.HD_4K
-
-            let tenBitsHdrFormat = videoDeviceInput.device.formats.last { format in CMFormatDescriptionGetMediaSubType(format.formatDescription) == kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange }
-            if tenBitsHdrFormat != nil {
-                print("Setting 'x420' format \(String(describing: tenBitsHdrFormat))")
-                do {
-                    try videoDeviceInput.device.lockForConfiguration()
-                    videoDeviceInput.device.activeFormat = tenBitsHdrFormat!
-                    videoDeviceInput.device.unlockForConfiguration()
-                } catch {
-                    os_log("changeCamera_1: Could not lock device for configuration: \(String(describing: error))")
-                }
-            } else {
-                let highestQualityFormat = selectFormat(direction: Constants.Direction.last)
-                do {
-                    try videoDeviceInput.device.lockForConfiguration()
-                    videoDeviceInput.device.activeFormat = highestQualityFormat
-                    videoDeviceInput.device.unlockForConfiguration()
-                } catch {
-                    os_log("changeCamera_2: Could not lock device for configuration: \(String(describing: error))")
-                }
+            let currentFormat = selectFormat(direction: Constants.Direction.current)
+            do {
+                try videoDeviceInput.device.lockForConfiguration()
+                videoDeviceInput.device.activeFormat = currentFormat
+                videoDeviceInput.device.unlockForConfiguration()
+            } catch {
+                os_log("changeCamera_1: Could not lock device for configuration: \(String(describing: error))")
             }
             os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
             videoConnection = movieFileOutput?.connection(with: .video)
@@ -177,11 +163,11 @@ class CameraManager: NSObject {
             if photoOutput.isDepthDataDeliverySupported {
                 do {
                     try videoDeviceInput.device.lockForConfiguration()
-                    videoDeviceInput.device.activeFormat = videoDeviceInput.device.formats.last { $0.isHighestPhotoQualitySupported == false
+                    videoDeviceInput.device.activeFormat = videoDeviceInput.device.formats.last { $0.isHighPhotoQualitySupported == true // note: not .isHighestPhotoQualitySupported
                     }!
                     videoDeviceInput.device.unlockForConfiguration()
                 } catch {
-                    os_log("changeCamera_3: Could not lock device for configuration: \(String(describing: error))")
+                    os_log("changeCamera_2: Could not lock device for configuration: \(String(describing: error))")
                 }
             } else {
                 session.sessionPreset = .photo
@@ -221,7 +207,6 @@ class CameraManager: NSObject {
             os_log("changeFormat: Could not lock device for configuration: \(String(describing: error))")
         }
         os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
-        os_log("Color space: \(String(describing: self.videoDeviceInput.device.activeColorSpace))")
         videoConnection = movieFileOutput?.connection(with: .video)
         if let connection = videoConnection {
             if connection.isVideoStabilizationSupported {
@@ -233,23 +218,19 @@ class CameraManager: NSObject {
     }
 
     func selectFormat(direction: Constants.Direction) -> AVCaptureDevice.Format {
-        let selectedFormats = videoDeviceInput.device.formats.filter {!(
-            $0.isVideoBinned ||
-            $0.formatDescription.dimensions.height < 1080 ||
-            $0.supportedColorSpaces == [.sRGB] ||
-            // x422 only supports ProRes
-            $0.formatDescription.mediaSubType.rawValue == kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange ||
-            ($0.videoSupportedFrameRateRanges.last!.maxFrameRate < 60
-                && $0 != videoDeviceInput.device.formats.last)
-        )}
-        selectedFormats.forEach { os_log("FORMAT: \($0)") }
-        if direction == .last {
-            return selectedFormats.last!
-        }
-        var index = selectedFormats.firstIndex(of: videoDeviceInput.device.activeFormat)!
-        index = (index + direction.rawValue) % selectedFormats.count
-        if index < 0 { index += selectedFormats.count }
-        return selectedFormats[index]
+        var index = currentVideoFormat.rawValue
+        index = (index + direction.rawValue) % FormatType.allCases.count
+        if index < 0 { index += FormatType.allCases.count }
+        currentVideoFormat = FormatType.init(rawValue: index)!
+        let selectedFormatDescription = FormatDescription.of(currentVideoFormat)
+        //videoDeviceInput.device.formats.forEach { os_log("FORMAT: \($0)") }
+        return videoDeviceInput.device.formats.last {
+            $0.formatDescription.dimensions.width == selectedFormatDescription.dimensions.width &&
+            $0.formatDescription.dimensions.height == selectedFormatDescription.dimensions.height &&
+            $0.videoSupportedFrameRateRanges.last!.maxFrameRate == selectedFormatDescription.frameRate &&
+            !($0.isVideoBinned) && // binned formats are after the best!
+            !($0.formatDescription.mediaSubType.rawValue == kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange) // x422 only supports ProRes
+        } ?? selectFormat(direction: (direction == .current ? .previous : direction))
     }
 
     func lockFocusAndExposureInCentre() {
@@ -287,7 +268,7 @@ class CameraManager: NSObject {
             sessionQueue.async {
                 self.switchToMovie()
             }
-            return Constants.HD_4K
+            return .vga640x480 // non- .photo
         } else {
             os_log("Switching to Photo taking")
             sessionQueue.async {
@@ -323,27 +304,14 @@ class CameraManager: NSObject {
         if !session.canAddOutput(movieFileOutput) { return }
         session.beginConfiguration()
         session.addOutput(movieFileOutput)
-        session.sessionPreset = Constants.HD_4K
 
-        let tenBitsHdrFormat = videoDeviceInput.device.formats.last { format in CMFormatDescriptionGetMediaSubType(format.formatDescription) == kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange }
-        if tenBitsHdrFormat != nil {
-            print("Setting 'x420' format \(String(describing: tenBitsHdrFormat))")
-            do {
-                try videoDeviceInput.device.lockForConfiguration()
-                videoDeviceInput.device.activeFormat = tenBitsHdrFormat!
-                videoDeviceInput.device.unlockForConfiguration()
-            } catch {
-                os_log("switchToMovie_1: Could not lock device for configuration: \(String(describing: error))")
-            }
-        } else {
-            let highestQualityFormat = selectFormat(direction: Constants.Direction.last)
-            do {
-                try videoDeviceInput.device.lockForConfiguration()
-                videoDeviceInput.device.activeFormat = highestQualityFormat
-                videoDeviceInput.device.unlockForConfiguration()
-            } catch {
-                os_log("switchToMovie_2: Could not lock device for configuration: \(String(describing: error))")
-            }
+        let currentFormat = selectFormat(direction: Constants.Direction.current)
+        do {
+            try videoDeviceInput.device.lockForConfiguration()
+            videoDeviceInput.device.activeFormat = currentFormat
+            videoDeviceInput.device.unlockForConfiguration()
+        } catch {
+            os_log("changeCamera: Could not lock device for configuration: \(String(describing: error))")
         }
         os_log("Set video format \(String(describing: self.videoDeviceInput.device.activeFormat))")
         videoConnection = movieFileOutput.connection(with: .video)

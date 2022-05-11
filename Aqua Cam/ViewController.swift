@@ -133,25 +133,40 @@ class ViewController: UIViewController {
     // 3rd button - up
     // change camera/format
     @IBAction func upButtonPressed() {
-        cameraManager.sessionQueue.async {
-            self.cameraManager.changeFormat(direction: .previous)
+        if cameraName.selected {
+            cameraManager.sessionQueue.async {
+                self.cameraManager.changeCamera(direction: .previous)
+            }
+        } else {
+            cameraManager.sessionQueue.async {
+                self.cameraManager.changeFormat(direction: .previous)
+            }
         }
     }
 
     // 4th button - menu/ok
-    // change camera (cycle)
+    // select change camera/format (cycle)
     @IBAction func menuButtonPressed() {
-        os_log("Changing camera (cycle)")
-        cameraManager.sessionQueue.async {
-            self.cameraManager.changeCamera()
+        UIView.transition(with: resolutionIndicator.superview!,
+                          duration: 0.5,
+                          options: .layoutSubviews) {
+            let wasCameraChange = self.cameraName.selected
+            self.cameraName.selected = !wasCameraChange
+            self.resolutionIndicator.selected = wasCameraChange
         }
     }
 
     // 5th button - down
     // change camera/format
     @IBAction func downButtonPressed() {
-        cameraManager.sessionQueue.async {
-            self.cameraManager.changeFormat(direction: .next)
+        if cameraName.selected {
+            cameraManager.sessionQueue.async {
+                self.cameraManager.changeCamera(direction: .next)
+            }
+        } else {
+            cameraManager.sessionQueue.async {
+                self.cameraManager.changeFormat(direction: .next)
+            }
         }
     }
 
@@ -182,6 +197,8 @@ class ViewController: UIViewController {
         permissionsManager.askForBluetoothPermissions(bleCentralManager)
 
         cameraManager.launchConfigureSession(previewView: previewView)
+
+        cameraName.selected = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
