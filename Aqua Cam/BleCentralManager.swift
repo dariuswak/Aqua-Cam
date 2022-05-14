@@ -160,8 +160,14 @@ extension BleCentralManager: CBPeripheralDelegate {
         let stringForm = String(bytes: characteristic.value ?? Data([]), encoding: .ascii)!
         os_log("Peripheral \(peripheral.identifier.uuidString) - Characteristic \(characteristic.uuid.uuidString): \(bytes) \(stringForm)")
 
-        if (characteristic.uuid == BleConstants.buttonsCharacteristicUuid) {
+        if characteristic.uuid == BleConstants.buttonsCharacteristicUuid {
             buttonPressed = characteristic.value!
+        }
+        if characteristic.uuid == BleConstants.sensorsCharacteristicUuid {
+            Logger.log("sensors", bytes)
+        }
+        if characteristic.uuid == BleConstants.batteryLevelCharacteristicUuid {
+            Logger.log("battery", bytes)
         }
     }
 

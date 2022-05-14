@@ -55,28 +55,13 @@ class ViewController: UIViewController {
     @IBAction func shutterButtonPressed() {
         if !cameraManager.session.isRunning {
             os_log("Attempting to restart the session")
-            cameraManager.sessionQueue.async {
-                self.cameraManager.session.startRunning()
-                if !self.cameraManager.session.isRunning {
-                    os_log("Unable to resume session")
-                }
-            }
+            cameraManager.startSession()
             return
         }
         if previewView.isHidden {
-            os_log("Waking up from sleep")
-            cameraManager.sessionQueue.async {
-                self.cameraManager.videoDeviceInput.ports
-                    .filter { port in port.mediaType == AVMediaType.video }
-                    .forEach { port in
-                        os_log("Enabling video port: \(port)")
-                        port.isEnabled = true
-                    }
-                DispatchQueue.main.async {
-                    self.previewView.isHidden = false
-                    self.disconnectedControls.isHidden = self.bleCentralManager.discoveredPeripheral?.state == .connected
-                    os_log("Wakeup from sleep finished")
-                }
+            cameraManager.wakeUpSession {
+                self.previewView.isHidden = false
+                self.disconnectedControls.isHidden = self.bleCentralManager.discoveredPeripheral?.state == .connected
             }
             return
         }
@@ -101,16 +86,8 @@ class ViewController: UIViewController {
     }
 
     func sleep() {
-        os_log("Entering sleep")
         self.previewView.isHidden = true
-        cameraManager.sessionQueue.async {
-            self.cameraManager.videoDeviceInput.ports
-                .filter { port in port.mediaType == AVMediaType.video }
-                .forEach { port in
-                    os_log("Disabling video port: \(port)")
-                    port.isEnabled = false
-                }
-        }
+        cameraManager.sleepSession()
     }
 
     // 2nd button - mode
@@ -134,13 +111,9 @@ class ViewController: UIViewController {
     // change camera/format
     @IBAction func upButtonPressed() {
         if cameraName.selected {
-            cameraManager.sessionQueue.async {
-                self.cameraManager.changeCamera(direction: .previous)
-            }
+            self.cameraManager.configureSession(changeCamera: .previous, changeFormat: .current)
         } else {
-            cameraManager.sessionQueue.async {
-                self.cameraManager.changeFormat(direction: .previous)
-            }
+            self.cameraManager.configureSession(changeCamera: .current, changeFormat: .previous)
         }
     }
 
@@ -150,9 +123,9 @@ class ViewController: UIViewController {
         UIView.transition(with: resolutionIndicator.superview!,
                           duration: 0.5,
                           options: .layoutSubviews) {
-            let wasCameraChange = self.cameraName.selected
-            self.cameraName.selected = !wasCameraChange
-            self.resolutionIndicator.selected = wasCameraChange
+            let wasCameraNameSelected = self.cameraName.selected
+            self.cameraName.selected = !wasCameraNameSelected
+            self.resolutionIndicator.selected = wasCameraNameSelected
         }
     }
 
@@ -160,13 +133,9 @@ class ViewController: UIViewController {
     // change camera/format
     @IBAction func downButtonPressed() {
         if cameraName.selected {
-            cameraManager.sessionQueue.async {
-                self.cameraManager.changeCamera(direction: .next)
-            }
+            self.cameraManager.configureSession(changeCamera: .next, changeFormat: .current)
         } else {
-            cameraManager.sessionQueue.async {
-                self.cameraManager.changeFormat(direction: .next)
-            }
+            self.cameraManager.configureSession(changeCamera: .current, changeFormat: .next)
         }
     }
 
@@ -196,87 +165,46 @@ class ViewController: UIViewController {
         permissionsManager.askForLocationPermissions(cameraManager.locationManager)
         permissionsManager.askForBluetoothPermissions(bleCentralManager)
 
-        cameraManager.launchConfigureSession(previewView: previewView)
+        cameraManager.preconfigureSession(previewView: previewView)
 
         cameraName.selected = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        cameraManager.sessionQueue.async {
-            switch self.cameraManager.setupResult {
-            case .success:
-                os_log("Starting the session")
-                self.cameraManager.addObservers()
-                self.cameraManager.session.startRunning()
-
-            case .notAuthorizedCamera:
-                os_log("Alert about camera permissions")
-                DispatchQueue.main.async {
-                    let changePrivacySetting = "Permission to use the camera is denied, please review settings"
-                    let message = NSLocalizedString(changePrivacySetting, comment: "Alert message when no camera access")
-                    let alertController = UIAlertController(title: Bundle.main.appName, message: message, preferredStyle: .alert)
-
-                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
-                                                            style: .cancel,
-                                                            handler: nil))
-
-                    alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
-                                                            style: .`default`,
-                                                            handler: { _ in self.openSettings() }))
-
-                    self.present(alertController, animated: true, completion: nil)
-                }
-
-            case .notAuthorizedAlbum:
-                os_log("Alert about photos permissions")
-                DispatchQueue.main.async {
-                    let changePrivacySetting = "Permission to save to album is denied, please review settings"
-                    let message = NSLocalizedString(changePrivacySetting, comment: "Alert message when no album access")
-                    let alertController = UIAlertController(title: Bundle.main.appName, message: message, preferredStyle: .alert)
-
-                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
-                                                            style: .cancel,
-                                                            handler: nil))
-
-                    alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
-                                                            style: .`default`,
-                                                            handler: { _ in self.openSettings() }))
-
-                    self.present(alertController, animated: true, completion: nil)
-                }
-
-            case .configurationFailed:
-                os_log("Alert about configuration failure")
-                DispatchQueue.main.async {
-                    let alertMsg = "Alert message when something goes wrong during capture session configuration"
-                    let message = NSLocalizedString("Unable to capture media", comment: alertMsg)
-                    let alertController = UIAlertController(title: Bundle.main.appName, message: message, preferredStyle: .alert)
-
-                    alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
-                                                            style: .cancel,
-                                                            handler: nil))
-
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            }
+        switch self.cameraManager.setupResult {
+        case .success:
+            self.cameraManager.startSession()
+        case .notAuthorizedCamera:
+            os_log("Alert about camera permissions")
+            alert(message: "Permission to use the camera is denied, please review settings", comment: "Alert message when no camera access")
+        case .notAuthorizedAlbum:
+            os_log("Alert about photos permissions")
+            alert(message: "Permission to save to album is denied, please review settings", comment: "Alert message when no album access")
+        case .configurationFailed:
+            os_log("Alert about configuration failure")
+            alert(message: "Unable to capture media", comment:"Alert message when something goes wrong during capture session configuration")
         }
         addObservers()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        cameraManager.sessionQueue.async {
-            if self.cameraManager.setupResult == .success {
-                os_log("Shutting down the session")
-                self.cameraManager.session.stopRunning()
-                self.cameraManager.removeObservers()
-            }
-        }
+        cameraManager.shutdownSession()
         os_log("Stopping BLE scanning")
         bleCentralManager.centralManager.stopScan()
         removeObservers()
         super.viewWillDisappear(animated)
+    }
+
+    func alert(message: String, comment: String) {
+        DispatchQueue.main.async {
+            let localizedMessage = NSLocalizedString(message, comment: comment)
+            let alertController = UIAlertController(title: Bundle.main.appName, message: localizedMessage, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
+                                                    style: .`default`,
+                                                    handler: { _ in self.openSettings() }))
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
 
     // MARK: Notifications
@@ -294,7 +222,9 @@ class ViewController: UIViewController {
                 self.resolutionIndicator.fromFormat = format
             }
         })
-        self.resolutionIndicator.fromFormat = self.cameraManager.videoDeviceInput.device.activeFormat
+        if self.cameraManager.videoDeviceInput != nil {
+            self.resolutionIndicator.fromFormat = self.cameraManager.videoDeviceInput.device.activeFormat
+        }
         // bluetooth on/off
         keyValueObservations.append(observe(\.bleCentralManager.centralManager.state) { _,_ in
             DispatchQueue.main.async {
@@ -308,14 +238,18 @@ class ViewController: UIViewController {
                 self.cameraName.cameraType = self.cameraManager.videoDeviceInput.device.deviceType
             }
         })
-        self.cameraName.cameraType = self.cameraManager.videoDeviceInput.device.deviceType
+        if self.cameraManager.videoDeviceInput != nil {
+            self.cameraName.cameraType = self.cameraManager.videoDeviceInput.device.deviceType
+        }
         // focus lock
         keyValueObservations.append(observe(\.cameraManager.videoDeviceInput.device.focusMode) { _,_ in
             DispatchQueue.main.async {
                 self.focusLockIndicator.focusMode = self.cameraManager.videoDeviceInput.device.focusMode
             }
         })
-        self.focusLockIndicator.focusMode = self.cameraManager.videoDeviceInput.device.focusMode
+        if self.cameraManager.videoDeviceInput != nil {
+            self.focusLockIndicator.focusMode = self.cameraManager.videoDeviceInput.device.focusMode
+        }
         // stabilisation mode
         keyValueObservations.append(observe(\.cameraManager.videoConnection?.activeVideoStabilizationMode) { _,_ in
             DispatchQueue.main.async {
@@ -342,6 +276,7 @@ class ViewController: UIViewController {
             self.disconnectedControls.show(if: !shouldHide, duration: 1, options: .transitionCrossDissolve)
             self.bluetoothIndicator.connected = connected
         })
+        self.disconnectedControls.isHidden = self.cameraManager.videoDeviceInput == nil
         // housing buttons
         keyValueObservations.append(observe(\.bleCentralManager.buttonPressed) { _,_ in
             switch self.bleCentralManager.buttonPressed {

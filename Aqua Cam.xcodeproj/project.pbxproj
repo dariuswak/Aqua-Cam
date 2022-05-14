@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8A09202D281E543100E33C6A /* UIWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A09202C281E543100E33C6A /* UIWidgets.swift */; };
+		8A0FC7D5282E55F60091EF76 /* CameraManagerLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0FC7D4282E55F60091EF76 /* CameraManagerLifecycle.swift */; };
+		8A5836B7282F688F00C5BD3A /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5836B6282F688F00C5BD3A /* Logger.swift */; };
 		8A766A512801380E00677419 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A502801380E00677419 /* AppDelegate.swift */; };
 		8A766A552801380E00677419 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A542801380E00677419 /* ViewController.swift */; };
 		8A766A582801380E00677419 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A766A562801380E00677419 /* Main.storyboard */; };
@@ -47,6 +49,8 @@
 
 /* Begin PBXFileReference section */
 		8A09202C281E543100E33C6A /* UIWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWidgets.swift; sourceTree = "<group>"; };
+		8A0FC7D4282E55F60091EF76 /* CameraManagerLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManagerLifecycle.swift; sourceTree = "<group>"; };
+		8A5836B6282F688F00C5BD3A /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		8A766A4D2801380E00677419 /* Aqua Cam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aqua Cam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A766A502801380E00677419 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8A766A542801380E00677419 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 				8A766A542801380E00677419 /* ViewController.swift */,
 				8A09202C281E543100E33C6A /* UIWidgets.swift */,
 				8A766A822802852500677419 /* CameraManager.swift */,
+				8A0FC7D4282E55F60091EF76 /* CameraManagerLifecycle.swift */,
 				8AFE65932802F18100F73301 /* PhotoCaptureDelegate.swift */,
 				8AFF1255280C037C00460FD4 /* MovieRecordingDelegate.swift */,
 				8A766A80280272AD00677419 /* PreviewView.swift */,
@@ -131,6 +136,7 @@
 				8A766A86280293DD00677419 /* Extensions.swift */,
 				8AD4B6762816515500B04CF4 /* BleConstants.swift */,
 				8AFE65912802E5E400F73301 /* Constants.swift */,
+				8A5836B6282F688F00C5BD3A /* Logger.swift */,
 				8A766A562801380E00677419 /* Main.storyboard */,
 				8A766A5B2801381100677419 /* LaunchScreen.storyboard */,
 				8A766A592801381100677419 /* Assets.xcassets */,
@@ -292,6 +298,7 @@
 				8A766A85280289D100677419 /* PermissionsManager.swift in Sources */,
 				8AD4B6772816515500B04CF4 /* BleConstants.swift in Sources */,
 				8A766A552801380E00677419 /* ViewController.swift in Sources */,
+				8A0FC7D5282E55F60091EF76 /* CameraManagerLifecycle.swift in Sources */,
 				8A766A512801380E00677419 /* AppDelegate.swift in Sources */,
 				8A766A832802852500677419 /* CameraManager.swift in Sources */,
 				8AD4B679281652B200B04CF4 /* BleCentralManager.swift in Sources */,
@@ -299,6 +306,7 @@
 				8A09202D281E543100E33C6A /* UIWidgets.swift in Sources */,
 				8AFE65922802E5E400F73301 /* Constants.swift in Sources */,
 				8A766A87280293DD00677419 /* Extensions.swift in Sources */,
+				8A5836B7282F688F00C5BD3A /* Logger.swift in Sources */,
 				8AFE65942802F18100F73301 /* PhotoCaptureDelegate.swift in Sources */,
 				8A766A81280272AD00677419 /* PreviewView.swift in Sources */,
 			);
@@ -481,6 +489,7 @@
 				DEVELOPMENT_TEAM = 54LA6F887S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Aqua Cam/Info.plist";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Required to integrate with camera housing";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Required to take photos and videos.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Optional to add location to photos and videos.";
@@ -516,6 +525,7 @@
 				DEVELOPMENT_TEAM = 54LA6F887S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Aqua Cam/Info.plist";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Required to integrate with camera housing";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Required to take photos and videos.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Optional to add location to photos and videos.";
