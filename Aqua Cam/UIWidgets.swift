@@ -207,7 +207,12 @@ class UIExposure: UILabel {
 
     var exposureDuration: CMTime? {
         didSet {
-            text = " 1/\(Int(Int64(exposureDuration!.timescale) / exposureDuration!.value)) "
+            guard let exposureDuration = exposureDuration, exposureDuration.value != 0
+                    else {
+                        text = " 1/? "
+                        return
+                    }
+            text = " 1/\(Int(Int64(exposureDuration.timescale) / exposureDuration.value)) "
         }
     }
 

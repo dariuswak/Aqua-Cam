@@ -8,14 +8,20 @@ class BleCentralManager: NSObject {
 
     @objc dynamic var discoveredPeripheral: CBPeripheral?
 
-    @objc dynamic var buttonPressed = Data()
+    @objc dynamic var buttonPressed: UInt8 = 0
+
+    @objc dynamic var depthSensor: Float = 0.0
+
+    @objc dynamic var temperatureSensor: Float = 0.0
+
+    @objc dynamic var batteryLevelPercentage: UInt8 = 0
 
     func initiate() {
         centralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: true])
     }
 
     func connectToPeripheral() {
-        let foundPeripherals: [CBPeripheral] = (centralManager.retrieveConnectedPeripherals(withServices: [BleConstants.buttonsServiceUuid]))
+        let foundPeripherals: [CBPeripheral] = centralManager.retrieveConnectedPeripherals(withServices: [BleConstants.buttonsServiceUuid])
         if let foundPeripheral = foundPeripherals.last {
             os_log("Found previously connected peripherals with Buttons Service: \(foundPeripherals)")
             os_log("Connecting to peripheral \(foundPeripheral)")
@@ -98,7 +104,7 @@ extension BleCentralManager: CBCentralManagerDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        os_log("Perhiperal Disconnected")
+        os_log("Perhiperal Disconnected, error (if any): \(String(describing: error))")
         discoveredPeripheral = nil
         connectToPeripheral()
     }
@@ -118,8 +124,7 @@ extension BleCentralManager: CBPeripheralDelegate {
             cleanup()
             return
         }
-        guard let peripheralServices = peripheral.services else { return }
-        for service in peripheralServices {
+        peripheral.services?.forEach { service in
             os_log("Discovered services: \(service)")
             peripheral.discoverCharacteristics(nil, for: service)
         }
@@ -131,8 +136,8 @@ extension BleCentralManager: CBPeripheralDelegate {
             cleanup()
             return
         }
-        os_log("Discovered characteristics: \(service.characteristics!)")
         service.characteristics?.forEach { characteristic in
+            os_log("Discovered characteristic: \(characteristic)")
             if characteristic.properties.contains(.notify) {
                 os_log("The characteristic \(characteristic) sends notifications, subscribing.")
                 peripheral.setNotifyValue(true, for: characteristic)
@@ -154,20 +159,31 @@ extension BleCentralManager: CBPeripheralDelegate {
             cleanup()
             return
         }
-
-        var bytes: [UInt8] = []
-        characteristic.value?.withUnsafeBytes{$0.forEach{bytes.append($0)}}
-        let stringForm = String(bytes: characteristic.value ?? Data([]), encoding: .ascii)!
-        os_log("Peripheral \(peripheral.identifier.uuidString) - Characteristic \(characteristic.uuid.uuidString): \(bytes) \(stringForm)")
-
-        if characteristic.uuid == BleConstants.buttonsCharacteristicUuid {
-            buttonPressed = characteristic.value!
-        }
-        if characteristic.uuid == BleConstants.sensorsCharacteristicUuid {
-            Logger.log("sensors", bytes)
-        }
-        if characteristic.uuid == BleConstants.batteryLevelCharacteristicUuid {
-            Logger.log("battery", bytes)
+        guard let value = characteristic.value, !value.isEmpty
+                else { return }
+        switch characteristic.uuid {
+        case BleConstants.buttonsCharacteristicUuid:
+            buttonPressed = value.first!
+        case BleConstants.sensorsCharacteristicUuid:
+            let sensorsValue = value.withUnsafeBytes { Array($0.bindMemory(to: Int16.self)) }
+            let depthValue = Float(sensorsValue[0]) / 10.0
+            let temperatureValue = Float(sensorsValue[1]) / 10.0
+            // the housing transmits this continuously twice per second; avoid propagation of the redundant notifications
+            if depthSensor != depthValue {
+                depthSensor = depthValue
+                Logger.log("depth", depthSensor)
+            }
+            if temperatureSensor != temperatureValue {
+                temperatureSensor = temperatureValue
+                Logger.log("temp", temperatureSensor)
+            }
+        case BleConstants.batteryLevelCharacteristicUuid, BleConstants.emulatedBatteryLevelCharacteristicUuid:
+            batteryLevelPercentage = value.first!
+            Logger.log("battery", batteryLevelPercentage)
+        default:
+            let arrayValue = Array(value)
+            let stringValue = String(bytes: value, encoding: .ascii)!
+            os_log("Unhandled characteristic: \(characteristic.uuid.uuidString), value: \(arrayValue) <\(stringValue)>")
         }
     }
 

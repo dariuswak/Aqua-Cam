@@ -31,15 +31,17 @@ class PermissionsManager {
     func askForMicrophonePermissions() {
         if AVCaptureDevice.authorizationStatus(for: .audio) == .notDetermined {
             os_log("Asking for microphone permissions")
-            AVCaptureDevice.requestAccess(for: .audio) { _ in }
+            AVCaptureDevice.requestAccess(for: .audio) { granted in
+                if !granted {
+                    os_log("Microphone permissions denied")
+                }
+            }
         }
     }
 
     func askForSaveToPhotosPermissions(_ cameraManager: CameraManager) {
         switch PHPhotoLibrary.authorizationStatus(for: .addOnly) {
-        case .authorized:
-            break
-        case .limited:
+        case .authorized, .limited:
             break
 
         case .notDetermined:

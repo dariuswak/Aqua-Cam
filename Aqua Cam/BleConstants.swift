@@ -23,19 +23,19 @@ struct BleConstants {
 
     static let buttonsCharacteristicUuid = CBUUID(string: "00001524-1212-EFDE-1523-785FEABCD123")
 
-    static let shutterButtonCode = Data([32])
+    static let shutterButtonCode: UInt8 = 32
 
-    static let focusButtonCode = Data([97])
+    static let focusButtonCode: UInt8 = 97
 
-    static let focusPressHoldButtonCode = Data([96])
+    static let focusPressHoldButtonCode: UInt8 = 96
 
-    static let modeButtonCode = Data([16])
+    static let modeButtonCode: UInt8 = 16
 
-    static let upButtonCode = Data([64])
+    static let upButtonCode: UInt8 = 64
 
-    static let menuButtonCode = Data([48])
+    static let menuButtonCode: UInt8 = 48
 
-    static let downButtonCode = Data([80])
+    static let downButtonCode: UInt8 = 80
 
     static let connectableSignalStrengthThreshold = -70 // TODO -40 (tap)
 
