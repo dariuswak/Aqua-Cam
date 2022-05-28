@@ -31,6 +31,26 @@ class Constants {
 
 }
 
+class Colour {
+
+    static let ACTIVE = UIColor.white
+
+    static let INACTIVE = UIColor.gray
+
+    static let BLUETOOTH = UIColor(red: 0, green: 0.5, blue: 1, alpha: 1) // ~ default systemBlue
+
+    static let FLASH_PHOTO = UIColor.gray
+
+    static let FLASH_REC_START = UIColor.red
+
+    static let FLASH_REC_STOP = UIColor.black
+
+    static func activeIf(_ isActive: Bool) -> UIColor {
+        return isActive ? ACTIVE : INACTIVE
+    }
+
+}
+
 enum FormatType: Int, CaseIterable {
     case FOUR_K
     case UHD

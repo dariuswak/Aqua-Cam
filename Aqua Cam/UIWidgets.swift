@@ -99,7 +99,7 @@ class UIBluetooth: UIImageView {
         didSet {
             let poweredOn = state == .poweredOn
             image = poweredOn ? UIImage(named: "bluetooth") : UIImage(named: "bluetooth_disabled")
-            tintColor = poweredOn ? UIColor.tintColor : UIColor.systemGray
+            tintColor = poweredOn ? Colour.BLUETOOTH : Colour.INACTIVE
         }
     }
 
@@ -148,7 +148,7 @@ class UIFocus: UIImageView {
 
     var focusMode: AVCaptureDevice.FocusMode = .continuousAutoFocus {
         didSet {
-            tintColor = focusMode == .locked ? UIColor.systemRed : UIColor.systemGray
+            tintColor = Colour.activeIf(focusMode == .locked)
             if focusMode == .autoFocus {
                 UIView.animate(withDuration: 0.2) {
                     self.focusIndicator?.alpha = 1
@@ -223,7 +223,7 @@ class SelectableUILabel: UILabel {
     var selected: Bool = false {
         didSet {
             layer.borderWidth = selected ? 2 : 0
-            layer.borderColor = UIColor.systemRed.cgColor
+            layer.borderColor = Colour.ACTIVE.cgColor
             layer.cornerRadius = 8
         }
     }

@@ -216,7 +216,7 @@ class CameraManager: NSObject {
             if movieFileOutput.isRecording {
                 os_log("Stopping recording")
                 movieFileOutput.stopRecording()
-                flashView.flash(color: UIColor.black)
+                flashView.flash(color: Colour.FLASH_REC_STOP)
             } else {
                 os_log("Starting recording")
                 let movieRecordingProcessor = MovieRecordingProcessor(completionHandler: { movieRecordingProcessor in
@@ -225,7 +225,7 @@ class CameraManager: NSObject {
                 self.inProgressMovieRecordingDelegates[movieRecordingProcessor.uniqueID] = movieRecordingProcessor
                 movieRecordingProcessor.location = self.locationManager.location
                 movieRecordingProcessor.startRecording(with: movieFileOutput)
-                flashView.flash(color: UIColor.systemRed)
+                flashView.flash(color: Colour.FLASH_REC_START)
             }
         }
     }
@@ -256,7 +256,7 @@ class CameraManager: NSObject {
             }
 
             let photoCaptureProcessor = PhotoCaptureProcessor(with: photoSettings, willCapturePhotoAnimation: {
-                viewController.flashView.flash(color: UIColor.systemGray)
+                viewController.flashView.flash(color: Colour.FLASH_PHOTO)
             }, livePhotoCaptureHandler: { capturing in
                 self.sessionQueue.async {
                     if capturing {
