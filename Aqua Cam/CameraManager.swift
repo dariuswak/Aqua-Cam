@@ -42,6 +42,8 @@ class CameraManager: NSObject {
 
     @objc dynamic var videoConnection: AVCaptureConnection?
 
+    @objc dynamic var focusRestriction: AVCaptureDevice.AutoFocusRangeRestriction = .none
+
     func configureSession(changeCamera changeCameraDirection: Constants.Direction,
                           changeFormat changeFormatDirection: Constants.Direction,
                           doFirst: (() -> Void)? = nil
@@ -150,24 +152,31 @@ class CameraManager: NSObject {
     }
 
     func lockFocusAndExposureInCentre() {
+        focusRestriction = AVCaptureDevice.AutoFocusRangeRestriction.init(rawValue: (focusRestriction.rawValue + 1) % 3) ?? .none
         focusAndExposure(with: .autoFocus, exposureMode: .autoExpose)
     }
 
     func focusAndExposure(with focusMode: AVCaptureDevice.FocusMode,
                           exposureMode: AVCaptureDevice.ExposureMode) {
-        let centre = CGPoint(x: 0.5, y: 0.5)
+//        let centre = CGPoint(x: 0.5, y: 0.5)
 
         os_log("Focus: \(String(describing: focusMode)), exposure: \(String(describing: exposureMode))")
         sessionQueue.async {
             let device = self.videoDeviceInput.device
             do {
                 try device.lockForConfiguration()
+                if device.isAutoFocusRangeRestrictionSupported {
+                    device.autoFocusRangeRestriction = self.focusRestriction
+                    os_log("Set focus restriction to \(self.focusRestriction.rawValue)")
+                } else {
+                    self.focusRestriction = .none
+                }
                 if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(focusMode) {
-                    device.focusPointOfInterest = centre
+//                    device.focusPointOfInterest = centre
                     device.focusMode = focusMode
                 }
                 if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode) {
-                    device.exposurePointOfInterest = centre
+//                    device.exposurePointOfInterest = centre
                     device.exposureMode = exposureMode
                 }
                 device.isSubjectAreaChangeMonitoringEnabled = true

@@ -250,6 +250,16 @@ class ViewController: UIViewController {
         if self.cameraManager.videoDeviceInput != nil {
             self.focusLockIndicator.focusMode = self.cameraManager.videoDeviceInput.device.focusMode
         }
+        keyValueObservations.append(observe(\.cameraManager.focusRestriction) { _,_ in
+            self.focusLockIndicator.image = {
+                switch self.cameraManager.focusRestriction {
+                    case .none: return UIImage(systemName: "circle")
+                    case .near: return UIImage(systemName: "circle.inset.filled")
+                    case .far:  return UIImage(systemName: "smallcircle.filled.circle")
+                    @unknown default: return UIImage(systemName: "questionmark.circle")
+                }
+            }()
+        })
         // stabilisation mode
         keyValueObservations.append(observe(\.cameraManager.videoConnection?.activeVideoStabilizationMode) { _,_ in
             DispatchQueue.main.async {
