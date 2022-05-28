@@ -83,7 +83,7 @@
                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                             </imageView>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ntc-vi-na0" userLabel="Camera Info">
-                                                <rect key="frame" x="79.5" y="0.0" width="101.5" height="25.5"/>
+                                                <rect key="frame" x="79" y="0.0" width="101.5" height="25.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" PHOTO|" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtz-dc-irH" userLabel="Mode" customClass="UIMode" customModule="Aqua_Cam" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="75" height="25.5"/>
@@ -102,27 +102,27 @@
                                                 </subviews>
                                             </stackView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P0G-GA-KJj" userLabel="Focus" customClass="UIFocus" customModule="Aqua_Cam" customModuleProvider="target">
-                                                <rect key="frame" x="237" y="0.5" width="20" height="24.5"/>
+                                                <rect key="frame" x="235.5" y="-1.5" width="23.5" height="28"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="tintColor" systemColor="systemGrayColor"/>
-                                                <imageReference key="image" image="target" catalog="system" symbolScale="medium"/>
+                                                <imageReference key="image" image="scope" catalog="system" symbolScale="medium"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" (o) " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZW-hY-GIO" userLabel="Stabilisation" customClass="UIStabilisationType" customModule="Aqua_Cam" customModuleProvider="target">
-                                                <rect key="frame" x="312.5" y="0.0" width="50" height="25.5"/>
+                                                <rect key="frame" x="314.5" y="0.0" width="50" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ????x???? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3e-nx-hLc" userLabel="Resolution" customClass="UIFormatResolution" customModule="Aqua_Cam" customModuleProvider="target">
-                                                <rect key="frame" x="418" y="0.0" width="85" height="25.5"/>
+                                                <rect key="frame" x="419.5" y="0.0" width="85" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 1/? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bjo-ad-CEI" userLabel="Exposure" customClass="UIExposure" customModule="Aqua_Cam" customModuleProvider="target">
-                                                <rect key="frame" x="559" y="0.0" width="35" height="25.5"/>
+                                                <rect key="frame" x="559.5" y="0.0" width="35" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -137,8 +137,8 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" image="target" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="nox-87-Tkw" userLabel="Focus Indicator">
-                                        <rect key="frame" x="383" y="187.5" width="40" height="39"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" image="scope" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="nox-87-Tkw" userLabel="Focus Indicator">
+                                        <rect key="frame" x="383" y="185.5" width="40" height="42.5"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="Jp0-Yy-qbK"/>
@@ -298,7 +298,7 @@
     </scenes>
     <resources>
         <image name="bluetooth_disabled" width="24" height="24"/>
-        <image name="target" catalog="system" width="128" height="121"/>
+        <image name="scope" catalog="system" width="128" height="122"/>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
