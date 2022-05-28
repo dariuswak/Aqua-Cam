@@ -275,6 +275,7 @@ class ViewController: UIViewController {
             let shouldHide = connected || self.previewView.isHidden
             self.disconnectedControls.show(if: !shouldHide, duration: 1, options: .transitionCrossDissolve)
             self.bluetoothIndicator.connected = connected
+            UIScreen.main.brightness = connected ? 1 : 0.5
         })
         self.disconnectedControls.isHidden = self.cameraManager.videoDeviceInput == nil
         // housing buttons
