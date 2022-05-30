@@ -109,28 +109,25 @@ extension CameraManager {
     }
 
     func addObservers() {
-        keyValueObservations.append(observe(\.videoDeviceInput.device.systemPressureState) { _,_ in
-            os_log("System pressure state changed to: \(self.videoDeviceInput.device.systemPressureState)")
-        })
+        NotificationCenter.default.addObserver(self,
+                                      selector:#selector(subjectAreaDidChange),
+                                          name:.AVCaptureDeviceSubjectAreaDidChange,
+                                        object:videoDeviceInput.device)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(subjectAreaDidChange),
-                                               name: .AVCaptureDeviceSubjectAreaDidChange,
-                                               object: videoDeviceInput.device)
+                                      selector:#selector(sessionRuntimeError),
+                                          name:.AVCaptureSessionRuntimeError,
+                                        object:session)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(sessionRuntimeError),
-                                               name: .AVCaptureSessionRuntimeError,
-                                               object: session)
+                                      selector:#selector(sessionWasInterrupted),
+                                          name:.AVCaptureSessionWasInterrupted,
+                                        object:session)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(sessionWasInterrupted),
-                                               name: .AVCaptureSessionWasInterrupted,
-                                               object: session)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(sessionInterruptionEnded),
-                                               name: .AVCaptureSessionInterruptionEnded,
-                                               object: session)
+                                      selector:#selector(sessionInterruptionEnded),
+                                          name:.AVCaptureSessionInterruptionEnded,
+                                        object:session)
     }
 
     func removeObservers() {

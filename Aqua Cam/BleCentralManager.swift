@@ -14,7 +14,7 @@ class BleCentralManager: NSObject {
 
     @objc dynamic var temperatureSensor: Float = 0.0
 
-    @objc dynamic var batteryLevelPercentage: UInt8 = 0
+    @objc dynamic var batteryLevelPercentage: Int = 0
 
     func initiate() {
         centralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: true])
@@ -178,7 +178,7 @@ extension BleCentralManager: CBPeripheralDelegate {
                 Logger.log("temp", temperatureSensor)
             }
         case BleConstants.batteryLevelCharacteristicUuid, BleConstants.emulatedBatteryLevelCharacteristicUuid:
-            batteryLevelPercentage = value.first!
+            batteryLevelPercentage = Int(value.first!)
             Logger.log("battery", batteryLevelPercentage)
         default:
             let arrayValue = Array(value)

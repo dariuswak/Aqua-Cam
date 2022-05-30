@@ -93,6 +93,54 @@ class UIFormatFrameRate: UILabel {
 
 }
 
+class UIBatteryLevel: UIStackView {
+
+    lazy var icon = self.subviews[1] as! UIImageView
+
+    lazy var percentage = self.subviews[2] as! UILabel
+
+    var batteryLevel: Int = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                let imageName: String
+                switch self.batteryLevel {
+                case 0..<13: imageName = "battery.0"
+                case 13..<38: imageName = "battery.25"
+                case 38..<63: imageName = "battery.50"
+                case 63..<88: imageName = "battery.75"
+                case 88...100: imageName = "battery.100"
+                default: imageName = "questionmark.circle"
+                }
+                self.icon.image = UIImage(systemName: imageName)
+                self.percentage.text = "\(self.batteryLevel)% "
+            }
+        }
+    }
+
+}
+
+class UISystemPressure: UIImageView {
+
+    var level: AVCaptureDevice.SystemPressureState.Level = .nominal {
+        didSet {
+            os_log("System pressure changed to: \(self.level.rawValue)")
+            DispatchQueue.main.async {
+                let imageName: String
+                switch self.level {
+                case .nominal: imageName = "sun.max"
+                case .fair: imageName = "cloud.sun"
+                case .serious: imageName = "cloud"
+                case .critical: imageName = "cloud.heavyrain"
+                case .shutdown: imageName = "cloud.bolt"
+                default: imageName = "questionmark.circle"
+                }
+                self.image = UIImage(systemName: imageName)
+            }
+        }
+    }
+
+}
+
 class UIBluetooth: UIImageView {
 
     var state: CBManagerState = .unknown {
@@ -112,7 +160,6 @@ class UIBluetooth: UIImageView {
             }
         }
     }
-
 
 }
 

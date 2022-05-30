@@ -7,8 +7,6 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var previewView: PreviewView!
 
-    @IBOutlet weak var disconnectedControls: UIView!
-
     // MARK: Center widgets
 
     @IBOutlet weak var flashView: UIFlashView!
@@ -17,13 +15,21 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var processingIndicator: UIActivityIndicatorView!
 
-    // MARK: Left info pane
+    // MARK: Top info pane
 
-    @IBOutlet weak var capturingLivePhotoIndicator: UILabel!
+    @IBOutlet weak var topInfoPane: UIStackView!
 
-    @IBOutlet weak var recordingTime: UIRecordingTime!
+    @IBOutlet weak var phoneBatteryIndicator: UIBatteryLevel!
 
-    @IBOutlet weak var frameRate: UIFormatFrameRate!
+    @IBOutlet weak var systemPressureIndicator: UISystemPressure!
+
+    @IBOutlet weak var depthIndicator: UILabel!
+
+    @IBOutlet weak var timeAtDepth: UILabel!
+
+    @IBOutlet weak var temperatureIndicator: UILabel!
+
+    @IBOutlet weak var housingBatteryIndicator: UIBatteryLevel!
 
     // MARK: Bottom info pane
 
@@ -43,7 +49,17 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var isoIndicator: UILabel!
 
+    // MARK: Left info pane
+
+    @IBOutlet weak var capturingLivePhotoIndicator: UILabel!
+
+    @IBOutlet weak var recordingTime: UIRecordingTime!
+
+    @IBOutlet weak var frameRate: UIFormatFrameRate!
+
     // MARK: Disconnected controls
+
+    @IBOutlet weak var disconnectedControls: UIStackView!
 
     @IBAction func openSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
@@ -62,6 +78,7 @@ class ViewController: UIViewController {
             cameraManager.wakeUpSession {
                 self.previewView.isHidden = false
                 self.disconnectedControls.isHidden = self.bleCentralManager.discoveredPeripheral?.state == .connected
+                self.topInfoPane.isHidden = !self.disconnectedControls.isHidden
             }
             return
         }
@@ -225,6 +242,34 @@ class ViewController: UIViewController {
         if self.cameraManager.videoDeviceInput != nil {
             self.resolutionIndicator.fromFormat = self.cameraManager.videoDeviceInput.device.activeFormat
         }
+        // phone battery level
+        NotificationCenter.default.addObserver(self,
+                                      selector:#selector(batteryLevelChanged),
+                                          name:UIDevice.batteryLevelDidChangeNotification,
+                                        object:nil)
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        batteryLevelChanged(notification: NSNotification(name: UIDevice.batteryLevelDidChangeNotification, object: nil))
+        // system pressure
+        keyValueObservations.append(observe(\.cameraManager.videoDeviceInput?.device.systemPressureState) { _,_ in
+            self.systemPressureIndicator.level = self.cameraManager.videoDeviceInput.device.systemPressureState.level
+        })
+        if self.cameraManager.videoDeviceInput != nil {
+            self.systemPressureIndicator.level = self.cameraManager.videoDeviceInput.device.systemPressureState.level
+        }
+        // depth
+        keyValueObservations.append(observe(\.bleCentralManager.depthSensor) { _,_ in
+            self.depthIndicator.text = " \(self.bleCentralManager.depthSensor)m "
+        })
+        // time at depth
+        // TODO
+        // temperature
+        keyValueObservations.append(observe(\.bleCentralManager.temperatureSensor) { _,_ in
+            self.temperatureIndicator.text = " \(self.bleCentralManager.temperatureSensor)℃ "
+        })
+        // housing battery level
+        keyValueObservations.append(observe(\.bleCentralManager.batteryLevelPercentage) { _,_ in
+            self.housingBatteryIndicator.batteryLevel = self.bleCentralManager.batteryLevelPercentage
+        })
         // bluetooth on/off
         keyValueObservations.append(observe(\.bleCentralManager.centralManager.state) { _,_ in
             DispatchQueue.main.async {
@@ -269,11 +314,12 @@ class ViewController: UIViewController {
                 self.isoIndicator.text = " ISO \(Int(self.cameraManager.videoDeviceInput.device.iso)) "
             }
         })
-        // disconnected view
+        // disconnected controls
         keyValueObservations.append(observe(\.bleCentralManager.discoveredPeripheral?.state) { _,_ in
             let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
-            let shouldHide = connected || self.previewView.isHidden
-            self.disconnectedControls.show(if: !shouldHide, duration: 1, options: .transitionCrossDissolve)
+            let asleep = self.previewView.isHidden
+            self.disconnectedControls.show(if: !connected && !asleep, duration: 1, options: .transitionCrossDissolve)
+            self.topInfoPane.show(if: connected && !asleep, duration: 1, options: .transitionCrossDissolve)
             self.bluetoothIndicator.connected = connected
             UIScreen.main.brightness = connected ? 1 : 0.5
         })
@@ -294,8 +340,17 @@ class ViewController: UIViewController {
     }
 
     func removeObservers() {
+        NotificationCenter.default.removeObserver(self)
         keyValueObservations.forEach { $0.invalidate() }
         keyValueObservations.removeAll()
+    }
+
+    @objc
+    func batteryLevelChanged(notification: NSNotification) {
+        os_log("Battery level changed to: \(UIDevice.current.batteryLevel)")
+        // 20% is effectively 0%: the system warning will show & the app will enter background & the phone will sleep
+        let adjustedLevel = (UIDevice.current.batteryLevel - 0.2) * 125
+        self.phoneBatteryIndicator.batteryLevel = Int(adjustedLevel)
     }
 
 }

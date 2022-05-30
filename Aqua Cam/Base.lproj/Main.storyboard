@@ -24,6 +24,181 @@
                                         <rect key="frame" x="0.0" y="0.0" width="806" height="414"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
+                                    <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="JPI-gk-QhA" userLabel="Top Status">
+                                        <rect key="frame" x="50" y="20" width="706" height="25.5"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BF6-eg-4dQ" userLabel="Phone Battery" customClass="UIBatteryLevel" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="74" height="25.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FOn-Gb-vBv" userLabel="Spacer">
+                                                        <rect key="frame" x="0.0" y="0.0" width="8" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="w6b-Gx-ggQ" userLabel="Icon">
+                                                        <rect key="frame" x="8" y="0.5" width="36.5" height="24"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <imageReference key="image" image="battery.0" catalog="system" symbolScale="large"/>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="?% " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a8T-Sz-YWN" userLabel="Percentage">
+                                                        <rect key="frame" x="44.5" y="0.0" width="29.5" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t4l-Gr-d1w" userLabel="System Pressure">
+                                                <rect key="frame" x="148.5" y="0.0" width="43.5" height="25.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hpk-lk-A2l" userLabel="Spacer, left">
+                                                        <rect key="frame" x="0.0" y="0.0" width="8" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ohi-NB-FJt" userLabel="System Pressure" customClass="UISystemPressure" customModule="Aqua_Cam" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="-4" width="27.5" height="33"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <imageReference key="image" image="sun.max" catalog="system" symbolScale="large"/>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kHo-rs-jIf" userLabel="Spacer, right">
+                                                        <rect key="frame" x="35.5" y="0.0" width="8" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </stackView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ?m " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZkH-Z1-Pru" userLabel="Depth">
+                                                <rect key="frame" x="267" y="0.0" width="44.5" height="25.5"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 0s " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iq9-Im-0hp" userLabel="Time at Depth">
+                                                <rect key="frame" x="386" y="0.0" width="44.5" height="25.5"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ?℃ " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NLR-D7-li8" userLabel="Temperature">
+                                                <rect key="frame" x="505.5" y="0.0" width="52" height="25.5"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4jC-4X-b2X" userLabel="Housing Battery" customClass="UIBatteryLevel" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="632" y="0.0" width="74" height="25.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uJ8-uZ-I93" userLabel="Spacer">
+                                                        <rect key="frame" x="0.0" y="0.0" width="8" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ad0-Cc-hNT" userLabel="Icon">
+                                                        <rect key="frame" x="8" y="0.5" width="36.5" height="24"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <imageReference key="image" image="battery.0" catalog="system" symbolScale="large"/>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="?% " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LY3-wI-09k" userLabel="Percentage">
+                                                        <rect key="frame" x="44.5" y="0.0" width="29.5" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="kpQ-Cq-shQ" userLabel="Bottom Status">
+                                        <rect key="frame" x="50" y="368.5" width="706" height="25.5"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bluetooth_disabled" translatesAutoresizingMaskIntoConstraints="NO" id="Fp2-3W-Anr" userLabel="Bluetooth" customClass="UIBluetooth" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="24" height="25.5"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="tintColor" systemColor="systemGrayColor"/>
+                                            </imageView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ntc-vi-na0" userLabel="Camera Info">
+                                                <rect key="frame" x="75.5" y="0.0" width="101.5" height="25.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" PHOTO|" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtz-dc-irH" userLabel="Mode" customClass="UIMode" customModule="Aqua_Cam" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="25.5"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qBG-l3-T0N" userLabel="Camera Name" customClass="UICameraType" customModule="Aqua_Cam" customModuleProvider="target">
+                                                        <rect key="frame" x="75" y="0.0" width="26.5" height="25.5"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ujw-yx-A5d" userLabel="System Pressure">
+                                                <rect key="frame" x="228" y="0.0" width="46" height="25.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Ep-mL-NrH" userLabel="Spacer, left">
+                                                        <rect key="frame" x="0.0" y="0.0" width="8" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P0G-GA-KJj" userLabel="Focus" customClass="UIFocus" customModule="Aqua_Cam" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="-5" width="30" height="35.5"/>
+                                                        <color key="tintColor" systemColor="systemGrayColor"/>
+                                                        <imageReference key="image" image="scope" catalog="system" symbolScale="large"/>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y8r-gX-W0u" userLabel="Spacer, right">
+                                                        <rect key="frame" x="38" y="0.0" width="8" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </stackView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" (o) " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZW-hY-GIO" userLabel="Stabilisation" customClass="UIStabilisationType" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="325.5" y="0.0" width="50" height="25.5"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ????x???? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3e-nx-hLc" userLabel="Resolution" customClass="UIFormatResolution" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="427" y="0.0" width="85" height="25.5"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 1/? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bjo-ad-CEI" userLabel="Exposure" customClass="UIExposure" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="563" y="0.0" width="35" height="25.5"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ISO ? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23h-yX-gKX" userLabel="ISO">
+                                                <rect key="frame" x="649.5" y="0.0" width="56.5" height="25.5"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="ds6-11-XO4" userLabel="Vertical Status">
                                         <rect key="frame" x="50" y="100" width="72.5" height="214"/>
                                         <subviews>
@@ -57,7 +232,7 @@
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" fps " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNN-HV-Iju" userLabel="FPS" customClass="UIFormatFrameRate" customModule="Aqua_Cam" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" fps " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNN-HV-Iju" userLabel="FPS">
                                                         <rect key="frame" x="31" y="0.0" width="41.5" height="0.0"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
@@ -69,69 +244,6 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mTw-DU-bVa" userLabel="Spacer, lower">
                                                 <rect key="frame" x="0.0" y="188.5" width="72.5" height="25.5"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="kpQ-Cq-shQ" userLabel="Horizontal Status">
-                                        <rect key="frame" x="50" y="368.5" width="706" height="25.5"/>
-                                        <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bluetooth_disabled" translatesAutoresizingMaskIntoConstraints="NO" id="Fp2-3W-Anr" userLabel="Bluetooth" customClass="UIBluetooth" customModule="Aqua_Cam" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="24" height="25.5"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <color key="tintColor" systemColor="systemGrayColor"/>
-                                            </imageView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ntc-vi-na0" userLabel="Camera Info">
-                                                <rect key="frame" x="79" y="0.0" width="101.5" height="25.5"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" PHOTO|" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtz-dc-irH" userLabel="Mode" customClass="UIMode" customModule="Aqua_Cam" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="25.5"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qBG-l3-T0N" userLabel="Camera Name" customClass="UICameraType" customModule="Aqua_Cam" customModuleProvider="target">
-                                                        <rect key="frame" x="75" y="0.0" width="26.5" height="25.5"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </stackView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P0G-GA-KJj" userLabel="Focus" customClass="UIFocus" customModule="Aqua_Cam" customModuleProvider="target">
-                                                <rect key="frame" x="235.5" y="-1.5" width="23.5" height="28"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <color key="tintColor" systemColor="systemGrayColor"/>
-                                                <imageReference key="image" image="scope" catalog="system" symbolScale="medium"/>
-                                            </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" (o) " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZW-hY-GIO" userLabel="Stabilisation" customClass="UIStabilisationType" customModule="Aqua_Cam" customModuleProvider="target">
-                                                <rect key="frame" x="314.5" y="0.0" width="50" height="25.5"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ????x???? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3e-nx-hLc" userLabel="Resolution" customClass="UIFormatResolution" customModule="Aqua_Cam" customModuleProvider="target">
-                                                <rect key="frame" x="419.5" y="0.0" width="85" height="25.5"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 1/? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bjo-ad-CEI" userLabel="Exposure" customClass="UIExposure" customModule="Aqua_Cam" customModuleProvider="target">
-                                                <rect key="frame" x="559.5" y="0.0" width="35" height="25.5"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ISO ? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23h-yX-gKX" userLabel="ISO">
-                                                <rect key="frame" x="649.5" y="0.0" width="56.5" height="25.5"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="18"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -160,11 +272,14 @@
                                     <constraint firstAttribute="bottom" secondItem="kpQ-Cq-shQ" secondAttribute="bottom" constant="20" id="3yx-Pp-eaF"/>
                                     <constraint firstItem="Q8d-gv-jpw" firstAttribute="top" secondItem="GYI-aq-X2x" secondAttribute="top" id="92k-bY-tTv"/>
                                     <constraint firstAttribute="bottom" secondItem="ds6-11-XO4" secondAttribute="bottom" constant="100" id="BX4-s9-dqu"/>
+                                    <constraint firstAttribute="trailing" secondItem="JPI-gk-QhA" secondAttribute="trailing" constant="50" id="LSY-AB-hGM"/>
                                     <constraint firstItem="Q8d-gv-jpw" firstAttribute="trailing" secondItem="GYI-aq-X2x" secondAttribute="trailing" id="N6F-kf-XQn"/>
                                     <constraint firstAttribute="trailing" secondItem="kpQ-Cq-shQ" secondAttribute="trailing" constant="50" id="SPk-vg-k8I"/>
                                     <constraint firstItem="Q8d-gv-jpw" firstAttribute="bottom" secondItem="GYI-aq-X2x" secondAttribute="bottom" id="YCy-Xw-P42"/>
                                     <constraint firstItem="l96-3y-9vP" firstAttribute="centerY" secondItem="GYI-aq-X2x" secondAttribute="centerY" id="Yf8-iH-eHd"/>
                                     <constraint firstItem="l96-3y-9vP" firstAttribute="centerX" secondItem="GYI-aq-X2x" secondAttribute="centerX" id="cdL-XT-8XF"/>
+                                    <constraint firstItem="JPI-gk-QhA" firstAttribute="leading" secondItem="GYI-aq-X2x" secondAttribute="leading" constant="50" id="hAz-M2-9Pc"/>
+                                    <constraint firstItem="JPI-gk-QhA" firstAttribute="top" secondItem="GYI-aq-X2x" secondAttribute="top" constant="20" id="ib5-n1-9cI"/>
                                     <constraint firstItem="Q8d-gv-jpw" firstAttribute="leading" secondItem="GYI-aq-X2x" secondAttribute="leading" id="mUg-Ou-EUK"/>
                                     <constraint firstItem="kpQ-Cq-shQ" firstAttribute="leading" secondItem="GYI-aq-X2x" secondAttribute="leading" constant="50" id="qZR-fz-WeN"/>
                                     <constraint firstItem="ds6-11-XO4" firstAttribute="leading" secondItem="GYI-aq-X2x" secondAttribute="leading" constant="50" id="r9l-ca-C7z"/>
@@ -172,103 +287,91 @@
                                     <constraint firstItem="nox-87-Tkw" firstAttribute="centerY" secondItem="GYI-aq-X2x" secondAttribute="centerY" id="xgo-5s-2aT"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Gv-n6-Rt1" userLabel="Disconnected Controls">
-                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="tQF-tL-Dly" userLabel="Disconnected controls">
+                                <rect key="frame" x="758.5" y="60" width="77.5" height="294"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="tQF-tL-Dly" userLabel="Buttons">
-                                        <rect key="frame" x="758.5" y="30" width="77.5" height="324"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ByJ-1B-ykn">
-                                                <rect key="frame" x="0.0" y="0.0" width="77.5" height="31"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="Shutter"/>
-                                                <connections>
-                                                    <action selector="shutterButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="ETU-ky-vmw"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXN-l9-f4k" userLabel="Spacer, upper">
-                                                <rect key="frame" x="0.0" y="39.5" width="77.5" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3E-5T-HxI">
-                                                <rect key="frame" x="0.0" y="68" width="77.5" height="31"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" title="Focus"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="Focus"/>
-                                                <connections>
-                                                    <action selector="focusButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="xbd-yE-dK8"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U1Q-Zj-DF2">
-                                                <rect key="frame" x="0.0" y="107.5" width="77.5" height="31"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="Mode"/>
-                                                <connections>
-                                                    <action selector="modeButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="qxk-sL-tW4"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xCd-To-jS9">
-                                                <rect key="frame" x="0.0" y="146.5" width="77.5" height="31"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="Up"/>
-                                                <connections>
-                                                    <action selector="upButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Wq-Wn-WyO"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gll-Rf-lBf" userLabel="Menu">
-                                                <rect key="frame" x="0.0" y="186" width="77.5" height="31"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="Menu"/>
-                                                <connections>
-                                                    <action selector="menuButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="G11-D2-znY"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T46-qr-MWF">
-                                                <rect key="frame" x="0.0" y="225" width="77.5" height="31"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="Down"/>
-                                                <connections>
-                                                    <action selector="downButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="f8I-Dl-Mjm"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wD4-kc-Wst" userLabel="Spacer, lower">
-                                                <rect key="frame" x="0.0" y="264.5" width="77.5" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZ0-5o-BGH">
-                                                <rect key="frame" x="0.0" y="293" width="77.5" height="31"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="Settings">
-                                                    <color key="baseBackgroundColor" systemColor="systemGrayColor"/>
-                                                </buttonConfiguration>
-                                                <connections>
-                                                    <action selector="openSettings" destination="BYZ-38-t0r" eventType="touchUpInside" id="jTc-Qv-F9v"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ByJ-1B-ykn">
+                                        <rect key="frame" x="0.0" y="0.0" width="77.5" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Shutter"/>
+                                        <connections>
+                                            <action selector="shutterButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="ETU-ky-vmw"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXN-l9-f4k" userLabel="Spacer, upper">
+                                        <rect key="frame" x="0.0" y="37.5" width="77.5" height="12"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3E-5T-HxI">
+                                        <rect key="frame" x="0.0" y="56.5" width="77.5" height="31"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Focus"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Focus"/>
+                                        <connections>
+                                            <action selector="focusButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="xbd-yE-dK8"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U1Q-Zj-DF2">
+                                        <rect key="frame" x="0.0" y="94" width="77.5" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Mode"/>
+                                        <connections>
+                                            <action selector="modeButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="qxk-sL-tW4"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xCd-To-jS9">
+                                        <rect key="frame" x="0.0" y="131.5" width="77.5" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Up"/>
+                                        <connections>
+                                            <action selector="upButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Wq-Wn-WyO"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gll-Rf-lBf" userLabel="Menu">
+                                        <rect key="frame" x="0.0" y="169" width="77.5" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Menu"/>
+                                        <connections>
+                                            <action selector="menuButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="G11-D2-znY"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T46-qr-MWF">
+                                        <rect key="frame" x="0.0" y="207" width="77.5" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Down"/>
+                                        <connections>
+                                            <action selector="downButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="f8I-Dl-Mjm"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wD4-kc-Wst" userLabel="Spacer, lower">
+                                        <rect key="frame" x="0.0" y="244.5" width="77.5" height="12"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZ0-5o-BGH">
+                                        <rect key="frame" x="0.0" y="263" width="77.5" height="31"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Settings">
+                                            <color key="baseBackgroundColor" systemColor="systemGrayColor"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="openSettings" destination="BYZ-38-t0r" eventType="touchUpInside" id="jTc-Qv-F9v"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="tQF-tL-Dly" secondAttribute="trailing" constant="60" id="ghY-fY-91D"/>
-                                    <constraint firstItem="tQF-tL-Dly" firstAttribute="top" secondItem="7Gv-n6-Rt1" secondAttribute="top" constant="30" id="qo9-9M-udH"/>
-                                    <constraint firstAttribute="bottom" secondItem="tQF-tL-Dly" secondAttribute="bottom" constant="60" id="sB4-GG-Pgi"/>
-                                </constraints>
-                            </view>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="4j2-SQ-jRG"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="7Gv-n6-Rt1" firstAttribute="width" secondItem="PwE-ho-rt2" secondAttribute="width" id="4OE-CW-W5t"/>
                             <constraint firstItem="GYI-aq-X2x" firstAttribute="height" secondItem="PwE-ho-rt2" secondAttribute="height" id="F7x-iZ-hqf"/>
-                            <constraint firstItem="7Gv-n6-Rt1" firstAttribute="height" secondItem="PwE-ho-rt2" secondAttribute="height" id="Pjz-n9-frJ"/>
+                            <constraint firstItem="tQF-tL-Dly" firstAttribute="top" secondItem="PwE-ho-rt2" secondAttribute="top" constant="60" id="Vjq-le-7Ye"/>
+                            <constraint firstAttribute="bottom" secondItem="tQF-tL-Dly" secondAttribute="bottom" constant="60" id="ahV-2E-gvp"/>
                             <constraint firstItem="GYI-aq-X2x" firstAttribute="width" secondItem="PwE-ho-rt2" secondAttribute="width" constant="-90" id="bsC-3P-twW"/>
-                            <constraint firstItem="7Gv-n6-Rt1" firstAttribute="leading" secondItem="PwE-ho-rt2" secondAttribute="leading" id="f5a-C0-vNi"/>
                             <constraint firstItem="GYI-aq-X2x" firstAttribute="leading" secondItem="PwE-ho-rt2" secondAttribute="leading" constant="90" id="ibC-eh-5Ig"/>
-                            <constraint firstItem="7Gv-n6-Rt1" firstAttribute="top" secondItem="PwE-ho-rt2" secondAttribute="top" id="rK5-Sv-ZJT"/>
+                            <constraint firstAttribute="trailing" secondItem="tQF-tL-Dly" secondAttribute="trailing" constant="60" id="ieY-rR-qUI"/>
                             <constraint firstItem="GYI-aq-X2x" firstAttribute="top" secondItem="PwE-ho-rt2" secondAttribute="top" id="waP-an-qkK"/>
                         </constraints>
                     </view>
@@ -276,19 +379,26 @@
                         <outlet property="bluetoothIndicator" destination="Fp2-3W-Anr" id="cpr-0n-Syt"/>
                         <outlet property="cameraName" destination="qBG-l3-T0N" id="3ht-XC-3qs"/>
                         <outlet property="capturingLivePhotoIndicator" destination="mbe-HS-tO6" id="0gy-jK-lTT"/>
-                        <outlet property="disconnectedControls" destination="7Gv-n6-Rt1" id="cAt-Qm-ahN"/>
+                        <outlet property="depthIndicator" destination="ZkH-Z1-Pru" id="RPD-d1-mie"/>
+                        <outlet property="disconnectedControls" destination="tQF-tL-Dly" id="77t-jm-FUG"/>
                         <outlet property="exposureIndicator" destination="Bjo-ad-CEI" id="cyJ-eq-GcI"/>
                         <outlet property="flashView" destination="Q8d-gv-jpw" id="Hn3-Mi-7NK"/>
                         <outlet property="focusIndicator" destination="nox-87-Tkw" id="u2C-nj-88d"/>
                         <outlet property="focusLockIndicator" destination="P0G-GA-KJj" id="Nks-Ch-vlT"/>
                         <outlet property="frameRate" destination="23o-pM-uqv" id="XPC-Yb-oRw"/>
+                        <outlet property="housingBatteryIndicator" destination="4jC-4X-b2X" id="UU2-6w-ywX"/>
                         <outlet property="isoIndicator" destination="23h-yX-gKX" id="r2U-vQ-AYA"/>
                         <outlet property="modeIndicator" destination="qtz-dc-irH" id="rEE-hw-2Dj"/>
+                        <outlet property="phoneBatteryIndicator" destination="BF6-eg-4dQ" id="ktk-HB-h7z"/>
                         <outlet property="previewView" destination="GYI-aq-X2x" id="ieX-34-8PY"/>
                         <outlet property="processingIndicator" destination="l96-3y-9vP" id="ILo-GQ-5Zs"/>
                         <outlet property="recordingTime" destination="94e-wP-Rlt" id="L6R-VH-ajJ"/>
                         <outlet property="resolutionIndicator" destination="P3e-nx-hLc" id="sex-fd-1cO"/>
                         <outlet property="stabilisationIndicator" destination="oZW-hY-GIO" id="KYK-61-oa8"/>
+                        <outlet property="systemPressureIndicator" destination="ohi-NB-FJt" id="JNq-Ji-80y"/>
+                        <outlet property="temperatureIndicator" destination="NLR-D7-li8" id="ftI-BE-gEV"/>
+                        <outlet property="timeAtDepth" destination="iq9-Im-0hp" id="kNZ-43-ppg"/>
+                        <outlet property="topInfoPane" destination="JPI-gk-QhA" id="edV-j2-0BZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -297,8 +407,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="battery.0" catalog="system" width="128" height="59"/>
         <image name="bluetooth_disabled" width="24" height="24"/>
         <image name="scope" catalog="system" width="128" height="122"/>
+        <image name="sun.max" catalog="system" width="128" height="124"/>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
