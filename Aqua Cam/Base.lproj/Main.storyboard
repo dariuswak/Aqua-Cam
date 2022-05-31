@@ -51,7 +51,7 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t4l-Gr-d1w" userLabel="System Pressure">
-                                                <rect key="frame" x="148.5" y="0.0" width="43.5" height="25.5"/>
+                                                <rect key="frame" x="228" y="0.0" width="43.5" height="25.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hpk-lk-A2l" userLabel="Spacer, left">
                                                         <rect key="frame" x="0.0" y="0.0" width="8" height="25.5"/>
@@ -73,22 +73,51 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </stackView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ?m " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZkH-Z1-Pru" userLabel="Depth">
-                                                <rect key="frame" x="267" y="0.0" width="44.5" height="25.5"/>
+                                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E8p-rm-pUw" userLabel="Seal Pressure">
+                                                <rect key="frame" x="271.5" y="0.0" width="0.0" height="25.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ARw-8c-sjN" userLabel="Spacer, left">
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DX9-Nz-7RB" userLabel="System Pressure" customClass="UISystemPressure" customModule="Aqua_Cam" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="-2" width="0.0" height="28.5"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <imageReference key="image" image="rectangle.compress.vertical" catalog="system" symbolScale="medium"/>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oSJ-1f-bY8" userLabel="Seal Pressure">
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o9b-oe-TrX" userLabel="Spacer, right">
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="25.5"/>
+                                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </stackView>
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ?m " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZkH-Z1-Pru" userLabel="Depth">
+                                                <rect key="frame" x="271.5" y="0.0" width="0.0" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 0s " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iq9-Im-0hp" userLabel="Time at Depth">
-                                                <rect key="frame" x="386" y="0.0" width="44.5" height="25.5"/>
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 0s " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iq9-Im-0hp" userLabel="Time at Depth" customClass="TimeAtDepth" customModule="Aqua_Cam" customModuleProvider="target">
+                                                <rect key="frame" x="271.5" y="0.0" width="0.0" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ?℃ " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NLR-D7-li8" userLabel="Temperature">
-                                                <rect key="frame" x="505.5" y="0.0" width="52" height="25.5"/>
+                                                <rect key="frame" x="426" y="0.0" width="52" height="25.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.39746602380000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -394,6 +423,7 @@
                         <outlet property="processingIndicator" destination="l96-3y-9vP" id="ILo-GQ-5Zs"/>
                         <outlet property="recordingTime" destination="94e-wP-Rlt" id="L6R-VH-ajJ"/>
                         <outlet property="resolutionIndicator" destination="P3e-nx-hLc" id="sex-fd-1cO"/>
+                        <outlet property="sealPressureIndicator" destination="oSJ-1f-bY8" id="09h-JU-6Pw"/>
                         <outlet property="stabilisationIndicator" destination="oZW-hY-GIO" id="KYK-61-oa8"/>
                         <outlet property="systemPressureIndicator" destination="ohi-NB-FJt" id="JNq-Ji-80y"/>
                         <outlet property="temperatureIndicator" destination="NLR-D7-li8" id="ftI-BE-gEV"/>
@@ -409,6 +439,7 @@
     <resources>
         <image name="battery.0" catalog="system" width="128" height="59"/>
         <image name="bluetooth_disabled" width="24" height="24"/>
+        <image name="rectangle.compress.vertical" catalog="system" width="122" height="128"/>
         <image name="scope" catalog="system" width="128" height="122"/>
         <image name="sun.max" catalog="system" width="128" height="124"/>
         <systemColor name="systemGrayColor">

@@ -8,6 +8,8 @@ class Constants {
     // for HD 60fps (default ~11 Mbps)
     static let NOMINAL_AVG_VIDEO_BITRATE = 25_000_000.0
 
+    static let TIME_AT_DEPTH_THRESHOLD: Float = 2.0
+
     enum Direction: Int {
         case next = 1
         case previous = -1

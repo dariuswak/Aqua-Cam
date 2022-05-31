@@ -2,6 +2,7 @@ import AVFoundation
 import Photos
 import CoreLocation
 import CoreBluetooth
+import CoreMotion
 import os
 
 class PermissionsManager {
@@ -70,6 +71,19 @@ class PermissionsManager {
 
     func askForBluetoothPermissions(_ bleCentralManager: BleCentralManager) {
         bleCentralManager.initiate()
+    }
+
+    func askForSensorPermissions(_ sensorManager: SensorManager) {
+        switch CMAltimeter.authorizationStatus() {
+        case .notDetermined:
+            os_log("Asking for altimeter permissions")
+            fallthrough
+        case .authorized:
+            sensorManager.initiate()
+        default:
+            os_log("Altimeter permissions has been denied")
+            return
+        }
     }
 
 }

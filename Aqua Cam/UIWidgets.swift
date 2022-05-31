@@ -141,6 +141,23 @@ class UISystemPressure: UIImageView {
 
 }
 
+class TimeAtDepth: UIRecordingTime {
+
+    var depth: Float = 0 {
+        didSet {
+            if self.isRecording {
+                if depth == 0 {
+                    self.isRecording = false
+                }
+            } else if depth > Constants.TIME_AT_DEPTH_THRESHOLD {
+                self.isHidden = false
+                self.isRecording = true
+            }
+        }
+    }
+
+}
+
 class UIBluetooth: UIImageView {
 
     var state: CBManagerState = .unknown {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8A09202D281E543100E33C6A /* UIWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A09202C281E543100E33C6A /* UIWidgets.swift */; };
 		8A0FC7D5282E55F60091EF76 /* CameraManagerLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0FC7D4282E55F60091EF76 /* CameraManagerLifecycle.swift */; };
+		8A11FBE128460BE400161A2F /* SensorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11FBE028460BE400161A2F /* SensorManager.swift */; };
 		8A5836B7282F688F00C5BD3A /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5836B6282F688F00C5BD3A /* Logger.swift */; };
 		8A766A512801380E00677419 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A502801380E00677419 /* AppDelegate.swift */; };
 		8A766A552801380E00677419 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A766A542801380E00677419 /* ViewController.swift */; };
@@ -50,6 +51,7 @@
 /* Begin PBXFileReference section */
 		8A09202C281E543100E33C6A /* UIWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWidgets.swift; sourceTree = "<group>"; };
 		8A0FC7D4282E55F60091EF76 /* CameraManagerLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManagerLifecycle.swift; sourceTree = "<group>"; };
+		8A11FBE028460BE400161A2F /* SensorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorManager.swift; sourceTree = "<group>"; };
 		8A5836B6282F688F00C5BD3A /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		8A766A4D2801380E00677419 /* Aqua Cam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aqua Cam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A766A502801380E00677419 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				8AFF1255280C037C00460FD4 /* MovieRecordingDelegate.swift */,
 				8A766A80280272AD00677419 /* PreviewView.swift */,
 				8AD4B678281652B200B04CF4 /* BleCentralManager.swift */,
+				8A11FBE028460BE400161A2F /* SensorManager.swift */,
 				8A766A84280289D100677419 /* PermissionsManager.swift */,
 				8A766A86280293DD00677419 /* Extensions.swift */,
 				8AD4B6762816515500B04CF4 /* BleConstants.swift */,
@@ -309,6 +312,7 @@
 				8A5836B7282F688F00C5BD3A /* Logger.swift in Sources */,
 				8AFE65942802F18100F73301 /* PhotoCaptureDelegate.swift in Sources */,
 				8A766A81280272AD00677419 /* PreviewView.swift in Sources */,
+				8A11FBE128460BE400161A2F /* SensorManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,6 +498,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Required to take photos and videos.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Optional to add location to photos and videos.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Optional to capture sound for photos and videos.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Optional to monitor housing seal using barometer";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Required to save photos and videos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -530,6 +535,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Required to take photos and videos.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Optional to add location to photos and videos.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Optional to capture sound for photos and videos.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Optional to monitor housing seal using barometer";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Required to save photos and videos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

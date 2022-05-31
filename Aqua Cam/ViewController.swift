@@ -23,9 +23,11 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var systemPressureIndicator: UISystemPressure!
 
+    @IBOutlet weak var sealPressureIndicator: UILabel!
+
     @IBOutlet weak var depthIndicator: UILabel!
 
-    @IBOutlet weak var timeAtDepth: UILabel!
+    @IBOutlet weak var timeAtDepth: TimeAtDepth!
 
     @IBOutlet weak var temperatureIndicator: UILabel!
 
@@ -160,6 +162,8 @@ class ViewController: UIViewController {
 
     @objc let bleCentralManager = BleCentralManager()
 
+    @objc let sensorManager = SensorManager()
+
     let permissionsManager = PermissionsManager()
 
     let multiClick = TimedMultiClick()
@@ -181,6 +185,7 @@ class ViewController: UIViewController {
         permissionsManager.askForSaveToPhotosPermissions(cameraManager)
         permissionsManager.askForLocationPermissions(cameraManager.locationManager)
         permissionsManager.askForBluetoothPermissions(bleCentralManager)
+        permissionsManager.askForSensorPermissions(sensorManager)
 
         cameraManager.preconfigureSession(previewView: previewView)
 
@@ -256,12 +261,19 @@ class ViewController: UIViewController {
         if self.cameraManager.videoDeviceInput != nil {
             self.systemPressureIndicator.level = self.cameraManager.videoDeviceInput.device.systemPressureState.level
         }
-        // depth
+        // seal pressure
+        keyValueObservations.append(observe(\.sensorManager.pressure) { _,_ in
+            DispatchQueue.main.async {
+                self.sealPressureIndicator.text = String(self.sensorManager.pressure)
+                self.sealPressureIndicator.superview?.isHidden = false
+            }
+        })
+        // depth & time at depth
         keyValueObservations.append(observe(\.bleCentralManager.depthSensor) { _,_ in
             self.depthIndicator.text = " \(self.bleCentralManager.depthSensor)m "
+            self.depthIndicator.isHidden = false
+            self.timeAtDepth.depth = self.bleCentralManager.depthSensor
         })
-        // time at depth
-        // TODO
         // temperature
         keyValueObservations.append(observe(\.bleCentralManager.temperatureSensor) { _,_ in
             self.temperatureIndicator.text = " \(self.bleCentralManager.temperatureSensor)℃ "
