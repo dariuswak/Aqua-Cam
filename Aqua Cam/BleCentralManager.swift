@@ -20,17 +20,27 @@ class BleCentralManager: NSObject {
         centralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: true])
     }
 
-    func connectToPeripheral() {
-        let foundPeripherals: [CBPeripheral] = centralManager.retrieveConnectedPeripherals(withServices: [BleConstants.buttonsServiceUuid])
-        if let foundPeripheral = foundPeripherals.last {
-            os_log("Found previously connected peripherals with Buttons Service: \(foundPeripherals)")
-            os_log("Connecting to peripheral \(foundPeripheral)")
-			discoveredPeripheral = foundPeripheral
-            centralManager.connect(foundPeripheral, options: nil)
-        } else {
-            centralManager.scanForPeripherals(withServices: nil, // Kraken housing doesn't advertise anything specific
-                                                   options: [CBCentralManagerScanOptionAllowDuplicatesKey: true]) // required to receive RSSI updates
+    func initiateConnectionToPeripheral() {
+        var foundPeripherals: [CBPeripheral]
+        if let discoveredPeripheral = discoveredPeripheral {
+            foundPeripherals = centralManager.retrievePeripherals(withIdentifiers: [discoveredPeripheral.identifier])
+            if let foundPeripheral = foundPeripherals.last {
+                os_log("Found previously connected peripherals: \(foundPeripherals)")
+                os_log("Connecting to peripheral \(foundPeripheral)")
+                centralManager.connect(foundPeripheral)
+                return
+            }
         }
+        foundPeripherals = centralManager.retrieveConnectedPeripherals(withServices: [BleConstants.buttonsServiceUuid])
+        if let foundPeripheral = foundPeripherals.last {
+            os_log("Found already connected peripherals: \(foundPeripherals)")
+            os_log("Connecting to peripheral \(foundPeripheral)")
+            discoveredPeripheral = foundPeripheral
+            centralManager.connect(foundPeripheral)
+            return
+        }
+        centralManager.scanForPeripherals(withServices: nil, // Kraken housing doesn't advertise anything specific
+                                               options: [CBCentralManagerScanOptionAllowDuplicatesKey: true]) // required to receive RSSI updates
     }
 
     private func cleanup() {
@@ -47,6 +57,7 @@ class BleCentralManager: NSObject {
         }
 
         centralManager.cancelPeripheralConnection(discoveredPeripheral)
+        initiateConnectionToPeripheral()
     }
 
 }
@@ -57,7 +68,7 @@ extension BleCentralManager: CBCentralManagerDelegate {
         switch central.state {
         case .poweredOn:
             os_log("centralManager: Bluetooth is powered on")
-            connectToPeripheral()
+            initiateConnectionToPeripheral()
         case .poweredOff, .resetting, .unsupported, .unknown:
             os_log("centralManager: Bluetooth is powered off or unavailable")
         case .unauthorized:
@@ -73,10 +84,11 @@ extension BleCentralManager: CBCentralManagerDelegate {
               advertisedServiceName == BleConstants.peripherialName
                 else { return }
         if discoveredPeripheral == peripheral {
+            // already connecting to
             return
         }
         guard RSSI.intValue > BleConstants.connectableSignalStrengthThreshold else {
-            //os_log("Discovered perhiperal not in expected range, at \(RSSI.intValue)")
+            os_log("Discovered perhiperal not in expected range, at \(RSSI.intValue)")
             return
         }
         os_log("""
@@ -105,8 +117,7 @@ extension BleCentralManager: CBCentralManagerDelegate {
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         os_log("Perhiperal Disconnected, error (if any): \(String(describing: error))")
-        discoveredPeripheral = nil
-        connectToPeripheral()
+        initiateConnectionToPeripheral()
     }
 
 }

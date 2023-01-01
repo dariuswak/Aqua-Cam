@@ -37,6 +37,6 @@ struct BleConstants {
 
     static let downButtonCode: UInt8 = 80
 
-    static let connectableSignalStrengthThreshold = -70 // TODO -40 (tap)
+    static let connectableSignalStrengthThreshold = -60
 
 }
