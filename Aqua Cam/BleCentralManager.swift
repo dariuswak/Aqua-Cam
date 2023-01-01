@@ -179,7 +179,7 @@ extension BleCentralManager: CBPeripheralDelegate {
             }
         case BleConstants.batteryLevelCharacteristicUuid, BleConstants.emulatedBatteryLevelCharacteristicUuid:
             batteryLevelPercentage = Int(value.first!)
-            Logger.log("battery", batteryLevelPercentage)
+            Logger.log("housing_battery", batteryLevelPercentage)
         default:
             let arrayValue = Array(value)
             let stringValue = String(bytes: value, encoding: .ascii)!

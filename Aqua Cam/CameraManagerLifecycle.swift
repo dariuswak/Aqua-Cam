@@ -56,7 +56,7 @@ extension CameraManager {
         }
     }
 
-    func startSession() {
+    func startSession(completionHandler: (() -> Void)? = nil) {
         os_log("Starting the session")
         sessionQueue.async {
             if self.keyValueObservations.isEmpty {
@@ -65,6 +65,10 @@ extension CameraManager {
             self.session.startRunning()
             if !self.session.isRunning {
                 os_log("Unable to start session")
+            }
+            DispatchQueue.main.async {
+                completionHandler?()
+                os_log("Wakeup from sleep finished")
             }
         }
     }
@@ -75,35 +79,6 @@ extension CameraManager {
                 os_log("Shutting down the session")
                 self.session.stopRunning()
                 self.removeObservers()
-            }
-        }
-    }
-
-    func sleepSession() {
-        os_log("Entering sleep")
-        sessionQueue.async {
-            self.videoDeviceInput.ports
-                .filter { port in port.mediaType == AVMediaType.video }
-                .forEach { port in
-                    os_log("Disabling video port: \(port)")
-                    port.isEnabled = false
-                }
-            os_log("Entered sleep")
-        }
-    }
-
-    func wakeUpSession(completionHandler: @escaping () -> Void) {
-        os_log("Waking up from sleep")
-        sessionQueue.async {
-            self.videoDeviceInput.ports
-                .filter { port in port.mediaType == AVMediaType.video }
-                .forEach { port in
-                    os_log("Enabling video port: \(port)")
-                    port.isEnabled = true
-                }
-            DispatchQueue.main.async {
-                completionHandler()
-                os_log("Wakeup from sleep finished")
             }
         }
     }

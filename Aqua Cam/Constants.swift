@@ -19,7 +19,6 @@ class Constants {
     static let CAMERAS: [AVCaptureDevice.DeviceType] = [
         .builtInWideAngleCamera,
         .builtInUltraWideCamera,
-        .builtInLiDARDepthCamera,
         .builtInTelephotoCamera,
     ]
 

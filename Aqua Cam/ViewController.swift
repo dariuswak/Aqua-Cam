@@ -72,12 +72,7 @@ class ViewController: UIViewController {
     // wake up
     @IBAction func shutterButtonPressed() {
         if !cameraManager.session.isRunning {
-            os_log("Attempting to restart the session")
-            cameraManager.startSession()
-            return
-        }
-        if previewView.isHidden {
-            cameraManager.wakeUpSession {
+            cameraManager.startSession {
                 self.previewView.isHidden = false
                 self.disconnectedControls.isHidden = self.bleCentralManager.discoveredPeripheral?.state == .connected
                 self.topInfoPane.isHidden = !self.disconnectedControls.isHidden
@@ -106,7 +101,7 @@ class ViewController: UIViewController {
 
     func sleep() {
         self.previewView.isHidden = true
-        cameraManager.sleepSession()
+        cameraManager.shutdownSession()
     }
 
     // 2nd button - mode
@@ -326,7 +321,7 @@ class ViewController: UIViewController {
                 self.isoIndicator.text = " ISO \(Int(self.cameraManager.videoDeviceInput.device.iso)) "
             }
         })
-        // disconnected controls
+        // disconnected controls & connected functions
         keyValueObservations.append(observe(\.bleCentralManager.discoveredPeripheral?.state) { _,_ in
             let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
             let asleep = self.previewView.isHidden
@@ -335,6 +330,10 @@ class ViewController: UIViewController {
             self.bluetoothIndicator.connected = connected
             UIScreen.main.brightness = connected ? 1 : 0.5
         })
+        NotificationCenter.default.addObserver(self,
+                                      selector:#selector(brightnessChanged),
+                                          name:UIScreen.brightnessDidChangeNotification,
+                                        object:nil)
         self.disconnectedControls.isHidden = self.cameraManager.videoDeviceInput == nil
         // housing buttons
         keyValueObservations.append(observe(\.bleCentralManager.buttonPressed) { _,_ in
@@ -359,10 +358,20 @@ class ViewController: UIViewController {
 
     @objc
     func batteryLevelChanged(notification: NSNotification) {
-        os_log("Battery level changed to: \(UIDevice.current.batteryLevel)")
+        os_log("Phone Battery level changed to: \(UIDevice.current.batteryLevel)")
+        Logger.log("phone_battery", Int(UIDevice.current.batteryLevel * 100))
         // 20% is effectively 0%: the system warning will show & the app will enter background & the phone will sleep
         let adjustedLevel = (UIDevice.current.batteryLevel - 0.2) * 125
         self.phoneBatteryIndicator.batteryLevel = Int(adjustedLevel)
+    }
+
+    @objc
+    func brightnessChanged(notification: NSNotification) {
+        let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
+        if connected {
+            os_log("Resetting brightness to max from \(UIScreen.main.brightness)")
+            UIScreen.main.brightness = 1
+        }
     }
 
 }
