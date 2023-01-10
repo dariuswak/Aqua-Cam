@@ -95,8 +95,8 @@ extension BleCentralManager: CBCentralManagerDelegate {
                Connecting to discovered \(String(describing: peripheral.name)) \
                /\(String(describing: advertisementData[CBAdvertisementDataLocalNameKey]))
                """)
-        discoveredPeripheral = peripheral
         centralManager.connect(peripheral)
+        discoveredPeripheral = peripheral
     }
 
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {

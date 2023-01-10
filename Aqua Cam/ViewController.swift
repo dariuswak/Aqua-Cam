@@ -66,22 +66,22 @@ class ViewController: UIViewController {
     @IBAction func openSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
     }
+    
+    @IBAction func showDisconnectedControls() {
+        disconnectedControls.isHidden = false
+    }
 
     // take photo
     // start/stop recording video
     // wake up
     @IBAction func shutterButtonPressed() {
         if !cameraManager.session.isRunning {
-            cameraManager.startSession {
-                self.previewView.isHidden = false
-                self.disconnectedControls.isHidden = self.bleCentralManager.discoveredPeripheral?.state == .connected
-                self.topInfoPane.isHidden = !self.disconnectedControls.isHidden
-            }
+            wakeup()
             return
         }
         if (cameraManager.movieFileOutput != nil) {
             os_log("Toggling video recording")
-            cameraManager.toggleMovieRecording(self.flashView)
+            cameraManager.toggleMovieRecording(flashView)
         } else {
             os_log("Capturing photo")
             cameraManager.capturePhoto(viewController: self)
@@ -99,8 +99,17 @@ class ViewController: UIViewController {
         }
     }
 
+    func wakeup() {
+        cameraManager.startSession {
+            let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
+            self.previewView.isHidden = false
+            self.disconnectedControls.isHidden = connected
+            self.topInfoPane.isHidden = !connected
+        }
+    }
+
     func sleep() {
-        self.previewView.isHidden = true
+        previewView.isHidden = true
         cameraManager.shutdownSession()
     }
 
@@ -113,11 +122,11 @@ class ViewController: UIViewController {
             cameraManager.capturePhoto(viewController: self)
         } else {
             os_log("Changing mode: photo/video")
-            let isPhoto = self.cameraManager.cyclePhotoAndVideo() == .photo
-            self.recordingTime.show(if: !isPhoto) {
+            let isPhoto = cameraManager.cyclePhotoAndVideo() == .photo
+            recordingTime.show(if: !isPhoto) {
                 self.frameRate.isHidden = isPhoto
             }
-            self.modeIndicator.isPhoto = isPhoto
+            modeIndicator.isPhoto = isPhoto
         }
     }
 
@@ -125,9 +134,9 @@ class ViewController: UIViewController {
     // change camera/format
     @IBAction func upButtonPressed() {
         if cameraName.selected {
-            self.cameraManager.configureSession(changeCamera: .previous, changeFormat: .current)
+            cameraManager.configureSession(changeCamera: .previous, changeFormat: .current)
         } else {
-            self.cameraManager.configureSession(changeCamera: .current, changeFormat: .previous)
+            cameraManager.configureSession(changeCamera: .current, changeFormat: .previous)
         }
     }
 
@@ -147,9 +156,9 @@ class ViewController: UIViewController {
     // change camera/format
     @IBAction func downButtonPressed() {
         if cameraName.selected {
-            self.cameraManager.configureSession(changeCamera: .next, changeFormat: .current)
+            cameraManager.configureSession(changeCamera: .next, changeFormat: .current)
         } else {
-            self.cameraManager.configureSession(changeCamera: .current, changeFormat: .next)
+            cameraManager.configureSession(changeCamera: .current, changeFormat: .next)
         }
     }
 
@@ -189,9 +198,9 @@ class ViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        switch self.cameraManager.setupResult {
+        switch cameraManager.setupResult {
         case .success:
-            self.cameraManager.startSession()
+            cameraManager.startSession()
         case .notAuthorizedCamera:
             os_log("Alert about camera permissions")
             alert(message: "Permission to use the camera is denied, please review settings", comment: "Alert message when no camera access")
@@ -323,12 +332,26 @@ class ViewController: UIViewController {
         })
         // disconnected controls & connected functions
         keyValueObservations.append(observe(\.bleCentralManager.discoveredPeripheral?.state) { _,_ in
+            switch self.bleCentralManager.discoveredPeripheral?.state {
+            case .connected, .disconnected: break
+            default: return // ignore transition states
+            }
             let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
-            let asleep = self.previewView.isHidden
-            self.disconnectedControls.show(if: !connected && !asleep, duration: 1, options: .transitionCrossDissolve)
-            self.topInfoPane.show(if: connected && !asleep, duration: 1, options: .transitionCrossDissolve)
+            let awake = self.cameraManager.session.isRunning
+            self.topInfoPane.show(if: connected && awake, duration: 1, options: .transitionCrossDissolve)
             self.bluetoothIndicator.connected = connected
             UIScreen.main.brightness = connected ? 1 : 0.5
+            if connected {
+                self.disconnectedControls.show(if: false, duration: 1, options: .transitionCrossDissolve)
+            }
+            if connected && !awake {
+                self.wakeup()
+            }
+            if !connected && awake {
+                self.sleep()
+                self.menuButtonPressed() // compensate for the most typical scenario when disconnected using the Menu Button;
+                                         // in such case the button press effect should be reverted
+            }
         })
         NotificationCenter.default.addObserver(self,
                                       selector:#selector(brightnessChanged),
@@ -362,14 +385,15 @@ class ViewController: UIViewController {
         Logger.log("phone_battery", Int(UIDevice.current.batteryLevel * 100))
         // 20% is effectively 0%: the system warning will show & the app will enter background & the phone will sleep
         let adjustedLevel = (UIDevice.current.batteryLevel - 0.2) * 125
-        self.phoneBatteryIndicator.batteryLevel = Int(adjustedLevel)
+        phoneBatteryIndicator.batteryLevel = Int(adjustedLevel)
     }
 
     @objc
     func brightnessChanged(notification: NSNotification) {
-        let connected = self.bleCentralManager.discoveredPeripheral?.state == .connected
+        let connected = bleCentralManager.discoveredPeripheral?.state == .connected
         if connected {
             os_log("Resetting brightness to max from \(UIScreen.main.brightness)")
+            Logger.log("event", "brightness-reset")
             UIScreen.main.brightness = 1
         }
     }

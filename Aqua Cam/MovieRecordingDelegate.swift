@@ -49,6 +49,7 @@ class MovieRecordingProcessor: NSObject, AVCaptureFileOutputRecordingDelegate {
 
     /// - Tag: DidStartRecording
     func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
+        Logger.log("event", "record-movie-begin")
     }
 
     /// - Tag: DidFinishRecording
@@ -57,7 +58,8 @@ class MovieRecordingProcessor: NSObject, AVCaptureFileOutputRecordingDelegate {
                     from connections: [AVCaptureConnection],
                     error: Error?) {
         if error != nil {
-            print("Movie file finishing error: \(String(describing: error))")
+            os_log("Movie file finishing error: \(String(describing: error))")
+            Logger.log("error", "record-movie: \(String(describing: error))")
             let success = (((error! as NSError).userInfo[AVErrorRecordingSuccessfullyFinishedKey] as AnyObject).boolValue)!
             if !success {
                 cleanup(outputFileURL)
@@ -72,10 +74,12 @@ class MovieRecordingProcessor: NSObject, AVCaptureFileOutputRecordingDelegate {
             creationRequest.location = self.location
         }, completionHandler: { success, error in
             if !success {
-                print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
+                os_log("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
+                Logger.log("error", "record-movie: \(String(describing: error))")
             }
             self.cleanup(outputFileURL)
         })
+        Logger.log("event", "record-movie-end")
     }
 
     func cleanup(_ outputFileURL: URL) {

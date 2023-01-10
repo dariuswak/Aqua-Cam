@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="landscape" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -317,10 +318,10 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="tQF-tL-Dly" userLabel="Disconnected controls">
-                                <rect key="frame" x="758.5" y="60" width="77.5" height="294"/>
+                                <rect key="frame" x="749" y="60" width="87" height="294"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ByJ-1B-ykn">
-                                        <rect key="frame" x="0.0" y="0.0" width="77.5" height="31"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="87" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Shutter"/>
                                         <connections>
@@ -328,13 +329,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXN-l9-f4k" userLabel="Spacer, upper">
-                                        <rect key="frame" x="0.0" y="37.5" width="77.5" height="12"/>
+                                        <rect key="frame" x="0.0" y="38" width="87" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3E-5T-HxI">
-                                        <rect key="frame" x="0.0" y="56.5" width="77.5" height="31"/>
+                                        <rect key="frame" x="0.0" y="53.5" width="87" height="34.5"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Focus"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Focus"/>
@@ -343,7 +344,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U1Q-Zj-DF2">
-                                        <rect key="frame" x="0.0" y="94" width="77.5" height="31"/>
+                                        <rect key="frame" x="0.0" y="91.5" width="87" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Mode"/>
                                         <connections>
@@ -351,7 +352,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xCd-To-jS9">
-                                        <rect key="frame" x="0.0" y="131.5" width="77.5" height="31"/>
+                                        <rect key="frame" x="0.0" y="130" width="87" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Up"/>
                                         <connections>
@@ -359,7 +360,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gll-Rf-lBf" userLabel="Menu">
-                                        <rect key="frame" x="0.0" y="169" width="77.5" height="31"/>
+                                        <rect key="frame" x="0.0" y="168" width="87" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Menu"/>
                                         <connections>
@@ -367,7 +368,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T46-qr-MWF">
-                                        <rect key="frame" x="0.0" y="207" width="77.5" height="31"/>
+                                        <rect key="frame" x="0.0" y="206" width="87" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Down"/>
                                         <connections>
@@ -375,13 +376,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wD4-kc-Wst" userLabel="Spacer, lower">
-                                        <rect key="frame" x="0.0" y="244.5" width="77.5" height="12"/>
+                                        <rect key="frame" x="0.0" y="244" width="87" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZ0-5o-BGH">
-                                        <rect key="frame" x="0.0" y="263" width="77.5" height="31"/>
+                                        <rect key="frame" x="0.0" y="259.5" width="87" height="34.5"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Settings">
                                             <color key="baseBackgroundColor" systemColor="systemGrayColor"/>
                                         </buttonConfiguration>
@@ -394,6 +395,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="4j2-SQ-jRG"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="GYI-aq-X2x" firstAttribute="height" secondItem="PwE-ho-rt2" secondAttribute="height" id="F7x-iZ-hqf"/>
                             <constraint firstItem="tQF-tL-Dly" firstAttribute="top" secondItem="PwE-ho-rt2" secondAttribute="top" constant="60" id="Vjq-le-7Ye"/>
@@ -403,6 +405,9 @@
                             <constraint firstAttribute="trailing" secondItem="tQF-tL-Dly" secondAttribute="trailing" constant="60" id="ieY-rR-qUI"/>
                             <constraint firstItem="GYI-aq-X2x" firstAttribute="top" secondItem="PwE-ho-rt2" secondAttribute="top" id="waP-an-qkK"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="vzK-xG-xv8" appends="YES" id="b38-df-Yp2"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="bluetoothIndicator" destination="Fp2-3W-Anr" id="cpr-0n-Syt"/>
@@ -432,6 +437,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="1" id="vzK-xG-xv8" userLabel="Long Press Show Controls">
+                    <connections>
+                        <action selector="showDisconnectedControls" destination="BYZ-38-t0r" id="q1n-mN-g3c"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="138.61607142857142" y="137.68115942028987"/>
         </scene>
@@ -439,9 +449,9 @@
     <resources>
         <image name="battery.0" catalog="system" width="128" height="59"/>
         <image name="bluetooth_disabled" width="24" height="24"/>
-        <image name="rectangle.compress.vertical" catalog="system" width="122" height="128"/>
-        <image name="scope" catalog="system" width="128" height="122"/>
-        <image name="sun.max" catalog="system" width="128" height="124"/>
+        <image name="rectangle.compress.vertical" catalog="system" width="124" height="128"/>
+        <image name="scope" catalog="system" width="128" height="124"/>
+        <image name="sun.max" catalog="system" width="128" height="125"/>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

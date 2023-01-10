@@ -50,7 +50,7 @@ class PhotoCaptureProcessor: NSObject {
                 do {
                     try FileManager.default.removeItem(atPath: livePhotoCompanionMoviePath)
                 } catch {
-                    print("Could not remove file at url: \(livePhotoCompanionMoviePath)")
+                    os_log("Could not remove file at url: \(livePhotoCompanionMoviePath)")
                 }
             }
         }
@@ -72,6 +72,7 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
 
     /// - Tag: WillCapturePhoto
     func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        Logger.log("event", "capture-photo")
         willCapturePhotoAnimation()
         guard let maxPhotoProcessingTime = maxPhotoProcessingTime else { return }
         if maxPhotoProcessingTime > PhotoCaptureProcessor.ONE_SECOND {
@@ -84,6 +85,7 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
         photoProcessingHandler(false)
         if let error = error {
             os_log("Error capturing photo: \(String(describing: error))")
+            Logger.log("error", "capture-photo: \(String(describing: error))")
             return
         } else {
             photoData = photo.fileDataRepresentation()
@@ -111,6 +113,7 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingLivePhotoToMovieFileAt outputFileURL: URL, duration: CMTime, photoDisplayTime: CMTime, resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
         if error != nil {
             os_log("Error processing Live Photo companion movie: \(String(describing: error))")
+            Logger.log("error", "capture-photo: \(String(describing: error))")
             return
         }
         livePhotoCompanionMovieURL = outputFileURL
@@ -120,6 +123,7 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
         if let error = error {
             os_log("Error capturing photo: \(String(describing: error))")
+            Logger.log("error", "capture-photo: \(String(describing: error))")
             didFinish()
             return
         }
@@ -152,6 +156,7 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
         }, completionHandler: { _, error in
             if let error = error {
                 os_log("Error occurred while saving photo to photo library: \(String(describing: error))")
+                Logger.log("error", "capture-photo: \(String(describing: error))")
             }
             self.didFinish()
         })
