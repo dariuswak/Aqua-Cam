@@ -3,18 +3,30 @@ import os
 
 class Logger {
 
+    enum Column: Int, CaseIterable {
+        case timestamp, depth, temp, housing_battery, camera_battery, event, error
+    }
+
     static let dateFormatter = DateFormatter()
+
+    static let indent = (0 ..< Column.allCases.count)
+        .map({_ in "\t"})
+        .joined()
 
     var logFlushTimer: Timer?
 
-    static func log(_ message: String, _ data: Any) {
-        print("\(Logger.dateFormatter.string(from: Date()))\t\(message)\t\(data)")
+    static func log(_ column: Column, _ data: Any) {
+        print("\(Logger.dateFormatter.string(from: Date()))\(indent.prefix(column.rawValue))\(data)")
     }
 
     func start() {
         Logger.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         Logger.dateFormatter.timeZone = TimeZone.autoupdatingCurrent
         redirectStdOut()
+        print(Column.allCases
+            .map({"\($0)"})
+            .joined(separator: "\t")
+        )
         logFlushTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
             fflush(__stdoutp)
         }
@@ -38,7 +50,7 @@ class Logger {
         }
         let timestampPath = Logger.dateFormatter.string(from: Date())
             .replacingOccurrences(of: ":", with: "-")
-        let logFilePath = logsLocation + "/aqua_cam-\(timestampPath).log"
+        let logFilePath = logsLocation + "/aqua_cam-\(timestampPath).csv"
         os_log("Redirecting stdout to \(logFilePath)")
         freopen(logFilePath.cString(using: String.Encoding.ascii)!, "a+", stdout)
     }

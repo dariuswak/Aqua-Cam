@@ -106,8 +106,8 @@ extension BleCentralManager: CBCentralManagerDelegate {
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         os_log("Peripheral Connected")
+        Logger.log(.event, "housing-connected")
         centralManager.stopScan()
-        os_log("Scanning stopped")
         peripheral.delegate = self
         peripheral.discoverServices([BleConstants.deviceInformationServiceUuid,
                                      BleConstants.batteryServiceUuid, BleConstants.emulatedBatteryServiceUuid,
@@ -117,6 +117,7 @@ extension BleCentralManager: CBCentralManagerDelegate {
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         os_log("Perhiperal Disconnected, error (if any): \(String(describing: error))")
+        Logger.log(.event, "housing-disconnected")
         initiateConnectionToPeripheral()
     }
 
@@ -182,15 +183,15 @@ extension BleCentralManager: CBPeripheralDelegate {
             // the housing transmits this continuously twice per second; avoid propagation of the redundant notifications
             if depthSensor != depthValue {
                 depthSensor = depthValue
-                Logger.log("depth", depthSensor)
+                Logger.log(.depth, depthSensor)
             }
             if temperatureSensor != temperatureValue {
                 temperatureSensor = temperatureValue
-                Logger.log("temp", temperatureSensor)
+                Logger.log(.temp, temperatureSensor)
             }
         case BleConstants.batteryLevelCharacteristicUuid, BleConstants.emulatedBatteryLevelCharacteristicUuid:
             batteryLevelPercentage = Int(value.first!)
-            Logger.log("housing_battery", batteryLevelPercentage)
+            Logger.log(.housing_battery, batteryLevelPercentage)
         default:
             let arrayValue = Array(value)
             let stringValue = String(bytes: value, encoding: .ascii)!

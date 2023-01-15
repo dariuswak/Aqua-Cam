@@ -63,7 +63,9 @@ extension CameraManager {
                 self.addObservers()
             }
             self.session.startRunning()
-            if !self.session.isRunning {
+            if self.session.isRunning {
+                Logger.log(.event, "camera-awake")
+            } else {
                 os_log("Unable to start session")
             }
             DispatchQueue.main.async {
@@ -78,6 +80,7 @@ extension CameraManager {
             if self.setupResult == .success {
                 os_log("Shutting down the session")
                 self.session.stopRunning()
+                Logger.log(.event, "camera-asleep")
                 self.removeObservers()
             }
         }

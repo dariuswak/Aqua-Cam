@@ -382,7 +382,7 @@ class ViewController: UIViewController {
     @objc
     func batteryLevelChanged(notification: NSNotification) {
         os_log("Phone Battery level changed to: \(UIDevice.current.batteryLevel)")
-        Logger.log("phone_battery", Int(UIDevice.current.batteryLevel * 100))
+        Logger.log(.camera_battery, Int(UIDevice.current.batteryLevel * 100))
         // 20% is effectively 0%: the system warning will show & the app will enter background & the phone will sleep
         let adjustedLevel = (UIDevice.current.batteryLevel - 0.2) * 125
         phoneBatteryIndicator.batteryLevel = Int(adjustedLevel)
@@ -393,7 +393,7 @@ class ViewController: UIViewController {
         let connected = bleCentralManager.discoveredPeripheral?.state == .connected
         if connected {
             os_log("Resetting brightness to max from \(UIScreen.main.brightness)")
-            Logger.log("event", "brightness-reset")
+            Logger.log(.event, "brightness-reset")
             UIScreen.main.brightness = 1
         }
     }
