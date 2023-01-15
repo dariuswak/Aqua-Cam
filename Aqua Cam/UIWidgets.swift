@@ -32,7 +32,7 @@ class UIFlashView: UIView {
     func flash(color: UIColor) {
         DispatchQueue.main.async {
             self.backgroundColor = color
-            UIView.animate(withDuration: 0.35) {
+            UIView.animate(withDuration: 0.5) {
                 self.backgroundColor = UIColor.clear
             }
         }
@@ -57,8 +57,9 @@ class UIRecordingTime: UILabel {
                 startTime = Date.now
                 timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                     self.text = " \(self.format.string(from: self.startTime!, to: Date.now) ?? "(err)")s "
+                    self.flashBorder()
                 }
-                timer?.tolerance = 3
+                timer?.tolerance = 0.1
             } else {
                 timer?.invalidate()
             }
@@ -72,6 +73,16 @@ class UIRecordingTime: UILabel {
         willSet {
             text = UIRecordingTime.ZERO
             timer?.invalidate()
+        }
+    }
+
+    func flashBorder() {
+        DispatchQueue.main.async {
+            self.layer.borderWidth = 5
+            self.layer.borderColor = UIColor.red.cgColor
+            UIView.transition(with: self, duration: 0.5, options: .curveEaseIn) {
+                self.layer.borderWidth = 0
+            }
         }
     }
 
