@@ -50,7 +50,7 @@ class Logger {
         }
         let timestampPath = Logger.dateFormatter.string(from: Date())
             .replacingOccurrences(of: ":", with: "-")
-        let logFilePath = logsLocation + "/aqua_cam-\(timestampPath).csv"
+        let logFilePath = logsLocation + "/aqua_cam-\(timestampPath).tsv"
         os_log("Redirecting stdout to \(logFilePath)")
         freopen(logFilePath.cString(using: String.Encoding.ascii)!, "a+", stdout)
     }

@@ -117,13 +117,8 @@ extension CameraManager {
     @objc
     func sessionRuntimeError(notification: NSNotification) {
         guard let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError else { return }
-        if error.code == AVError.Code.unknown
-                && error.userInfo[NSLocalizedFailureReasonErrorKey] as! String == "An unknown error occurred (-16401)"
-                && error.userInfo[NSLocalizedDescriptionKey] as! String == "The operation could not be completed"
-                && (error.userInfo[NSUnderlyingErrorKey] as! NSError).domain == NSOSStatusErrorDomain {
-            return
-        }
         os_log("Capture session runtime error: \(String(describing: error))")
+        Logger.log(.error, "capture-session: \(String(describing: error))")
     }
 
     @objc
@@ -131,7 +126,8 @@ extension CameraManager {
         if let userInfoValue = notification.userInfo?[AVCaptureSessionInterruptionReasonKey] as AnyObject?,
             let reasonIntegerValue = userInfoValue.integerValue,
             let reason = AVCaptureSession.InterruptionReason(rawValue: reasonIntegerValue) {
-            os_log("Capture session was interrupted with reason \(String(describing: reason).lowercased())")
+            os_log("Capture session was interrupted with reason \(String(describing: reason))")
+            Logger.log(.event, "capture-session: interrupted: \(String(describing: reason))")
             if reason == .videoDeviceNotAvailableDueToSystemPressure {
                 os_log("Session stopped running due to shutdown system pressure level.")
             }
@@ -141,6 +137,7 @@ extension CameraManager {
     @objc
     func sessionInterruptionEnded(notification: NSNotification) {
         os_log("Capture session interruption ended")
+        Logger.log(.event, "capture-session: interruption ended")
     }
 
     @objc

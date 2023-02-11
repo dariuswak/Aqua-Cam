@@ -21,18 +21,18 @@ class MovieRecordingProcessor: NSObject, AVCaptureFileOutputRecordingDelegate {
         if UIDevice.current.isMultitaskingSupported {
             self.backgroundRecordingID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
         }
-        let movieFileOutputConnection = movieFileOutput.connection(with: .video)
-        movieFileOutputConnection?.videoOrientation = Constants.LANDSCAPE_RIGHT
+        guard let movieFileOutputConnection = movieFileOutput.connection(with: .video) else { return }
+        movieFileOutputConnection.videoOrientation = Constants.LANDSCAPE_RIGHT
 
-        let settings = movieFileOutput.outputSettings(for: movieFileOutputConnection!)
+        let settings = movieFileOutput.outputSettings(for: movieFileOutputConnection)
         let newSettings: [String : Any] = [
             AVVideoCodecKey: AVVideoCodecType.hevc,
             AVVideoCompressionPropertiesKey: [
                 AVVideoAverageBitRateKey: calculateNominalBitRate(settings),
             ],
         ]
-        movieFileOutput.setOutputSettings(newSettings, for: movieFileOutputConnection!)
-        os_log("Recording settings: \(movieFileOutput.outputSettings(for: movieFileOutputConnection!))")
+        movieFileOutput.setOutputSettings(newSettings, for: movieFileOutputConnection)
+        os_log("Recording settings: \(movieFileOutput.outputSettings(for: movieFileOutputConnection))")
 
         let outputFileName = uniqueID.uuidString
         let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
@@ -60,7 +60,7 @@ class MovieRecordingProcessor: NSObject, AVCaptureFileOutputRecordingDelegate {
         if error != nil {
             os_log("Movie file finishing error: \(String(describing: error))")
             Logger.log(.error, "record-movie: \(String(describing: error))")
-            let success = (((error! as NSError).userInfo[AVErrorRecordingSuccessfullyFinishedKey] as AnyObject).boolValue)!
+            let success = (((error! as NSError).userInfo[AVErrorRecordingSuccessfullyFinishedKey] as AnyObject).boolValue) ?? false
             if !success {
                 cleanup(outputFileURL)
                 return
