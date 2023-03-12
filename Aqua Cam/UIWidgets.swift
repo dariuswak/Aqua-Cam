@@ -167,6 +167,10 @@ class TimeAtDepth: UIRecordingTime {
         }
     }
 
+    override func flashBorder() {
+        // do not flash
+    }
+
 }
 
 class UIBluetooth: UIImageView {
@@ -298,6 +302,7 @@ class SelectableUILabel: UILabel {
     var selected: Bool = false {
         didSet {
             layer.borderWidth = selected ? 2 : 0
+            layer.masksToBounds = selected
             layer.borderColor = Colour.ACTIVE.cgColor
             layer.cornerRadius = 8
         }
