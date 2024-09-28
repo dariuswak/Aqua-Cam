@@ -45,12 +45,11 @@ extension CameraManager {
                     return
                 }
                 self.session.addOutput(self.photoOutput)
-                self.photoOutput.isHighResolutionCaptureEnabled = true
             }
             // do last
             self.sessionQueue.async {
                 DispatchQueue.main.async {
-                    previewView.videoPreviewLayer.connection!.videoOrientation = Constants.LANDSCAPE_RIGHT
+                    previewView.videoPreviewLayer.connection!.videoRotationAngle = Constants.LANDSCAPE_RIGHT
                 }
             }
         }
@@ -89,22 +88,22 @@ extension CameraManager {
     func addObservers() {
         NotificationCenter.default.addObserver(self,
                                       selector:#selector(subjectAreaDidChange),
-                                          name:.AVCaptureDeviceSubjectAreaDidChange,
+                                          name:AVCaptureDevice.subjectAreaDidChangeNotification,
                                         object:videoDeviceInput.device)
 
         NotificationCenter.default.addObserver(self,
                                       selector:#selector(sessionRuntimeError),
-                                          name:.AVCaptureSessionRuntimeError,
+                                          name:AVCaptureSession.runtimeErrorNotification,
                                         object:session)
 
         NotificationCenter.default.addObserver(self,
                                       selector:#selector(sessionWasInterrupted),
-                                          name:.AVCaptureSessionWasInterrupted,
+                                          name:AVCaptureSession.wasInterruptedNotification,
                                         object:session)
 
         NotificationCenter.default.addObserver(self,
                                       selector:#selector(sessionInterruptionEnded),
-                                          name:.AVCaptureSessionInterruptionEnded,
+                                          name:AVCaptureSession.interruptionEndedNotification,
                                         object:session)
     }
 

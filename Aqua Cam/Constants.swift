@@ -3,7 +3,7 @@ import AVFoundation
 
 class Constants {
 
-    static let LANDSCAPE_RIGHT: AVCaptureVideoOrientation = .landscapeRight
+    static let LANDSCAPE_RIGHT: CGFloat = 0 // in degrees
 
     // for HD 60fps (default ~11 Mbps)
     static let NOMINAL_AVG_VIDEO_BITRATE = 25_000_000.0

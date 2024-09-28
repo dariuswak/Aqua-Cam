@@ -65,8 +65,13 @@ class CameraManager: NSObject {
             }
             self.session.removeInput(oldVideoDeviceInput)
             if self.session.canAddInput(newVideoDeviceInput) {
-                NotificationCenter.default.removeObserver(self, name: .AVCaptureDeviceSubjectAreaDidChange, object: oldVideoDeviceInput.device)
-                NotificationCenter.default.addObserver(self, selector: #selector(self.subjectAreaDidChange), name: .AVCaptureDeviceSubjectAreaDidChange, object: newVideoDeviceInput.device)
+                NotificationCenter.default.removeObserver(self,
+                                                          name: AVCaptureDevice.subjectAreaDidChangeNotification,
+                                                          object: oldVideoDeviceInput.device)
+                NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(self.subjectAreaDidChange),
+                                                       name: AVCaptureDevice.subjectAreaDidChangeNotification,
+                                                       object: newVideoDeviceInput.device)
                 self.session.addInput(newVideoDeviceInput)
                 self.videoDeviceInput = newVideoDeviceInput
                 os_log("Changed camera to: \(newVideoDeviceInput)")
@@ -232,7 +237,7 @@ class CameraManager: NSObject {
 
     func capturePhoto(viewController: ViewController) {
         sessionQueue.async {
-            self.photoOutput.connection(with: .video)!.videoOrientation = Constants.LANDSCAPE_RIGHT
+            self.photoOutput.connection(with: .video)!.videoRotationAngle = Constants.LANDSCAPE_RIGHT
             var photoSettings = AVCapturePhotoSettings()
             if self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {
                 photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
@@ -246,7 +251,6 @@ class CameraManager: NSObject {
                 let livePhotoMovieFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((livePhotoMovieFileName as NSString).appendingPathExtension("mov")!)
                 photoSettings.livePhotoMovieFileURL = URL(fileURLWithPath: livePhotoMovieFilePath)
             }
-            photoSettings.isHighResolutionPhotoEnabled = !self.photoOutput.isDepthDataDeliveryEnabled
             photoSettings.isDepthDataDeliveryEnabled = self.photoOutput.isDepthDataDeliveryEnabled
             photoSettings.isPortraitEffectsMatteDeliveryEnabled = self.photoOutput.isPortraitEffectsMatteDeliveryEnabled
             photoSettings.photoQualityPrioritization = .quality

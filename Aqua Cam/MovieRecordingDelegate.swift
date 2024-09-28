@@ -22,7 +22,7 @@ class MovieRecordingProcessor: NSObject, AVCaptureFileOutputRecordingDelegate {
             self.backgroundRecordingID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
         }
         guard let movieFileOutputConnection = movieFileOutput.connection(with: .video) else { return }
-        movieFileOutputConnection.videoOrientation = Constants.LANDSCAPE_RIGHT
+        movieFileOutputConnection.videoRotationAngle = Constants.LANDSCAPE_RIGHT
 
         let settings = movieFileOutput.outputSettings(for: movieFileOutputConnection)
         let newSettings: [String : Any] = [
