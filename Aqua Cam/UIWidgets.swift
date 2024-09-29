@@ -113,14 +113,14 @@ class UIBatteryLevel: UIStackView {
     var batteryLevel: Int = 0 {
         didSet {
             DispatchQueue.main.async {
-                self.icon.image = { switch self.batteryLevel {
-                    case ..<13: return UIImage.battery0
-                    case ..<38: return UIImage.battery25
-                    case ..<63: return UIImage.battery50
-                    case ..<88: return UIImage.battery75
-                    case ...100: return UIImage.battery100
-                    default: return UIImage.questionMarkCircle
-                }}()
+                self.icon.image = switch self.batteryLevel {
+                    case ..<13: UIImage.battery0
+                    case ..<38: UIImage.battery25
+                    case ..<63: UIImage.battery50
+                    case ..<88: UIImage.battery75
+                    case ...100: UIImage.battery100
+                    default: UIImage.questionMarkCircle
+                }
                 self.percentage.text = "\(self.batteryLevel)% "
             }
         }
@@ -134,14 +134,14 @@ class UISystemPressure: UIImageView {
         didSet {
             os_log("System pressure changed to: \(self.level.rawValue)")
             DispatchQueue.main.async {
-                self.image = { switch self.level {
-                    case .nominal: return UIImage.sunMax
-                    case .fair: return UIImage.cloudSun
-                    case .serious: return UIImage.cloud
-                    case .critical: return UIImage.cloudHeavyRain
-                    case .shutdown: return UIImage.cloudBolt
-                    default: return UIImage.questionMarkCircle
-                }}()
+                self.image = switch self.level {
+                    case .nominal: UIImage.sunMax
+                    case .fair: UIImage.cloudSun
+                    case .serious: UIImage.cloud
+                    case .critical: UIImage.cloudHeavyRain
+                    case .shutdown: UIImage.cloudBolt
+                    default: UIImage.questionMarkCircle
+                }
             }
         }
     }
@@ -207,11 +207,12 @@ class UICameraType: SelectableUILabel {
         didSet {
             let longName = cameraType.rawValue
             os_log("Camera name: \(longName)")
-            let codeName = (longName.contains("Ultra") ? "U" : "") +
-                           (longName.contains("Wide") ? "W" : "") +
-                           (longName.contains("Tele") ? "T" : "") +
-                           (longName.contains("Depth") ? "D" : "")
-            self.text = " \(codeName) "
+            self.text = switch longName {
+                case let name where name.contains("WideAngle"): " W "
+                case let name where name.contains("UltraWide"): " U "
+                case let name where name.contains("Telephoto"): " T "
+                default: " ? "
+            }
         }
     }
 
@@ -244,11 +245,12 @@ class UIStabilisationType: UILabel {
         os_log("Stabilisation mode: \(connection?.isVideoStabilizationSupported ?? false) / \(connection?.activeVideoStabilizationMode.rawValue ?? -100)")
         guard let stabilisationMode = connection?.activeVideoStabilizationMode else { return }
         isEnabled = stabilisationMode != .off
-        text = { switch stabilisationMode {
-            case .off, .standard: return " (o) "
-            case .cinematic, .cinematicExtended, .cinematicExtendedEnhanced: return " ((o)) "
-            default: return " (?) "
-        }}()
+        text = switch stabilisationMode {
+            case .off: " (x) "
+            case .standard, .cinematic: " (o) "
+            case .cinematicExtended, .cinematicExtendedEnhanced: " ((o)) "
+            default: " (?) "
+        }
     }
 
 }
@@ -258,15 +260,13 @@ class UIFormatResolution: SelectableUILabel {
     var fromFormat: AVCaptureDevice.Format? {
         didSet {
             let dimensions = fromFormat!.formatDescription.dimensions
-            text = { switch dimensions.height {
-                case 720: return " 2/3 HD "
-                case 1080: return " HD "
-                case 1440: return " HD 4/3 "
-                case 2160: return " UHD "
-                // should be 3072, but is slightly smaller
-                case 3024: return " 4K "
-                default: return " \(dimensions.width)x\(dimensions.height) "
-            }}()
+            text = switch dimensions.height {
+                case 1080: " HD "
+                case 1440: " HD 4/3 "
+                case 2160: " UHD "
+                case 3024: " 4K " // should be 3072, but is slightly smaller
+                default: " \(dimensions.width)x\(dimensions.height) "
+            }
         }
     }
 
