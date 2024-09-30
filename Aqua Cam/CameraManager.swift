@@ -121,6 +121,11 @@ class CameraManager: NSObject {
 //                connection.preferredVideoStabilizationMode = .off // max out photos resolution
             }
 
+            if let maxPhotoDimensions = newFormat.supportedMaxPhotoDimensions.last {
+                self.photoOutput.maxPhotoDimensions = maxPhotoDimensions
+            } else {
+                os_log("Error: missing max photo dimensions in photoOutput: \(String(describing: self.photoOutput))")
+            }
             /*
              Set Live Photo capture and depth data delivery if it's supported. When changing cameras, the
              `livePhotoCaptureEnabled` and `depthDataDeliveryEnabled` properties of the AVCapturePhotoOutput
@@ -147,9 +152,7 @@ class CameraManager: NSObject {
             $0.formatDescription.dimensions.width == selectedFormatDescription.dimensions.width &&
             $0.formatDescription.dimensions.height == selectedFormatDescription.dimensions.height &&
             $0.videoSupportedFrameRateRanges.last!.maxFrameRate == selectedFormatDescription.frameRate &&
-            !($0.formatDescription.dimensions.width > 4000 && videoDeviceInput.device.activeDepthDataFormat != nil) && // 4K doesn't support depth, contrary to what it declares
             !($0.isVideoBinned) && // binned formats are after the best!
-//            !($0.formatDescription.mediaSubType.rawValue == kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange) && // pick 420f over x420 for best photos quality
             !($0.formatDescription.mediaSubType.rawValue == kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange) // x422 only supports ProRes
         } ?? selectFormat(direction: (direction == .current ? .previous : direction))
     }
@@ -251,6 +254,7 @@ class CameraManager: NSObject {
                 let livePhotoMovieFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((livePhotoMovieFileName as NSString).appendingPathExtension("mov")!)
                 photoSettings.livePhotoMovieFileURL = URL(fileURLWithPath: livePhotoMovieFilePath)
             }
+            photoSettings.maxPhotoDimensions = self.photoOutput.maxPhotoDimensions
             photoSettings.isDepthDataDeliveryEnabled = self.photoOutput.isDepthDataDeliveryEnabled
             photoSettings.isPortraitEffectsMatteDeliveryEnabled = self.photoOutput.isPortraitEffectsMatteDeliveryEnabled
             photoSettings.photoQualityPrioritization = .quality

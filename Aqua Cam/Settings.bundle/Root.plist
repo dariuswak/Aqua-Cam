@@ -54,38 +54,6 @@
 				<integer>50000000</integer>
 			</array>
 		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string>Photos quality priority</string>
-			<key>FooterText</key>
-			<string>Unfortunately, for photos taken while recording video, a tradeoff need to be made: either photos or video can be of the highest quality, but not both.
-- If this setting is 'on', photos taken during video recording will be of the highest possible quality, as described in the video format settings, at the cost of the video can't use Dolby Vision 10-bit HDR quality.
-- If this setting is 'off', video will use Dolby Vision 10-bit HDR quality, if applicable, at the cost of photos taken during video recording to be of WYSIWYG quality only, same resolution as video.
-If you're mostly taking photos, turn this setting on. Leave it off for best video quality.
-NOTE: This setting doesn't affect quality of photos taken in the photo mode.</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-			<key>Title</key>
-			<string>Video recording photos quality priority</string>
-			<key>Key</key>
-			<string>na</string>
-			<key>DefaultValue</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Prioritise photos quality</string>
-			<key>Key</key>
-			<string>video_photo_priority</string>
-			<key>DefaultValue</key>
-			<false/>
-		</dict>
 	</array>
 </dict>
 </plist>
