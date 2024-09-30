@@ -99,9 +99,18 @@ class CameraManager: NSObject {
                 }
             }
             do {
-                try self.videoDeviceInput.device.lockForConfiguration()
-                self.videoDeviceInput.device.activeFormat = newFormat
-                self.videoDeviceInput.device.unlockForConfiguration()
+                let device = self.videoDeviceInput.device
+                try device.lockForConfiguration()
+                device.activeFormat = newFormat
+
+                // also, disable face-driven focus & exposure to avoid confusion
+                device.automaticallyAdjustsFaceDrivenAutoFocusEnabled = false
+                device.isFaceDrivenAutoFocusEnabled = false
+                device.automaticallyAdjustsFaceDrivenAutoExposureEnabled = false
+                device.isFaceDrivenAutoExposureEnabled = false
+                device.focusMode = .continuousAutoFocus
+
+                device.unlockForConfiguration()
             } catch {
                 os_log("changeFormat: Could not lock device for configuration: \(String(describing: error))")
             }
