@@ -177,6 +177,12 @@ extension BleCentralManager: CBPeripheralDelegate {
         case BleConstants.buttonsCharacteristicUuid:
             buttonPressed = value.first!
         case BleConstants.sensorsCharacteristicUuid:
+            guard value.count == 4 else {
+                let arrayValue = Array(value)
+                let stringValue = String(bytes: value, encoding: .ascii) ?? "(non-text)"
+                os_log("Unexpected sensor value length: \(value.count), value: \(arrayValue) <\(stringValue)>")
+                return
+            }
             let sensorsValue = value.withUnsafeBytes { Array($0.bindMemory(to: Int16.self)) }
             let depthValue = Float(sensorsValue[0]) / 10.0
             let temperatureValue = Float(sensorsValue[1]) / 10.0
@@ -194,7 +200,7 @@ extension BleCentralManager: CBPeripheralDelegate {
             Logger.log(.housing_battery, batteryLevelPercentage)
         default:
             let arrayValue = Array(value)
-            let stringValue = String(bytes: value, encoding: .ascii)!
+            let stringValue = String(bytes: value, encoding: .ascii) ?? "(non-text)"
             os_log("Unhandled characteristic: \(characteristic.uuid.uuidString), value: \(arrayValue) <\(stringValue)>")
         }
     }
