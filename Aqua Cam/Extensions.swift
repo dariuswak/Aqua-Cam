@@ -27,3 +27,22 @@ extension UIView {
     }
 
 }
+
+@available(iOS, deprecated: 19, message: "It's that time of year — check for system symbols deprecations, update test with new members.")
+extension UIImage {
+
+    static let questionMarkCircle = UIImage(systemName: "questionmark.circle")!
+
+    static let battery0 = UIImage(systemName: "battery.0percent")!
+    static let battery25 = UIImage(systemName: "battery.25percent")!
+    static let battery50 = UIImage(systemName: "battery.50percent")!
+    static let battery75 = UIImage(systemName: "battery.75percent")!
+    static let battery100 = UIImage(systemName: "battery.100percent")!
+
+    static let sunMax = UIImage(systemName: "sun.max")!
+    static let cloudSun = UIImage(systemName: "cloud.sun")!
+    static let cloud = UIImage(systemName: "cloud")!
+    static let cloudHeavyRain = UIImage(systemName: "cloud.heavyrain")!
+    static let cloudBolt = UIImage(systemName: "cloud.bolt")!
+
+}

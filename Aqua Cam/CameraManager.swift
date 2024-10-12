@@ -65,8 +65,13 @@ class CameraManager: NSObject {
             }
             self.session.removeInput(oldVideoDeviceInput)
             if self.session.canAddInput(newVideoDeviceInput) {
-                NotificationCenter.default.removeObserver(self, name: .AVCaptureDeviceSubjectAreaDidChange, object: oldVideoDeviceInput.device)
-                NotificationCenter.default.addObserver(self, selector: #selector(self.subjectAreaDidChange), name: .AVCaptureDeviceSubjectAreaDidChange, object: newVideoDeviceInput.device)
+                NotificationCenter.default.removeObserver(self,
+                                                          name: AVCaptureDevice.subjectAreaDidChangeNotification,
+                                                          object: oldVideoDeviceInput.device)
+                NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(self.subjectAreaDidChange),
+                                                       name: AVCaptureDevice.subjectAreaDidChangeNotification,
+                                                       object: newVideoDeviceInput.device)
                 self.session.addInput(newVideoDeviceInput)
                 self.videoDeviceInput = newVideoDeviceInput
                 os_log("Changed camera to: \(newVideoDeviceInput)")
@@ -94,9 +99,18 @@ class CameraManager: NSObject {
                 }
             }
             do {
-                try self.videoDeviceInput.device.lockForConfiguration()
-                self.videoDeviceInput.device.activeFormat = newFormat
-                self.videoDeviceInput.device.unlockForConfiguration()
+                let device = self.videoDeviceInput.device
+                try device.lockForConfiguration()
+                device.activeFormat = newFormat
+
+                // also, disable face-driven focus & exposure to avoid confusion
+                device.automaticallyAdjustsFaceDrivenAutoFocusEnabled = false
+                device.isFaceDrivenAutoFocusEnabled = false
+                device.automaticallyAdjustsFaceDrivenAutoExposureEnabled = false
+                device.isFaceDrivenAutoExposureEnabled = false
+                device.focusMode = .continuousAutoFocus
+
+                device.unlockForConfiguration()
             } catch {
                 os_log("changeFormat: Could not lock device for configuration: \(String(describing: error))")
             }
@@ -116,6 +130,11 @@ class CameraManager: NSObject {
 //                connection.preferredVideoStabilizationMode = .off // max out photos resolution
             }
 
+            if let maxPhotoDimensions = newFormat.supportedMaxPhotoDimensions.last {
+                self.photoOutput.maxPhotoDimensions = maxPhotoDimensions
+            } else {
+                os_log("Error: missing max photo dimensions in photoOutput: \(String(describing: self.photoOutput))")
+            }
             /*
              Set Live Photo capture and depth data delivery if it's supported. When changing cameras, the
              `livePhotoCaptureEnabled` and `depthDataDeliveryEnabled` properties of the AVCapturePhotoOutput
@@ -126,6 +145,12 @@ class CameraManager: NSObject {
             self.photoOutput.isDepthDataDeliveryEnabled = self.photoOutput.isDepthDataDeliverySupported
             self.photoOutput.isPortraitEffectsMatteDeliveryEnabled = self.photoOutput.isPortraitEffectsMatteDeliverySupported
             self.photoOutput.maxPhotoQualityPrioritization = .quality
+            
+            self.photoOutput.isAutoDeferredPhotoDeliveryEnabled = //self.photoOutput.isAutoDeferredPhotoDeliverySupported
+                                                                  false // FIXME the eventual photo is missing location
+            self.photoOutput.isZeroShutterLagEnabled = self.photoOutput.isZeroShutterLagSupported
+            self.photoOutput.isResponsiveCaptureEnabled = self.photoOutput.isResponsiveCaptureSupported
+            self.photoOutput.isFastCapturePrioritizationEnabled = self.photoOutput.isFastCapturePrioritizationSupported
 
             self.session.commitConfiguration()
         }
@@ -142,9 +167,7 @@ class CameraManager: NSObject {
             $0.formatDescription.dimensions.width == selectedFormatDescription.dimensions.width &&
             $0.formatDescription.dimensions.height == selectedFormatDescription.dimensions.height &&
             $0.videoSupportedFrameRateRanges.last!.maxFrameRate == selectedFormatDescription.frameRate &&
-            !($0.formatDescription.dimensions.width > 4000 && videoDeviceInput.device.activeDepthDataFormat != nil) && // 4K doesn't support depth, contrary to what it declares
             !($0.isVideoBinned) && // binned formats are after the best!
-//            !($0.formatDescription.mediaSubType.rawValue == kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange) && // pick 420f over x420 for best photos quality
             !($0.formatDescription.mediaSubType.rawValue == kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange) // x422 only supports ProRes
         } ?? selectFormat(direction: (direction == .current ? .previous : direction))
     }
@@ -232,7 +255,7 @@ class CameraManager: NSObject {
 
     func capturePhoto(viewController: ViewController) {
         sessionQueue.async {
-            self.photoOutput.connection(with: .video)!.videoOrientation = Constants.LANDSCAPE_RIGHT
+            self.photoOutput.connection(with: .video)!.videoRotationAngle = Constants.LANDSCAPE_RIGHT
             var photoSettings = AVCapturePhotoSettings()
             if self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {
                 photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
@@ -241,12 +264,14 @@ class CameraManager: NSObject {
                 photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPhotoPixelFormatType]
             }
             // Live Photo capture is not supported in movie mode.
-            if self.photoOutput.isLivePhotoCaptureSupported {
+            if self.photoOutput.isLivePhotoCaptureEnabled {
                 let livePhotoMovieFileName = NSUUID().uuidString
                 let livePhotoMovieFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((livePhotoMovieFileName as NSString).appendingPathExtension("mov")!)
                 photoSettings.livePhotoMovieFileURL = URL(fileURLWithPath: livePhotoMovieFilePath)
+            } else {
+                photoSettings.isShutterSoundSuppressionEnabled = self.photoOutput.isShutterSoundSuppressionSupported
             }
-            photoSettings.isHighResolutionPhotoEnabled = !self.photoOutput.isDepthDataDeliveryEnabled
+            photoSettings.maxPhotoDimensions = self.photoOutput.maxPhotoDimensions
             photoSettings.isDepthDataDeliveryEnabled = self.photoOutput.isDepthDataDeliveryEnabled
             photoSettings.isPortraitEffectsMatteDeliveryEnabled = self.photoOutput.isPortraitEffectsMatteDeliveryEnabled
             photoSettings.photoQualityPrioritization = .quality
