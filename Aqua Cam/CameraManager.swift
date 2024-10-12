@@ -145,6 +145,12 @@ class CameraManager: NSObject {
             self.photoOutput.isDepthDataDeliveryEnabled = self.photoOutput.isDepthDataDeliverySupported
             self.photoOutput.isPortraitEffectsMatteDeliveryEnabled = self.photoOutput.isPortraitEffectsMatteDeliverySupported
             self.photoOutput.maxPhotoQualityPrioritization = .quality
+            
+            self.photoOutput.isAutoDeferredPhotoDeliveryEnabled = //self.photoOutput.isAutoDeferredPhotoDeliverySupported
+                                                                  false // FIXME the eventual photo is missing location
+            self.photoOutput.isZeroShutterLagEnabled = self.photoOutput.isZeroShutterLagSupported
+            self.photoOutput.isResponsiveCaptureEnabled = self.photoOutput.isResponsiveCaptureSupported
+            self.photoOutput.isFastCapturePrioritizationEnabled = self.photoOutput.isFastCapturePrioritizationSupported
 
             self.session.commitConfiguration()
         }
@@ -258,10 +264,12 @@ class CameraManager: NSObject {
                 photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPhotoPixelFormatType]
             }
             // Live Photo capture is not supported in movie mode.
-            if self.photoOutput.isLivePhotoCaptureSupported {
+            if self.photoOutput.isLivePhotoCaptureEnabled {
                 let livePhotoMovieFileName = NSUUID().uuidString
                 let livePhotoMovieFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((livePhotoMovieFileName as NSString).appendingPathExtension("mov")!)
                 photoSettings.livePhotoMovieFileURL = URL(fileURLWithPath: livePhotoMovieFilePath)
+            } else {
+                photoSettings.isShutterSoundSuppressionEnabled = self.photoOutput.isShutterSoundSuppressionSupported
             }
             photoSettings.maxPhotoDimensions = self.photoOutput.maxPhotoDimensions
             photoSettings.isDepthDataDeliveryEnabled = self.photoOutput.isDepthDataDeliveryEnabled

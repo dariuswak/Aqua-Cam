@@ -22,6 +22,8 @@ class PhotoCaptureProcessor: NSObject {
         return requestedPhotoSettings.uniqueID
     }}
 
+    var photoResourceType: PHAssetResourceType = .photo
+    
     var photoData: Data?
 
     var depthData: Data?
@@ -104,6 +106,16 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
                                                     options: [.portraitEffectsMatteImage: depthDataImage])
     }
 
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishCapturingDeferredPhotoProxy deferredPhotoProxy: AVCaptureDeferredPhotoProxy?, error: (any Error)?) {
+        if let error = error {
+            os_log("Error capturing deferred photo: \(String(describing: error))")
+            Logger.log(.error, "capture-photo: \(String(describing: error))")
+            return
+        }
+        photoResourceType = .photoProxy
+        photoData = deferredPhotoProxy?.fileDataRepresentation()
+    }
+
     /// - Tag: DidFinishRecordingLive
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishRecordingLivePhotoMovieForEventualFileAt outputFileURL: URL, resolvedSettings: AVCaptureResolvedPhotoSettings) {
         livePhotoCaptureHandler(false)
@@ -136,10 +148,10 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
 
         PHPhotoLibrary.shared().performChanges({
             let options = PHAssetResourceCreationOptions()
-            let creationRequest = PHAssetCreationRequest.forAsset()
             options.uniformTypeIdentifier = self.requestedPhotoSettings.processedFileType.map { $0.rawValue }
-            creationRequest.addResource(with: .photo, data: photoData, options: options)
+            let creationRequest = PHAssetCreationRequest.forAsset()
             creationRequest.location = self.location
+            creationRequest.addResource(with: self.photoResourceType, data: photoData, options: options)
             if let livePhotoCompanionMovieURL = self.livePhotoCompanionMovieURL {
                 let livePhotoCompanionMovieFileOptions = PHAssetResourceCreationOptions()
                 livePhotoCompanionMovieFileOptions.shouldMoveFile = true
