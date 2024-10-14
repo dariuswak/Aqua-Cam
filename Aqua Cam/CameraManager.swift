@@ -151,6 +151,8 @@ class CameraManager: NSObject {
             self.photoOutput.isZeroShutterLagEnabled = self.photoOutput.isZeroShutterLagSupported
             self.photoOutput.isResponsiveCaptureEnabled = self.photoOutput.isResponsiveCaptureSupported
             self.photoOutput.isFastCapturePrioritizationEnabled = self.photoOutput.isFastCapturePrioritizationSupported
+            
+            self.photoOutput.isAppleProRAWEnabled = self.photoOutput.isAppleProRAWSupported
 
             self.session.commitConfiguration()
         }
@@ -257,23 +259,31 @@ class CameraManager: NSObject {
         sessionQueue.async {
             self.photoOutput.connection(with: .video)!.videoRotationAngle = Constants.LANDSCAPE_RIGHT
             var photoSettings = AVCapturePhotoSettings()
-            if self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+            if self.photoOutput.isAppleProRAWEnabled,
+               let rawFormat = self.photoOutput.availableRawPhotoPixelFormatTypes.first(where: { AVCapturePhotoOutput.isAppleProRAWPixelFormat($0) }),
+               self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+                photoSettings = AVCapturePhotoSettings(rawPixelFormatType: rawFormat,
+                                                       processedFormat: [AVVideoCodecKey: AVVideoCodecType.hevc])
+                if let thumbnailPhotoCodecType = photoSettings.availableRawEmbeddedThumbnailPhotoCodecTypes.first {
+                    photoSettings.rawEmbeddedThumbnailPhotoFormat = [
+                        AVVideoCodecKey: thumbnailPhotoCodecType,
+                        AVVideoWidthKey: 2016, AVVideoHeightKey: 1512 // 6 MP is enough
+                    ]
+                }
+            } else if self.photoOutput.availablePhotoCodecTypes.contains(.hevc) {
                 photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
-            }
-            if let previewPhotoPixelFormatType = photoSettings.availablePreviewPhotoPixelFormatTypes.first {
-                photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPhotoPixelFormatType]
             }
             // Live Photo capture is not supported in movie mode.
             if self.photoOutput.isLivePhotoCaptureEnabled {
                 let livePhotoMovieFileName = NSUUID().uuidString
                 let livePhotoMovieFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((livePhotoMovieFileName as NSString).appendingPathExtension("mov")!)
                 photoSettings.livePhotoMovieFileURL = URL(fileURLWithPath: livePhotoMovieFilePath)
-            } else {
-                photoSettings.isShutterSoundSuppressionEnabled = self.photoOutput.isShutterSoundSuppressionSupported
             }
+            photoSettings.isShutterSoundSuppressionEnabled = self.photoOutput.isShutterSoundSuppressionSupported
             photoSettings.maxPhotoDimensions = self.photoOutput.maxPhotoDimensions
             photoSettings.isDepthDataDeliveryEnabled = self.photoOutput.isDepthDataDeliveryEnabled
             photoSettings.isPortraitEffectsMatteDeliveryEnabled = self.photoOutput.isPortraitEffectsMatteDeliveryEnabled
+            
             photoSettings.photoQualityPrioritization = .quality
             // TODO flash
             if self.videoDeviceInput.device.isFlashAvailable {

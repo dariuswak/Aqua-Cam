@@ -24,6 +24,8 @@ class PhotoCaptureProcessor: NSObject {
 
     var photoResourceType: PHAssetResourceType = .photo
     
+    var rawPhotoData: Data?
+    
     var photoData: Data?
 
     var depthData: Data?
@@ -89,6 +91,9 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
             os_log("Error capturing photo: \(String(describing: error))")
             Logger.log(.error, "capture-photo: \(String(describing: error))")
             return
+        }
+        if photo.isRawPhoto {
+            rawPhotoData = photo.fileDataRepresentation()
         } else {
             photoData = photo.fileDataRepresentation()
         }
@@ -139,6 +144,20 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
             didFinish()
             return
         }
+        
+        if let rawPhotoData = rawPhotoData {
+            PHPhotoLibrary.shared().performChanges({
+                let options = PHAssetResourceCreationOptions()
+                let creationRequest = PHAssetCreationRequest.forAsset()
+                creationRequest.location = self.location
+                creationRequest.addResource(with: .photo, data: rawPhotoData, options: options)
+            }, completionHandler: { _, error in
+                if let error = error {
+                    os_log("Error occurred while saving raw photo to photo library: \(String(describing: error))")
+                    Logger.log(.error, "capture-photo: \(String(describing: error))")
+                }
+            })
+        }
 
         guard let photoData = photoData else {
             os_log("No photo data resource")
@@ -148,7 +167,6 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
 
         PHPhotoLibrary.shared().performChanges({
             let options = PHAssetResourceCreationOptions()
-            options.uniformTypeIdentifier = self.requestedPhotoSettings.processedFileType.map { $0.rawValue }
             let creationRequest = PHAssetCreationRequest.forAsset()
             creationRequest.location = self.location
             creationRequest.addResource(with: self.photoResourceType, data: photoData, options: options)
