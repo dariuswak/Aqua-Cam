@@ -113,16 +113,14 @@ class UIBatteryLevel: UIStackView {
     var batteryLevel: Int = 0 {
         didSet {
             DispatchQueue.main.async {
-                let imageName: String
-                switch self.batteryLevel {
-                case 0..<13: imageName = "battery.0"
-                case 13..<38: imageName = "battery.25"
-                case 38..<63: imageName = "battery.50"
-                case 63..<88: imageName = "battery.75"
-                case 88...100: imageName = "battery.100"
-                default: imageName = "questionmark.circle"
+                self.icon.image = switch self.batteryLevel {
+                    case ..<13: UIImage.battery0
+                    case ..<38: UIImage.battery25
+                    case ..<63: UIImage.battery50
+                    case ..<88: UIImage.battery75
+                    case ...100: UIImage.battery100
+                    default: UIImage.questionMarkCircle
                 }
-                self.icon.image = UIImage(systemName: imageName)
                 self.percentage.text = "\(self.batteryLevel)% "
             }
         }
@@ -136,16 +134,14 @@ class UISystemPressure: UIImageView {
         didSet {
             os_log("System pressure changed to: \(self.level.rawValue)")
             DispatchQueue.main.async {
-                let imageName: String
-                switch self.level {
-                case .nominal: imageName = "sun.max"
-                case .fair: imageName = "cloud.sun"
-                case .serious: imageName = "cloud"
-                case .critical: imageName = "cloud.heavyrain"
-                case .shutdown: imageName = "cloud.bolt"
-                default: imageName = "questionmark.circle"
+                self.image = switch self.level {
+                    case .nominal: UIImage.sunMax
+                    case .fair: UIImage.cloudSun
+                    case .serious: UIImage.cloud
+                    case .critical: UIImage.cloudHeavyRain
+                    case .shutdown: UIImage.cloudBolt
+                    default: UIImage.questionMarkCircle
                 }
-                self.image = UIImage(systemName: imageName)
             }
         }
     }
@@ -178,7 +174,7 @@ class UIBluetooth: UIImageView {
     var state: CBManagerState = .unknown {
         didSet {
             let poweredOn = state == .poweredOn
-            image = poweredOn ? UIImage(named: "bluetooth") : UIImage(named: "bluetooth_disabled")
+            image = poweredOn ? UIImage.bluetooth : UIImage.bluetoothDisabled
             tintColor = poweredOn ? Colour.BLUETOOTH : Colour.INACTIVE
         }
     }
@@ -186,7 +182,7 @@ class UIBluetooth: UIImageView {
     var connected: Bool = false {
         didSet {
             if connected {
-                image = UIImage(named: "bluetooth_connected")
+                image = UIImage.bluetoothConnected
             } else {
                 (state = state)
             }
@@ -211,11 +207,12 @@ class UICameraType: SelectableUILabel {
         didSet {
             let longName = cameraType.rawValue
             os_log("Camera name: \(longName)")
-            let codeName = (longName.contains("Ultra") ? "U" : "") +
-                           (longName.contains("Wide") ? "W" : "") +
-                           (longName.contains("Tele") ? "T" : "") +
-                           (longName.contains("Depth") ? "D" : "")
-            self.text = " \(codeName) "
+            self.text = switch longName {
+                case let name where name.contains("WideAngle"): " W "
+                case let name where name.contains("UltraWide"): " U "
+                case let name where name.contains("Telephoto"): " T "
+                default: " ? "
+            }
         }
     }
 
@@ -248,12 +245,12 @@ class UIStabilisationType: UILabel {
         os_log("Stabilisation mode: \(connection?.isVideoStabilizationSupported ?? false) / \(connection?.activeVideoStabilizationMode.rawValue ?? -100)")
         guard let stabilisationMode = connection?.activeVideoStabilizationMode else { return }
         isEnabled = stabilisationMode != .off
-        let indicatorText: String = { switch stabilisationMode {
-            case .off, .standard: return " (o) "
-            case .cinematic, .cinematicExtended: return " ((o)) "
-            default: return " (?) "
-        }}()
-        text = indicatorText
+        text = switch stabilisationMode {
+            case .off: " (x) "
+            case .standard, .cinematic: " (o) "
+            case .cinematicExtended, .cinematicExtendedEnhanced: " ((o)) "
+            default: " (?) "
+        }
     }
 
 }
@@ -263,19 +260,12 @@ class UIFormatResolution: SelectableUILabel {
     var fromFormat: AVCaptureDevice.Format? {
         didSet {
             let dimensions = fromFormat!.formatDescription.dimensions
-            switch dimensions.height {
-            case 720:
-                text = " 2/3 HD "
-            case 1080:
-                text = " HD "
-            case 1440:
-                text = " HD 4/3 "
-            case 2160:
-                text = " UHD "
-            case 3024: // should be 3072, but is slightly smaller
-                text = " 4K "
-            default:
-                text = " \(dimensions.width)x\(dimensions.height) "
+            text = switch dimensions.height {
+                case 1080: " HD "
+                case 1440: " HD 4/3 "
+                case 2160: " UHD "
+                case 3024: " 4K " // should be 3072, but is slightly smaller
+                default: " \(dimensions.width)x\(dimensions.height) "
             }
         }
     }
